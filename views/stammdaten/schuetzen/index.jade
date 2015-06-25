@@ -1,0 +1,37 @@
+extends ../index.jade
+
+mixin form()
+	form(role='form' method="post")
+		+inputDefault("vorname", schuetze ? schuetze.vorname : "", "Vorname")
+		+inputDefault("name", schuetze ? schuetze.name : "", "Name")
+		+inputDefault("passnummer", schuetze ? schuetze.name : "", "Passnummer")
+		
+		- var optionVerein = []
+		- vereine.forEach(function(verein){ optionVerein.push({id: verein.id, title: verein.name}) })
+		+inputSelect("verein", optionVerein, manschaft ? manschaft.vereinID : "", "Verein")
+		
+		input(type="submit" class="btn btn-primary pull-right")
+
+block title
+	| Schützen
+
+block main
+	h1
+		block title
+	table(class="table" id="example")
+		tr
+			th ID
+			th Vorname
+			th Name
+			th Verein
+			th Bearbeiten
+		- schuetzen.forEach(function(schuetze){
+			tr
+				td ##{schuetze.id}
+				td #{schuetze.vorname}
+				td #{schuetze.name}
+				td #{schuetze.verein}
+				td
+					a(href="./edit/" + schuetze.id) Bearbeiten
+		- })
+	a(href="./edit/new") Neu

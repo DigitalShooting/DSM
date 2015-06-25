@@ -1,0 +1,23 @@
+{
+	"name": "morbid",
+	"version": "0.0.0",
+	"description": "",
+	"private": true,
+	"dependencies": {
+		"express": "~4.12.2",
+		"jquery": "x",
+		"jade": "x",
+		"less": "x",
+		"mysql": "x",
+		"flash": "x",
+		"async": "x",
+		"compression": "x",
+		"express-less": "x",
+		"path": "x",
+		"bootstrap": "x",
+		"mysql": "x",
+		"body-parser": "x",
+		"datatables": "x"
+	},
+	"main": "index.js"
+}

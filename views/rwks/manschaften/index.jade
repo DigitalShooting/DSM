@@ -1,0 +1,39 @@
+extends ../index.jade
+
+mixin form()
+	form(role='form' method="post")
+		+inputDefault("name", manschaft ? manschaft.name : "", "Manschaft Name")
+		
+		- var optionVerein = []
+		- vereine.forEach(function(verein){ optionVerein.push({id: verein.id, title: verein.name}) })
+		+inputSelect("verein", optionVerein, manschaft ? manschaft.vereinID : "", "Verein")
+		
+		- var optionSaison = []
+		- saisons.forEach(function(saison){ optionSaison.push({id: saison.id, title: saison.jahr+" ("+saison.disziplin+")"}) })
+		+inputSelect("saison", optionSaison, manschaft ? manschaft.saisonID : "", "Saison")
+		
+		input(type="submit" class="btn btn-primary pull-right")
+
+block title
+	| Manschaften
+
+block main
+	h1
+		block title
+	table(class="table")
+		tr
+			th #ID
+			th Verein
+			th Manschaft Name
+			th Saisons
+			th Bearbeiten
+		- manschaften.forEach(function(manschaft){
+			tr
+				td ##{manschaft.id}
+				td #{manschaft.verein}
+				td #{manschaft.name}
+				td #{manschaft.saison}
+				td
+					a(href="./edit/" + manschaft.id) Bearbeiten
+		- })
+	a(href="./edit/new") New

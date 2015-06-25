@@ -1,0 +1,31 @@
+extends ../index.jade
+
+mixin form()
+	form(role='form' method="post")
+		+inputDefault("name", disziplin ? disziplin.name : "", "Name")
+		
+		- var optionScheibe = []
+		- scheiben.forEach(function(scheibe){ optionScheibe.push({id: scheibe.id, title: scheibe.name}) })
+		+inputSelect("scheibenID", optionScheibe, disziplin ? disziplin.scheibenID : "", "Scheibe")
+		
+		input(type="submit" class="btn btn-primary pull-right")
+
+block title
+	| Disziplinen
+
+block main
+	h1
+		block title
+	table(class="table")
+		tr
+			th #ID
+			th Name
+			th Bearbeiten
+		- disziplinen.forEach(function(disziplin){
+			tr
+				td ##{disziplin.id}
+				td #{disziplin.name}
+				td
+					a(href="./edit/" + disziplin.id) Bearbeiten
+		- })
+	a(href="./edit/new") Neu

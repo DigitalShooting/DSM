@@ -1,0 +1,13 @@
+extends ../layout.jade
+
+block title
+	| Stände
+
+block body
+	section(class="col-lg-offset-1 col-lg-3  col-sm-4")
+		h2
+			block title
+		ul(class="nav nav-pills nav-stacked")
+			+navElement("./overview", "Übersicht")
+	section(class="col-lg-7 col-sm-8")
+		block main

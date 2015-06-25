@@ -1,0 +1,37 @@
+extends ../index.jade
+
+mixin form()
+	form(role='form' method="post")
+		+inputDefault("name", rwk ? rwk.name : "", "Name")
+		
+		- var optionHeim = []
+		- manschaften.forEach(function(manschaft){ optionHeim.push({ id: manschaft.id, title: manschaft.verein+" "+manschaft.name+" ("+manschaft.saison+" "+manschaft.disziplin+")" }) })
+		+inputSelect("manschaftID_Heim", optionHeim, rwk ? rwk.manschaftID_Heim : "", "Manschaft (Heim)")
+		
+		- var optionGast = []
+		- manschaften.forEach(function(manschaft){ optionGast.push({ id: manschaft.id, title: manschaft.verein+" "+manschaft.name+" ("+manschaft.saison+" "+manschaft.disziplin+")" }) })
+		+inputSelect("manschaftID_Gast", optionGast, rwk ? rwk.manschaftID_Gast : "", "Manschaft (Gast)")
+		
+		//- Datum
+		
+		input(type="submit" class="btn btn-primary pull-right")
+
+block title
+	| Rundenwettkämpfe
+
+block main
+	h1
+		block title
+	table(class="table")
+		tr
+			th #ID
+			th Name
+			th Bearbeiten
+		- rwks.forEach(function(rwk){
+			tr
+				td ##{rwk.id}
+				td #{rwk.name}
+				td
+					a(href="./edit/" + rwk.id) Bearbeiten
+		- })
+	a(href="./edit/new") New

@@ -1,0 +1,16 @@
+extends index.jade
+
+block title
+	| Übersicht
+
+block main
+	h1
+		block title
+	table(class="table")
+		- for(var key in stände){
+			- var stand = stände[key]
+			tr
+				td #{stand.label}
+				td
+					a(href="/staende/edit/"+key) Bearbeiten
+		-}
