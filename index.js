@@ -6,7 +6,7 @@ var compression = require('compression')
 var http = require("http")
 var bodyParser = require('body-parser')
 var expressLess = require('express-less')
-var config = require("./config.js")
+var config = require("./config/")
 var routes = require("./routes")
 
 var app = express({ strict: true })
@@ -40,7 +40,6 @@ app.use(compression())
 
 app.use("/stammdaten/", routes.stammdaten)
 app.use("/rwks/", routes.rwks)
-app.use("/disziplinen/", routes.disziplinen)
 
 // app.use("/live/", routes.live)
 //
@@ -48,7 +47,7 @@ app.use("/disziplinen/", routes.disziplinen)
 // app.use("/schuetzen", routes.schützen)
 // app.use("/vereine", routes.vereine)
 //
-// app.use("/staende", routes.stände)
+app.use("/staende", routes.stände)
 // app.use("/auswertung", routes.auswertung)
 
 

@@ -2,13 +2,12 @@ var express = require("express");
 var router = express.Router();
 var fs = require("fs")
 var path = require("path")
+var config = require("../../../config/")
+
+router.use("/edit/", require("./edit"))
 
 router.get("/", function(req, res){
-	res.render("disziplinen")
+	res.render("stände/overview/")
 })
-
-
-router.use("/scheiben/", require("./scheiben"))
-router.use("/disziplinen/", require("./disziplinen"))
 
 module.exports = router

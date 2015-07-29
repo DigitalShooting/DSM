@@ -1,4 +1,4 @@
-extends index.jade
+extends ../index.jade
 
 block title
 	| Übersicht
@@ -12,5 +12,5 @@ block main
 			tr
 				td #{stand.label}
 				td
-					a(href="/staende/edit/"+key) Bearbeiten
+					a(href="./edit/"+key) Bearbeiten
 		-}

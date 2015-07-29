@@ -1,1 +1,3 @@
-# Shooting-Manager
+# DigitalShootingManager (DSM)
+
+Management Interface for DSCs.
