@@ -54,7 +54,7 @@ app.use("/staende", routes.stände)
 
 
 app.get("/", function(req, res){
-	res.render(__dirname + "/views/layout.jade")
+	res.render("index.jade")
 })
 
 
