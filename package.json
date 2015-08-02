@@ -17,7 +17,8 @@
 		"bootstrap": "x",
 		"mysql": "x",
 		"body-parser": "x",
-		"datatables": "x"
+		"datatables": "x",
+		"mongodb": "x"
 	},
 	"main": "index.js"
 }

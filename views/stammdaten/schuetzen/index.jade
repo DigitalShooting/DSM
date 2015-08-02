@@ -4,7 +4,7 @@ mixin form()
 	form(role='form' method="post")
 		+inputDefault("vorname", schuetze ? schuetze.vorname : "", "Vorname")
 		+inputDefault("name", schuetze ? schuetze.name : "", "Name")
-		+inputDefault("passnummer", schuetze ? schuetze.name : "", "Passnummer")
+		+inputDefault("passnummer", schuetze ? schuetze.passnummer : "", "Passnummer")
 		
 		- var optionVerein = []
 		- vereine.forEach(function(verein){ optionVerein.push({id: verein.id, title: verein.name}) })
@@ -32,6 +32,6 @@ block main
 				td #{schuetze.name}
 				td #{schuetze.verein}
 				td
-					a(href="./edit/" + schuetze.id) Bearbeiten
+					a(href="./edit/" + schuetze._id) Bearbeiten
 		- })
 	a(href="./edit/new") Neu
