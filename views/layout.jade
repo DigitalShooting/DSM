@@ -9,6 +9,11 @@ mixin inputDefault(name, value, label)
 		label #{label}:
 		input(type="" name=name value=value class="form-control" placeholder=label)
 		
+mixin inputDisabled(value, label)
+	div(class="form-group")
+		label #{label}:
+		input(type="" disabled value=value class="form-control" placeholder=label)
+		
 mixin inputSelect(name, options, selectedID, title)
 	div(class="form-group")
 		label #{title}:

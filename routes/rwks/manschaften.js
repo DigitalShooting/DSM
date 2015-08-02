@@ -2,146 +2,69 @@ var express = require("express");
 var router = express.Router();
 var fs = require("fs")
 var path = require("path")
-var connection = require("../../lib/connection")
 var async = require("async")
+
+var ObjectID = require("mongodb").ObjectID
+var database
+var mongodb = require("../../lib/mongodb")(function(db){
+	database = db
+})
 
 
 
 router.get("/", function(req, res){
-	connection.query(
-		"SELECT manschaften.*, vereine.name as 'verein', saisons.jahr as 'saison' " +
-		"FROM manschaften " +
-		"LEFT OUTER JOIN vereine " +
-		"ON manschaften.vereinID = vereine.id " +
-		"LEFT OUTER JOIN saisons " +
-		"ON manschaften.saisonID = saisons.id ",
-		function(err, manschaften){
-			if (err){
-				console.error(err)
-			}
-			res.locals.manschaften = manschaften
-			res.render("rwks/manschaften")
-		}
-	)
+	collection = database.collection('manschaften')
+	collection.find().toArray(function(err, results) {
+		res.locals.manschaften = results
+		res.render("rwks/manschaften")
+	})
 })
-
 
 
 
 router.get("/edit/*", function(req, res, next){
-	async.parallel(
-		{
-			vereine: function(callback) {
-				connection.query(
-					"SELECT * " +
-					"FROM vereine ",
-					function(err, vereine){
-						if (err){
-							console.error(err)
-						}
-						callback(null, vereine)
-					}
-				)
-			},
-			saisons: function(callback) {
-				connection.query(
-					"SELECT saisons.*, disziplinen.name as 'disziplin' " +
-					"FROM saisons " +
-					"LEFT OUTER JOIN disziplinen " +
-					"ON saisons.disziplinID = disziplinen.id ",
-					function(err, saisons){
-						if (err){
-							console.error(err)
-						}
-						callback(null, saisons)
-					}
-				)
-			}
-		},
-		function(err, results) {
-			res.locals.vereine = results.vereine
-			res.locals.saisons = results.saisons
-			next()
-		}
-	)
+	collection = database.collection('vereine')
+	collection.find().toArray(function(err, results) {
+		res.locals.vereine = results
+		next()
+	})
 })
 
 router.get("/edit/new", function(req, res){
-	res.render("rwks/manschaften/edit/new")
+	var newObject = {}
+	collection = database.collection('manschaften')
+	collection.insert(newObject, function(err, results){
+		res.redirect(newObject._id)
+	})
 })
-
-router.post("/edit/new", function(req, res){
-	connection.query(
-		"INSERT INTO manschaften (name, vereinID, saisonID) " +
-		"VALUES (?, ?, ?) ",
-		[req.body.name, req.body.verein, req.body.saison],
-		function(err, plugins){
-			if (err){
-				console.error(err)
-			}
-			res.redirect("../")
-		}
-	)
-})
-
 
 router.get("/edit/:id", function(req, res){
-	connection.query(
-		"SELECT * " +
-		"FROM manschaften " +
-		"WHERE id = ? ",
-		[req.params.id],
-		function(err, manschaften){
-			if (err){
-				console.error(err)
-			}
-			if(manschaften.length >= 1){
-				res.locals.manschaft = manschaften[0]
-				res.render("rwks/manschaften/edit")
-			} else {
-				res.redirect("../")
-			}
+	collection = database.collection('manschaften')
+	collection.find({"_id": new ObjectID(req.params.id)}).toArray(function(err, results) {
+		if(results.length >= 1){
+			res.locals.manschaft = results[0]
+			res.render("rwks/manschaften/edit")
+		} else {
+			res.redirect("../")
 		}
-	)
+	})
 })
 
 router.post("/edit/:id", function(req, res){
-	connection.query(
-		"UPDATE manschaften " +
-		"SET name = ?, vereinID = ?, saisonID = ? " +
-		"WHERE id = ? ",
-		[req.body.name, req.body.verein, req.body.saison, req.params.id],
-		function(err){
-			if (err){
-				console.error(err)
-			}
-			res.redirect("../")
-		}
-	)
+	collection = database.collection('manschaften')
+	collection.update({"_id": new ObjectID(req.params.id)}, req.body, function(err){
+		res.redirect("../")
+	})
 })
-
-
-
 
 
 
 router.get("/delete/:id", function(req, res){
-	connection.query(
-		"DELETE FROM manschaften " +
-		"WHERE id = ? ",
-		[req.params.id],
-		function(err){
-			if (err){
-				console.error(err)
-			}
-			res.redirect("../")
-
-		}
-	)
+	collection = database.collection('manschaften')
+	collection.remove({"_id": new ObjectID(req.params.id)}, function(err){
+		res.redirect("../")
+	})
 })
-
-
-
 
 
 

@@ -1,0 +1,20 @@
+extends ../index.jade
+
+block title
+	| #{manschaft.name}
+
+block main
+	h1
+		block title
+	div(class="panel panel-primary")
+		div(class="panel-heading") Infos
+		div(class="panel-body")
+			form(role='form' method="post")
+				+inputDefault("name", manschaft ? manschaft.name : "", "Manschaft Name")
+				
+				- var optionVerein = []
+				- vereine.forEach(function(verein){ optionVerein.push({id: verein._id, title: verein.name}) })
+				+inputSelect("vereinID", optionVerein, manschaft ? manschaft.vereinID : "", "Verein")
+				
+				input(type="submit" class="btn btn-primary pull-right")
+			a(href="../delete/" + manschaft._id class="btn btn-danger pull-reft") Löschen

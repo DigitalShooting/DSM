@@ -17,21 +17,6 @@ router.get("/", function(req, res){
 		res.locals.schuetzen = results
 		res.render("stammdaten/schuetzen")
 	})
-
-	// connection.query(
-	// 	"SELECT schuetzen.*, vereine.name as 'verein' " +
-	// 	"FROM schuetzen " +
-	// 	"LEFT OUTER JOIN vereine " +
-	// 	"ON schuetzen.vereinID = vereine.id ",
-	// 	function(err, schuetzen){
-	// 		if (err){
-	// 			console.error(err)
-	// 		}
-	// 		res.locals.schuetzen = schuetzen
-	// 		res.render("stammdaten/schuetzen")
-	//
-	// 	}
-	// )
 })
 
 
@@ -45,13 +30,10 @@ router.get("/edit/*", function(req, res, next){
 })
 
 router.get("/edit/new", function(req, res){
-	res.render("stammdaten/schuetzen/edit/new")
-})
-
-router.post("/edit/new", function(req, res){
+	var newObject = {}
 	collection = database.collection('schuetzen')
-	collection.insert(req.body, function(err, docs) {
-		res.redirect("../")
+	collection.insert(newObject, function(err, results){
+		res.redirect(newObject._id)
 	})
 })
 

@@ -1,10 +1,5 @@
 extends ../index.jade
 
-mixin form()
-	form(role='form' method="post")
-		+inputDefault("name", verein ? verein.name : "", "Name")
-		input(type="submit" class="btn btn-primary pull-right")
-
 block title
 	| Vereine
 
@@ -13,12 +8,10 @@ block main
 		block title
 	table(class="table")
 		tr
-			th #ID
 			th Name
 			th Bearbeiten
 		- vereine.forEach(function(verein){
 			tr
-				td ##{verein.id}
 				td #{verein.name}
 				td
 					a(href="./edit/" + verein._id) Bearbeiten

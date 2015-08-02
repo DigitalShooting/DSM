@@ -1,0 +1,26 @@
+extends ../index.jade
+
+block title
+	| #{rwk.name}
+
+block main
+	h1
+		block title
+	div(class="panel panel-primary")
+		div(class="panel-heading") Infos
+		div(class="panel-body")
+			form(role='form' method="post")
+				+inputDefault("name", rwk ? rwk.name : "", "Name")
+				
+				- var optionHeim = []
+				- manschaften.forEach(function(manschaft){ optionHeim.push({ id: manschaft.id, title: manschaft.verein+" "+manschaft.name+" ("+manschaft.saison+" "+manschaft.disziplin+")" }) })
+				+inputSelect("manschaftID_Heim", optionHeim, rwk ? rwk.manschaftID_Heim : "", "Manschaft (Heim)")
+				
+				- var optionGast = []
+				- manschaften.forEach(function(manschaft){ optionGast.push({ id: manschaft.id, title: manschaft.verein+" "+manschaft.name+" ("+manschaft.saison+" "+manschaft.disziplin+")" }) })
+				+inputSelect("manschaftID_Gast", optionGast, rwk ? rwk.manschaftID_Gast : "", "Manschaft (Gast)")
+				
+				//- Datum
+				
+				input(type="submit" class="btn btn-primary pull-right")
+			a(href="../delete/" + rwk._id class="btn btn-danger pull-reft") Löschen

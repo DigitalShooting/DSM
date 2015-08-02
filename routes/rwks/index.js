@@ -9,6 +9,5 @@ router.get("/", function(req, res){
 
 router.use("/manschaften/", require("./manschaften"))
 router.use("/rwks/", require("./rwks"))
-router.use("/saisons/", require("./saisons"))
 
 module.exports = router

@@ -18,16 +18,13 @@ router.get("/", function(req, res){
 })
 
 
-
 router.get("/edit/new", function(req, res){
-	res.render("stammdaten/vereine/edit/new")
-})
-
-router.post("/edit/new", function(req, res){
-	collection.insert(req.body, function(err, docs) {
-		res.redirect("../")
+	var newObject = {}
+	collection.insert(newObject, function(err, results){
+		res.redirect(newObject._id)
 	})
 })
+
 
 router.get("/edit/:id", function(req, res){
 	collection.find({"_id": new ObjectID(req.params.id)}).toArray(function(err, results) {

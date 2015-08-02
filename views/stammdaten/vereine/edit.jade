@@ -1,0 +1,16 @@
+extends index.jade
+
+block title
+	| #{verein.name}
+	
+block main
+	h1
+		block title
+	div(class="panel panel-primary")
+		div(class="panel-heading") Infos
+		div(class="panel-body")
+			form(role='form' method="post")
+				+inputDefault("name", verein ? verein.name : "", "Name")
+				+inputDisabled(verein ? verein._id : "", "ID")
+				input(type="submit" class="btn btn-primary pull-right")
+			a(href="../delete/" + verein._id class="btn btn-danger pull-left") Löschen
