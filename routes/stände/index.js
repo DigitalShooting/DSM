@@ -13,7 +13,7 @@ router.get("/", function(req, res){
 	res.redirect("/staende/overview/")
 })
 
-router.use("/overview/", require("./overview/"))
-
+router.use("/overview/", require("./overview.js"))
+router.use("/stand/", require("./stand.js"))
 
 module.exports = router

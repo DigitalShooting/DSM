@@ -2,8 +2,17 @@ extends ../layout.jade
 
 block body
 	section(class="col-lg-offset-1 col-lg-3  col-sm-4")
+		h2 Übersicht
+		ul(class="nav nav-pills nav-stacked")
+			+navElement("/staende/overview", "Übersicht")
+			
 		h2 Stände
 		ul(class="nav nav-pills nav-stacked")
-			+navElement("./overview", "Übersicht")
+			- for(var key in stände){
+				- var stand = stände[key]
+				+navElement("/staende/stand/"+key, stand.label)
+			-}
+		
+		
 	section(class="col-lg-7 col-sm-8")
 		block main

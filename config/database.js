@@ -1,10 +1,8 @@
 module.exports = {
 	/**
-		Database
-		Object is directly given to the mysql npm.
+		mongodb
 	*/
-	host		:	"localhost",
-	user		:	"",
-	password	:	"",
-	database	:	""
+	host		:	"127.0.0.1",
+	port		:	"27017",
+	collection	:	"dsm",
 }
