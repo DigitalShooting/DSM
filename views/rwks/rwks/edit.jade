@@ -9,7 +9,7 @@ block main
 	div(class="panel panel-primary")
 		div(class="panel-heading") Infos
 		div(class="panel-body")
-			form(role='form' method="post")
+			form(role='form' method="post" class="form-horizontal")
 				+inputDefault("name", rwk ? rwk.name : "", "Name")
 				
 				- var optionHeim = []

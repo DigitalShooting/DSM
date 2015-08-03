@@ -9,8 +9,8 @@ block main
 	div(class="panel panel-primary")
 		div(class="panel-heading") Infos
 		div(class="panel-body")
-			form(role='form' method="post")
-				+inputDefault("name", manschaft ? manschaft.name : "", "Manschaft Name")
+			form(role='form' method="post" class="form-horizontal")
+				+inputDefault("name", manschaft ? manschaft.name : "", "Name")
 				
 				- var optionVerein = []
 				- vereine.forEach(function(verein){ optionVerein.push({id: verein._id, title: verein.name}) })

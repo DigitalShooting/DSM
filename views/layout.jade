@@ -6,25 +6,28 @@ mixin navElement(url, text)
 	
 mixin inputDefault(name, value, label)
 	div(class="form-group")
-		label #{label}:
-		input(type="" name=name value=value class="form-control" placeholder=label)
+		label(class="col-sm-2 control-label") #{label}
+		div(class="col-sm-10")
+			input(type="" name=name value=value class="form-control" placeholder=label)
 		
 mixin inputDisabled(value, label)
 	div(class="form-group")
-		label #{label}:
-		input(type="" disabled value=value class="form-control" placeholder=label)
+		label(class="col-sm-2 control-label") #{label}
+		div(class="col-sm-10")
+			p(class="form-control-static") #{value}
 		
 mixin inputSelect(name, options, selectedID, title)
 	div(class="form-group")
-		label #{title}:
-		select(name=name class="selectpicker "+name style="width:100%")
-			- options.forEach(function(option){
-				- if(option.id == selectedID){
-					option(value=option.id selected="selected") #{option.title}
-				- } else {
-					option(value=option.id) #{option.title}
-				- }
-			- })
+		label(class="col-sm-2 control-label") #{title}
+		div(class="col-sm-10")
+			select(name=name class="selectpicker "+name style="width:100%")
+				- options.forEach(function(option){
+					- if(option.id == selectedID){
+						option(value=option.id selected="selected") #{option.title}
+					- } else {
+						option(value=option.id) #{option.title}
+					- }
+				- })
 
 doctype html
 html(lang="en")

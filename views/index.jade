@@ -1,19 +1,21 @@
 extends ./layout.jade
 
 block body
-	div(class="jumbotron")
-		h1 Übersicht
-			small DSM
-		p
+	h1 DSM 
+		small Übersicht
 	
-	
-	div
-		h2 Stände
-		p 1
-		p 2
-		p 3
-	div
-		h2 Wettkämfe
-		p A1 - B1
-		p C2 - D2
+	div(class="col-xs-3")
+		div(class="panel panel-default")
+			div(class="panel-heading") Aktive Stände
+			div(class="panel-body") 1, 2, 3
+			
+	div(class="col-xs-3")
+		div(class="panel panel-default")
+			div(class="panel-heading") DSV
+			div(class="panel-body")
 		
+	div(class="col-xs-3")
+		div(class="panel panel-default")
+			div(class="panel-heading") Verlassen
+			div(class="panel-body")
+				button(type="button" class="btn btn-danger btn-group-justified") Verlassen
