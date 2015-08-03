@@ -4,13 +4,25 @@ var fs = require("fs")
 var path = require("path")
 var config = require("../../config/")
 
+var ObjectID = require("mongodb").ObjectID
+var database
+var mongodb = require("../../lib/mongodb")(function(db){
+	database = db
+})
+
+
 
 router.get("/:id", function(req, res){
 	res.locals.stand = config.stände[req.params.id]
 
-	console.log(res.locals.stand)
 	if(res.locals.stand) {
-		res.render("stände/stand")
+
+		collection = database.collection('schuetzen')
+		collection.find().toArray(function(err, results) {
+			res.locals.schuetzen = results
+			res.render("stände/stand")
+		})
+
 	} else {
 		res.redirect("/staende/overview/")
 	}

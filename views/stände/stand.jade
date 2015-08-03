@@ -4,4 +4,67 @@ block title
 	| #{stand.label}
 
 block main
+	script(src="//"+stand.ip+":"+stand.port+"/socket.io/socket.io.js")
+	script.
+		var socket = io("//#{stand.ip}:#{stand.port}")
+		socket.on('setSession', function(newSession){
+			console.log(newSession)
+		});
+		socket.on('setConfig', function(config){
+			console.log(config)
+			setUpDisziplinen(config.disziplinen)
+		});
+		socket.on('newShot', function(shot){
+			console.log(shot)
+		});
+		
+		function setUpDisziplinen(disziplinen){
+			$(".stand .disziplin").html("")
+			for(var key in disziplinen){
+				var disziplin = disziplinen[key]
+				$(".stand .disziplin").append("<option value='"+key+"'>"+disziplin.title+"</option>")
+			}
+		}
+		
+		
+		function sendDisziplin(){
+			var disziplin = $('.stand .disziplin option:selected').val();
+			socket.emit('setDisziplin', disziplin)
+		}
+		function sendSchuetze(){
+			var schuetze = $('.stand .schuetze option:selected').val();
+			console.log(schuetze)
+			socket.emit('setUser', schuetze)
+		}
+
+
 	h1 #{stand.label}
+	
+	div(class="stand")
+		div(class="panel panel-default")
+			div(class="panel-heading") Disziplin
+			div(class="panel-body")
+				+inputSelect("disziplin", [], false, "Disziplin")
+				input(type="submit" class="btn btn-primary pull-right" onclick="sendDisziplin()")
+				
+				
+		div(class="panel panel-default")
+			div(class="panel-heading") Schütze
+			div(class="panel-body")
+				
+				- var optionSchuetze = []
+				- schuetzen.forEach(function(schuetze){ optionSchuetze.push({id: schuetze_id, title: schuetze.vorname + " " + schuetze.name}) })
+				+inputSelect("schuetze", optionSchuetze, false, "Schütze")
+				
+				input(type="submit" class="btn btn-primary pull-right" onclick="sendSchuetze()")
+				//a(href="../delete/" class="btn btn-default pull-left") Gast
+		
+		div(class="panel panel-default")
+			div(class="panel-heading") Aktionen
+			div(class="panel-body")
+			
+				//a(href="../delete/" class="btn btn-default pull-left") Neue Scheibe
+				//a(href="../delete/" class="btn btn-success pull-left") Match
+				//a(href="../delete/" class="btn btn-default pull-left") History
+			
+		

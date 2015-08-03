@@ -8,14 +8,12 @@ block main
 		block title
 	table(class="table")
 		tr
-			th #ID
 			th Name
 			th Bearbeiten
 		- rwks.forEach(function(rwk){
 			tr
-				td ##{rwk.id}
 				td #{rwk.name}
 				td
-					a(href="./edit/" + rwk.id) Bearbeiten
+					a(href="./edit/" + rwk._id) Bearbeiten
 		- })
 	a(href="./edit/new") New
