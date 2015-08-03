@@ -14,6 +14,6 @@ router.get("/", function(req, res){
 })
 
 router.use("/overview/", require("./overview.js"))
-router.use("/stand/", require("./stand.js"))
+router.use("/stand/", require("./stand/"))
 
 module.exports = router

@@ -8,20 +8,9 @@ block main
 		block title
 
 		div(class="")
-			div(class="col-xs-6 col-md-3 standbox")
-				a(href="#" class="thumbnail")
-					
-			div(class="col-xs-6 col-md-3 standbox")
-				a(href="#" class="thumbnail")
-							
-			div(class="col-xs-6 col-md-3 standbox")
-				a(href="#" class="thumbnail")
-				
-			div(class="col-xs-6 col-md-3 standbox")
-				a(href="#" class="thumbnail")
-
-			div(class="col-xs-6 col-md-3 standbox")
-				a(href="#" class="thumbnail")
-									
-			div(class="col-xs-6 col-md-3 standbox")
-				a(href="#" class="thumbnail")
+			
+			- for (var key in stände){
+				- var stand = stände[key]
+				div(class="col-xs-4")
+					p(href="#" class="thumbnail") #{stand.label}
+			- }

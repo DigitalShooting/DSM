@@ -1,28 +1,42 @@
 extends index.jade
 
-block title
-	| #{stand.label}
-
-block main
+block stand
 	script(src="//"+stand.ip+":"+stand.port+"/socket.io/socket.io.js")
 	script.
 		var socket = io("//#{stand.ip}:#{stand.port}")
+		
+		var session
 		socket.on('setSession', function(newSession){
 			console.log(newSession)
+			session = newSession
+			setUpDisziplinen()
 		});
-		socket.on('setConfig', function(config){
-			console.log(config)
-			setUpDisziplinen(config.disziplinen)
+		var config
+		socket.on('setConfig', function(c){
+			console.log(c)
+			config = c
+			setUpDisziplinen()
 		});
 		socket.on('newShot', function(shot){
-			console.log(shot)
+			//console.log(shot)
 		});
 		
-		function setUpDisziplinen(disziplinen){
-			$(".stand .disziplin").html("")
-			for(var key in disziplinen){
-				var disziplin = disziplinen[key]
-				$(".stand .disziplin").append("<option value='"+key+"'>"+disziplin.title+"</option>")
+		
+		var schuetzen = !{JSON.stringify(schuetzen)}
+		
+		
+		function setUpDisziplinen(){
+			if (config && session){
+				var disziplinen = config.disziplinen
+				
+				$(".stand .disziplin").html("")
+				for(var key in disziplinen){
+					var disziplin = disziplinen[key]
+					$(".stand .disziplin").append("<option value='"+key+"'>"+disziplin.title+"</option>")
+				}
+				
+				console.log(session.disziplin._id)
+				$(".stand .disziplin").val(session.disziplin._id).trigger("change")
 			}
 		}
 		
@@ -32,13 +46,18 @@ block main
 			socket.emit('setDisziplin', disziplin)
 		}
 		function sendSchuetze(){
-			var schuetze = $('.stand .schuetze option:selected').val();
-			console.log(schuetze)
-			socket.emit('setUser', schuetze)
+			var schuetzeID = $('.stand .schuetze option:selected').val();
+			
+			for (var i in schuetzen){
+				var schuetze = schuetzen[i]
+				if (schuetze._id == schuetzeID){
+					socket.emit('setUser', schuetze)
+					break
+				}
+			}
+			
+			
 		}
-
-
-	h1 #{stand.label}
 	
 	div(class="stand")
 		div(class="panel panel-default")
@@ -53,7 +72,7 @@ block main
 			div(class="panel-body")
 				
 				- var optionSchuetze = []
-				- schuetzen.forEach(function(schuetze){ optionSchuetze.push({id: schuetze_id, title: schuetze.vorname + " " + schuetze.name}) })
+				- schuetzen.forEach(function(schuetze){ optionSchuetze.push({id: schuetze._id, title: schuetze.vorname + " " + schuetze.name}) })
 				+inputSelect("schuetze", optionSchuetze, false, "Schütze")
 				
 				input(type="submit" class="btn btn-primary pull-right" onclick="sendSchuetze()")
@@ -62,7 +81,6 @@ block main
 		div(class="panel panel-default")
 			div(class="panel-heading") Aktionen
 			div(class="panel-body")
-			
 				//a(href="../delete/" class="btn btn-default pull-left") Neue Scheibe
 				//a(href="../delete/" class="btn btn-success pull-left") Match
 				//a(href="../delete/" class="btn btn-default pull-left") History

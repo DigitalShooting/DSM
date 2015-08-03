@@ -9,9 +9,8 @@ block body
 		h2 Stände
 		ul(class="nav nav-pills nav-stacked")
 			- for(var key in stände){
-				+navElement("/staende/stand/"+key, stände[key].label)
+				+navElement("/staende/stand/"+key+"/", stände[key].label)
 			- }
-		
 		
 	section(class="col-lg-7 col-sm-8")
 		block main

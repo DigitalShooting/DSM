@@ -1,0 +1,20 @@
+extends ../index.jade
+
+mixin subnavElement(url, text)
+	- var urlPath = url
+	- if (urlPath.substring(0, 1) == ".") urlPath = urlPath.substring(1, urlPath.length) 
+	li(class=(req.originalUrl.indexOf(urlPath) > -1 ? "active" : ""))
+		a(href=url) #{text}
+
+block title
+	| #{stand.label}
+
+block main
+	h1
+		block title
+	
+	ul(class="nav nav-tabs")
+		+subnavElement("./edit", "Einstellungen")
+		+subnavElement("./view", "Übersicht")
+	
+	block stand
