@@ -38,12 +38,11 @@ html(lang="en")
 		link(href="/css/style.css", rel="stylesheet")
 		link(href="/css/select2.min.css", rel="stylesheet")
 		link(href="/css/select2-bootstrap.css", rel="stylesheet")
-		// link(href="/css/jquery.dataTables.min.css", rel="stylesheet")
-		// link(href="/css/dataTables.bootstrap.css", rel="stylesheet")
 		
 		script(src="/js/jquery.min.js")
 		script(src="/js/bootstrap.min.js")
 		script(src="/js/select2.full.min.js")
+		script(src="/js/socket.io.js")
 		
 		script.
 			$(document).ready(function() {
@@ -51,9 +50,6 @@ html(lang="en")
 					theme: "bootstrap"
 				})
 			})
-		
-		// script(src="/js/jquery.dataTables.min.js")
-		// script(src="/js/jquery.dataTables.bootstrap.min.js")
 		
 		meta(name="viewport", content="width=device-width")
 	body

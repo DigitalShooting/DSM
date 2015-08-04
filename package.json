@@ -17,6 +17,7 @@
 		"bootstrap": "x",
 		"mysql": "x",
 		"body-parser": "x",
+		"socket.io": "^1.3.6",
 		"datatables": "x",
 		"mongodb": "x"
 	},

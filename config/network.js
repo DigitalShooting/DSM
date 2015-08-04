@@ -8,7 +8,7 @@ module.exports = {
 	/**
 		port
 	*/
-	port		:	3000,
+	port		:	3001,
 
 	/**
 		address

@@ -13,7 +13,7 @@ module.exports = {
 	// },
 	stand3 : {
 		label: "Stand 3",
-		ip: "192.168.101.213",
+		ip: "127.0.0.1",
 		port: "3000",
 		mac: "",
 	},
