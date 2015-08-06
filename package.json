@@ -12,7 +12,7 @@
 		"flash": "x",
 		"async": "x",
 		"compression": "x",
-		"express-less": "x",
+		"less-middleware": "x",
 		"path": "x",
 		"bootstrap": "x",
 		"mysql": "x",

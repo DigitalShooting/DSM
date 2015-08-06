@@ -5,7 +5,7 @@ var less = require("less")
 var compression = require('compression')
 var http = require("http")
 var bodyParser = require('body-parser')
-var expressLess = require('express-less')
+var lessMiddleware = require('less-middleware')
 var config = require("./config/")
 var routes = require("./routes")
 
@@ -30,7 +30,8 @@ app.use("/js/", express.static("./node_modules/jquery/dist"))
 
 // app.use("/css/jquery.dataTables.min.css", express.static("./node_modules/datatables/media/css/jquery.dataTables.css"))
 // app.use("/css/dataTables.bootstrap.css", express.static("./node_modules/datatables/media/css/dataTables.bootstrap.css"))
-app.use("/css/", expressLess(__dirname + "/stylesheets"))
+app.use("/css/", lessMiddleware(__dirname + "/stylesheets"))
+app.use("/css/", express.static(__dirname + "/stylesheets"))
 
 app.use(bodyParser.urlencoded({
 	extended: true
