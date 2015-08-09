@@ -9,6 +9,7 @@ block stand
 			console.log(newSession)
 			session = newSession
 			setUpDisziplinen()
+			setUpParts()
 		});
 		var config
 		socket.on('setConfig', function(c){
@@ -34,8 +35,21 @@ block stand
 					$(".stand .disziplin").append("<option value='"+key+"'>"+disziplin.title+"</option>")
 				}
 				
-				console.log(session.disziplin._id)
 				$(".stand .disziplin").val(session.disziplin._id).trigger("change")
+			}
+		}
+		function setUpParts(){
+			if (session){
+				var disziplin = session.disziplin
+				$(".stand .part").html("")
+				for(var i in disziplin.partsOrder){
+					var key = disziplin.partsOrder[i]
+					var part = disziplin.parts[key]
+					console.log(part)
+					$(".stand .part").append("<option value='"+key+"'>"+part.title+"</option>")
+				}
+				
+				$(".stand .part").val(session.type).trigger("change")
 			}
 		}
 		
@@ -43,6 +57,10 @@ block stand
 		function sendDisziplin(){
 			var disziplin = $('.stand .disziplin option:selected').val();
 			socket.emit('setDisziplin', disziplin)
+		}
+		function sendPart(){
+			var part = $('.stand .part option:selected').val();
+			socket.emit('switchToPart', part)
 		}
 		function sendSchuetze(){
 			var schuetzeID = $('.stand .schuetze option:selected').val();
@@ -65,6 +83,14 @@ block stand
 				div(class="form-horizontal")
 					+inputSelect("disziplin", [], false, "Disziplin")
 					input(type="submit" class="btn btn-primary pull-right" onclick="sendDisziplin()")
+					
+					
+		div(class="panel panel-default")
+			div(class="panel-heading") Part
+			div(class="panel-body")
+				div(class="form-horizontal")
+					+inputSelect("part", [], false, "Part")
+					input(type="submit" class="btn btn-primary pull-right" onclick="sendPart()")
 				
 				
 		div(class="panel panel-default")
