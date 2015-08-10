@@ -42,14 +42,16 @@ html(lang="en")
 		script(src="/js/jquery.min.js")
 		script(src="/js/bootstrap.min.js")
 		script(src="/js/select2.full.min.js")
-		script(src="/js/socket.io.js")
-		
+		script(src="/socket.io/socket.io.js")
 		script.
 			$(document).ready(function() {
 				$(".selectpicker").select2({
 					theme: "bootstrap"
 				})
 			})
+			
+		script.
+			var dsmSocket = io()
 		
 		meta(name="viewport", content="width=device-width")
 	body

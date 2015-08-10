@@ -8,6 +8,7 @@ var bodyParser = require('body-parser')
 var lessMiddleware = require('less-middleware')
 var config = require("./config/")
 var routes = require("./routes")
+var exec = require("exec")
 
 var app = express({ strict: true })
 
@@ -62,7 +63,30 @@ app.get("/", function(req, res){
 
 
 var server = http.Server(app)
+var io = require('socket.io')(server)
 server.listen(config.network.port, config.network.address)
 server.on('listening', function() {
 	console.log('Express server started on at %s:%s', server.address().address, server.address().port)
+})
+
+
+
+
+
+
+io.on('connection', function(socket){
+
+	socket.on('setPower', function(data){
+		var stand = config.stände[data.stand]
+		console.log(stand)
+		if (data.state == true){
+			// Power On
+			exec(["wakeonlan", stand.mac], function(err, out, code) { })
+		}
+		else {
+			// Power Off
+			exec(["ssh -t diana@"+stand.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
+		}
+	})
+
 })

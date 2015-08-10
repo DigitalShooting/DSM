@@ -1,7 +1,6 @@
 extends index.jade
 
 block stand
-	script(src="//"+stand.ip+":"+stand.port+"/socket.io/socket.io.js")
 	script.
 		var socket = io("//#{stand.ip}:#{stand.port}")
 		
