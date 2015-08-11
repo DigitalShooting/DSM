@@ -2,24 +2,29 @@ extends index.jade
 
 block stand
 	script.
-		var socket = io("//#{stand.ip}:#{stand.port}")
-		
+		var socket
 		var session
-		socket.on('setSession', function(newSession){
-			console.log(newSession)
-			session = newSession
-			setUpDisziplinen()
-			setUpParts()
-		});
 		var config
-		socket.on('setConfig', function(c){
-			console.log(c)
-			config = c
-			setUpDisziplinen()
-		});
-		socket.on('newShot', function(shot){
-			//console.log(shot)
-		});
+		
+		function initDSCSocket(){
+			socket = io("//#{stand.ip}:#{stand.port}")
+			
+			socket.on('setSession', function(newSession){
+				console.log(newSession)
+				session = newSession
+				setUpDisziplinen()
+				setUpParts()
+			});
+			
+			socket.on('setConfig', function(c){
+				console.log(c)
+				config = c
+				setUpDisziplinen()
+			});
+			socket.on('newShot', function(shot){
+				//console.log(shot)
+			});
+		}
 		
 		
 		var schuetzen = !{JSON.stringify(schuetzen)}
@@ -83,14 +88,19 @@ block stand
 		
 		dsmSocket.on('setStatus', function(object){
 			if (object.stand._id == "#{stand._id}"){
-				console.log(object)
 				if (object.alive == true){
+					if (socket == undefined){
+						initDSCSocket()
+					}
+					
 					$(".power").removeClass("panel-danger")
 					$(".power").addClass("panel-primary")
 					
 					$(".power .panel-heading").text("Online")
 				}
 				else {
+					socket = undefined
+					
 					$(".power").addClass("panel-danger")
 					$(".power").removeClass("panel-primary")
 					
