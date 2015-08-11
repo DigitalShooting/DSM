@@ -91,7 +91,7 @@ io.on('connection', function(socket){
 		var stand = config.stände[data.stand]
 		if (data.state == true){
 			// Power On
-			child_process.exec(["wakeonlan", stand.mac], function(err, out, code) { })
+			exec(["wakeonlan", stand.mac], function(err, out, code) { })
 		}
 		else {
 			// Power Off
