@@ -79,10 +79,12 @@ block stand
 			}
 		}
 		function setPower(value){
-			dsmSocket.emit('setPower', {
-				state: value,
-				stand: "#{stand._id}",
-			})
+			$("#shutdownConfirm").modal("show")
+			
+			//- dsmSocket.emit('setPower', {
+			//- 	state: value,
+			//- 	stand: "#{stand._id}",
+			//- })
 		}
 		
 		
