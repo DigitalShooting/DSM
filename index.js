@@ -126,5 +126,4 @@ setInterval(function(){
 			statusCache[stand._id] = isAlive
 		})
 	})
-	console.log(statusCache)
 }, 5000)
