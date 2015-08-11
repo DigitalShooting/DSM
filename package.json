@@ -20,7 +20,8 @@
 		"socket.io": "^1.3.6",
 		"datatables": "x",
 		"mongodb": "x",
-		"exec": "x"
+		"exec": "x",
+		"ping": "x"
 	},
 	"main": "index.js"
 }

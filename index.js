@@ -9,6 +9,8 @@ var lessMiddleware = require('less-middleware')
 var config = require("./config/")
 var routes = require("./routes")
 var exec = require("exec")
+var child_process = require('child_process')
+var ping = require('ping')
 
 var app = express({ strict: true })
 
@@ -76,17 +78,53 @@ server.on('listening', function() {
 
 io.on('connection', function(socket){
 
+	for(var id in statusCache){
+		var stand = config.stände[id]
+
+		socket.emit('setStatus', {
+			stand: stand,
+			alive: statusCache[id],
+		})
+	}
+
 	socket.on('setPower', function(data){
 		var stand = config.stände[data.stand]
-		console.log(stand)
 		if (data.state == true){
 			// Power On
-			exec(["wakeonlan", stand.mac], function(err, out, code) { })
+			child_process.exec(["wakeonlan", stand.mac], function(err, out, code) { })
 		}
 		else {
 			// Power Off
-			exec(["ssh -t diana@"+stand.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
+			child_process.exec(["ssh -t "+stand.user+"@"+stand.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
 		}
 	})
 
 })
+
+
+
+
+
+
+
+
+var stände = []
+for(var key in config.stände){
+	var stand = config.stände[key]
+	stände.push(stand)
+}
+
+var statusCache = {}
+
+setInterval(function(){
+	stände.forEach(function(stand){
+		ping.sys.probe(stand.ip, function(isAlive){
+			io.emit('setStatus', {
+				stand: stand,
+				alive: isAlive,
+			})
+			statusCache[stand._id] = isAlive
+		})
+	})
+	console.log(statusCache)
+}, 5000)

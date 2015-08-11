@@ -79,14 +79,40 @@ block stand
 				stand: "#{stand._id}",
 			})
 		}
+		
+		
+		dsmSocket.on('setStatus', function(object){
+			if (object.stand._id == "#{stand._id}"){
+				console.log(object)
+				if (object.alive == true){
+					$(".power").removeClass("panel-danger")
+					$(".power").addClass("panel-primary")
+					
+					$(".power .panel-heading").text("Online")
+				}
+				else {
+					$(".power").addClass("panel-danger")
+					$(".power").removeClass("panel-primary")
+					
+					$(".power .panel-heading").text("Offline")
+				}
+			}
+		})
+		
+		
+		
+		
+		
+		
 	
 	div(class="stand")
 		.col-xs-12
-			div(class="panel panel-danger")
-				div(class="panel-heading") Power
+			div(class="panel panel-danger power")
+				div(class="panel-heading") Offline
 				div(class="panel-body")
 					div(class="form-horizontal")
 						input(type="submit" class="btn btn-danger pull-left" value="Herunterfahren" onclick="setPower(false)")
+						p(class="status")
 						input(type="submit" class="btn btn-primary pull-right" value="Hochfahren" onclick="setPower(true)")
 						
 		.col-xs-6
