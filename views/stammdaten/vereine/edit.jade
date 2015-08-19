@@ -4,13 +4,24 @@ block title
 	| #{verein.name}
 	
 block main
-	h1
-		block title
-	div(class="panel panel-primary")
-		div(class="panel-heading") Infos
-		div(class="panel-body")
-			form(role='form' method="post" class="form-horizontal")
-				+inputDefault("name", verein ? verein.name : "", "Name")
-				+inputDisabled(verein ? verein._id : "", "ID")
-				input(type="submit" class="btn btn-primary pull-right")
-			a(href="../delete/" + verein._id class="btn btn-danger pull-left") Löschen
+	//- div(ng-app="editVerein" ng-controller="editVereinCtrl")
+	div
+		h1
+			| {{name}}
+
+		script.
+			var app = angular.module('editVerein', []);
+			app.controller('editVereinCtrl', function($scope) {
+				$scope.name= "#{verein.name}";
+			});
+
+		
+		div(class="panel panel-primary")
+			
+			div(class="panel-heading") Infos
+			div(class="panel-body")
+				form(role='form' method="post" class="form-horizontal")
+					+inputDefault("name", verein ? verein.name : "", "Name")
+					+inputDisabled(verein ? verein._id : "", "ID")
+					input(type="submit" class="btn btn-primary pull-right")
+				a(href="../delete/" + verein._id class="btn btn-danger pull-left") Löschen

@@ -4,21 +4,37 @@ block title
 	| #{schuetze.vorname} #{schuetze.name}
 	
 block main
-	h1
-		block title
-	div(class="panel panel-primary")
-		div(class="panel-heading") Infos
-		div(class="panel-body")
-			form(role='form' method="post" class="form-horizontal")
-				+inputDefault("vorname", schuetze ? schuetze.vorname : "", "Vorname")
-				+inputDefault("name", schuetze ? schuetze.name : "", "Name")
-				+inputDefault("passnummer", schuetze ? schuetze.passnummer : "", "Passnummer")
-				
-				- var optionVerein = []
-				- vereine.forEach(function(verein){ optionVerein.push({id: verein._id, title: verein.name}) })
-				+inputSelect("vereinID", optionVerein, schuetze ? schuetze.vereinID : "", "Verein")
-				
-				+inputDisabled(schuetze ? schuetze._id : "", "ID")
-				
-				input(type="submit" class="btn btn-primary pull-right")
-			a(href="../delete/" + schuetze._id class="btn btn-danger pull-left") Löschen
+
+
+
+
+
+
+	div(ng-app="editSchuetze" ng-controller="editSchuetzeCtrl")
+		h1
+			| {{vorname}} {{name}}
+			
+			
+		script.
+			var app = angular.module('editSchuetze', []);
+			app.controller('editSchuetzeCtrl', function($scope) {
+				$scope.vorname=  "#{schuetze.vorname}";
+				$scope.name= "#{schuetze.name}";
+			});
+			
+		div(class="panel panel-primary")
+			div(class="panel-heading") Infos
+			div(class="panel-body")
+				form(role='form' method="post" class="form-horizontal")
+					+inputDefault("vorname", schuetze ? schuetze.vorname : "", "Vorname")
+					+inputDefault("name", schuetze ? schuetze.name : "", "Name")
+					+inputDefault("passnummer", schuetze ? schuetze.passnummer : "", "Passnummer")
+					
+					- var optionVerein = []
+					- vereine.forEach(function(verein){ optionVerein.push({id: verein._id, title: verein.name}) })
+					+inputSelect("vereinID", optionVerein, schuetze ? schuetze.vereinID : "", "Verein")
+					
+					+inputDisabled(schuetze ? schuetze._id : "", "ID")
+					
+					input(type="submit" class="btn btn-primary pull-right")
+				a(href="../delete/" + schuetze._id class="btn btn-danger pull-left") Löschen
