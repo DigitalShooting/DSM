@@ -95,6 +95,7 @@ io.on('connection', function(socket){
 		}
 		else {
 			// Power Off
+			console.log("ssh -t "+stand.user+"@"+stand.ip+" 'sudo shutdown -h now'")
 			child_process.exec(["ssh -t "+stand.user+"@"+stand.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
 		}
 	})
