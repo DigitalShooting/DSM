@@ -93,7 +93,7 @@ module.exports = {
 		user: "diana",
 		ip: "10.0.1.11",
 		port: "3000",
-		mac: "",
+		mac: "00:12:3f:94:68:de",
 	},
 	stand12 : {
 		_id: "stand12",
