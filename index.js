@@ -26,10 +26,11 @@ app.use("/fonts/", express.static("./node_modules/bootstrap/fonts"))
 
 app.use("/js/socket.io.js", express.static("./node_modules/socket.io/node_modules/socket.io-client/socket.io.js"))
 
-app.use("/js/", express.static("./assets/js"))
+app.use("/js/", express.static(__dirname + "/assets/js"))
+app.use("/libs/", express.static(__dirname + "/assets/libs"))
 // app.use("/js/jquery.dataTables.min.js", express.static("./node_modules/datatables/media/js/jquery.dataTables.js"))
 // app.use("/js/dataTables.bootstrap.min.js", express.static("./node_modules/datatables/media/js/dataTables.bootstrap.min.js"))
-app.use("/js/", express.static("./node_modules/jquery/dist"))
+app.use("/js/", express.static(__dirname + "/node_modules/jquery/dist"))
 
 // app.use("/css/jquery.dataTables.min.css", express.static("./node_modules/datatables/media/css/jquery.dataTables.css"))
 // app.use("/css/dataTables.bootstrap.css", express.static("./node_modules/datatables/media/css/dataTables.bootstrap.css"))
