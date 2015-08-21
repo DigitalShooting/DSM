@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.5",
-    "select2": "~4.0.0",
+    "select2": "4.x.x",
     "angularjs": "~1.4.4",
     "angular-socket-io": "~0.7.0",
     "angular-route": "~1.4.4"
