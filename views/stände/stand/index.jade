@@ -13,8 +13,101 @@ block main
 	h1
 		block title
 	
+	script.
+		angular.module('dsm.services.socketio', []).
+		factory('socket', function (socketFactory) {
+			var myIoSocket = io.connect("//#{stand.ip}:#{stand.port}");
+			mySocket = socketFactory({
+				ioSocket: myIoSocket
+			});
+
+			return mySocket; 
+		}).
+		filter('propsFilter', function() {
+			return function(items, props) {
+				console.log(items, props)
+				var out = [];
+
+				if (angular.isArray(items)) {
+					var keys = Object.keys(props);
+				
+					items.forEach(function(item) {
+						var itemMatches = false;
+
+						for (var i = 0; i < keys.length; i++) {
+							var prop = keys[i];
+							var text = props[prop].toLowerCase();
+							if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+								itemMatches = true;
+								break;
+							}
+						}
+
+						if (itemMatches) {
+							out.push(item);
+						}
+					});
+				} else {
+					// Let the output be the input untouched
+					out = items;
+				}
+
+				return out;
+			};
+		});
+		
+		angular.module('stände', [
+			'dsm.services.socketio',
+			'dsm.controllers.stände.overview',
+			
+			// 3rd party dependencies
+			"btford.socket-io",
+			"ngSanitize",
+			'ui.select',
+		])
+		
+		angular.module('dsm.controllers.stände.overview', []).
+		controller('disziplinen', ["$scope", "socket", function ($scope, socket) {
+			console.log(socket)
+			socket.on("setSession", function (session) {
+				console.log(session)
+				$scope.session = session
+				
+				
+				$scope.selectedDisziplin = {
+					id: session.disziplin._id,
+					title: session.disziplin.title,
+				}
+			});
+			socket.on("setConfig", function (config) {
+				
+				$scope.disziplinen = []
+				console.log(config.disziplinen.groups)
+				for (var i in config.disziplinen.groups){
+					var group = config.disziplinen.groups[i]
+					
+					for (var id in group.disziplinen){
+						var disziplin = config.disziplinen.all[group.disziplinen[id]]
+						
+						$scope.disziplinen.push({
+							group: group.title,
+							id: id,
+							title: disziplin.title,
+						})
+					}
+					
+				}
+				//- console.log($scope.disziplinen)
+				
+			});
+			
+			
+			
+		}])
+		
+	
 	ul(class="nav nav-tabs")
 		+subnavElement("./edit", "Einstellungen")
 		+subnavElement("./view", "Übersicht")
-	
+		
 	block stand

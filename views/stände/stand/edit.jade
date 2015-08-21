@@ -6,24 +6,28 @@ block stand
 		var session
 		var config
 		
+		
+		
+		
+		
 		function initDSCSocket(){
-			socket = io("//#{stand.ip}:#{stand.port}")
-			
-			socket.on('setSession', function(newSession){
-				console.log(newSession)
-				session = newSession
-				setUpDisziplinen()
-				setUpParts()
-			});
-			
-			socket.on('setConfig', function(c){
-				console.log(c)
-				config = c
-				setUpDisziplinen()
-			});
-			socket.on('newShot', function(shot){
-				//console.log(shot)
-			});
+			//- socket = io("//#{stand.ip}:#{stand.port}")
+			//- 
+			//- socket.on('setSession', function(newSession){
+			//- 	console.log(newSession)
+			//- 	session = newSession
+			//- 	setUpDisziplinen()
+			//- 	setUpParts()
+			//- });
+			//- 
+			//- socket.on('setConfig', function(c){
+			//- 	console.log(c)
+			//- 	config = c
+			//- 	setUpDisziplinen()
+			//- });
+			//- socket.on('newShot', function(shot){
+			//- 	//console.log(shot)
+			//- });
 		}
 		
 		
@@ -112,7 +116,7 @@ block stand
 		})
 		
 		
-		
+	
 		
 		
 		
@@ -128,12 +132,30 @@ block stand
 						input(type="submit" class="btn btn-primary pull-right" value="Hochfahren" onclick="setPower(true)")
 						
 		.col-xs-6
-			div(class="panel panel-default")
+			div(class="panel panel-default" ng-controller="disziplinen")
 				div(class="panel-heading") Disziplin
 				div(class="panel-body")
 					div(class="form-horizontal")
-						+inputSelect("disziplin", [], false, "Disziplin")
+						
+						div(class="form-group")
+							label(class="col-sm-2 control-label") Disziplin
+							div(class="col-sm-10")
+								
+								//- ul
+								//- 	li(ng-repeat="disziplin in disziplinen.groups track by $index") {{disziplin.title}}
+								
+								ui-select(ng-model="selectedDisziplin" theme="bootstrap" reset-search-input="false" )
+									ui-select-match {{selectedDisziplin.title}}
+									ui-select-choices(repeat="disziplin in disziplinen track by $index | propsFilter: {title: $select.search}" refresh="" refresh-delay="0")
+										div(group-by="disziplin.group") {{disziplin.title}}
+								
+								{{selectedDisziplin.title}}
+								
 						input(type="submit" class="btn btn-primary pull-right" onclick="sendDisziplin()")
+				
+				
+				
+		
 					
 		.col-xs-6
 			div(class="panel panel-default")

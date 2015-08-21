@@ -21,6 +21,8 @@
     "angularjs": "~1.4.4",
     "angular-socket-io": "~0.7.0",
     "angular-route": "~1.4.4",
-    "select2-bootstrap-theme": "~0.1.0-beta.4"
+    "select2-bootstrap-theme": "~0.1.0-beta.4",
+    "angular-ui-select": "~0.12.1",
+    "angular-sanitize": "~1.4.4"
   }
 }
