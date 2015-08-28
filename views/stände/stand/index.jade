@@ -104,10 +104,9 @@ block main
 			
 			
 		}])
-		
-	
-	ul(class="nav nav-tabs")
-		+subnavElement("./edit", "Einstellungen")
-		+subnavElement("./view", "Übersicht")
-		
-	block stand
+	div(ng-app="stände")
+		ul(class="nav nav-tabs")
+			+subnavElement("./edit", "Einstellungen")
+			+subnavElement("./view", "Übersicht")
+			
+		block stand

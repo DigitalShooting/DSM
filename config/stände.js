@@ -59,7 +59,7 @@ module.exports = {
 		_id: "stand7",
 		label: "Stand 7",
 		user: "diana",
-		ip: "10.0.1.10",
+		ip: "10.0.1.7",
 		port: "3000",
 		mac: "00:12:3f:94:6d:69",
 	},
