@@ -1,14 +1,14 @@
 extends ../layout.jade
 
 block body
-	div(ng-app="stände" ng-controller="stände")
+	div(ng-app="staende" ng-controller="stände")
 		section(class="col-xs-offset-1 col-xs-2")
 			h2 Stände
 			ul(class="nav nav-pills nav-stacked")
 				li(ng-repeat="stand in staende track by $index" class="col-xs-12")
-					div(class="btn-group col-xs-12" role="group")
-						button(href="#/staende/stand/key/" type="button" ng-click="toggleAll(false); toggle(stand._id);" class="btn col-xs-8 {{stand.isConnected ? 'btn-success' : 'btn-default' }} {{state[stand._id] ? 'selected' : 'deselected'}}") {{stand.label}}
-						button(href="#/staende/stand/key/" type="button" ng-click="toggle(stand._id)" class="btn col-xs-4 {{stand.isConnected ? 'btn-success' : 'btn-default' }} {{state[stand._id] ? 'selected' : 'deselected'}}") {{state[stand._id] ? '-' : '+'}}
+					div(class="btn-group fullWidth" role="group")
+						button(href="#/staende/stand/key/" type="button" ng-click="toggleAll(false); toggle(stand._id);" class="btn col-xs-10 {{stand.isConnected ? 'btn-success' : 'btn-default' }} {{state[stand._id] ? 'selected' : 'deselected'}}") {{stand.label}}
+						button(href="#/staende/stand/key/" type="button" ng-click="toggle(stand._id)" class="btn col-xs-2 {{stand.isConnected ? 'btn-success' : 'btn-default' }} {{state[stand._id] ? 'selected' : 'deselected'}}") {{state[stand._id] ? '-' : '+'}}
 				
 				li(class="col-xs-12 btn-group" role="group")
 					button(href="#/staende/stand/key/" type="button" ng-click="toggleAll(true)" class="btn col-xs-6 btn-default") Alle markieren
@@ -85,12 +85,13 @@ block body
 
 	
 	script.
-		var config = {}
-		config.staende = !{JSON.stringify(stände)};
+		var config = {
+			staende: !{JSON.stringify(stände)},
+		}
 		var vereine = !{JSON.stringify(vereine)};
 		var schuetzen = !{JSON.stringify(schuetzen)};
 	
-		angular.module('dsm.controllers.stände.overview', ["ui", 'ui.select', 'ngSanitize'])
+		angular.module('dsm.controllers.stände.overview', ['ui.select', 'ngSanitize'])
 		
 		.controller('stände', ["$scope", "staende", "dsmSocket", function ($scope, staende, dsmSocket) {
 			$scope.staende = staende
@@ -332,7 +333,7 @@ block body
 		
 		
 		
-		angular.module('stände', [
+		angular.module('staende', [
 			'dsm.services.socketio',
 			'dsm.controllers.stände.overview',
 		])

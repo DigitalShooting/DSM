@@ -54,15 +54,6 @@ html(lang="en")
 		
 		script(src="/libs/angular-ui-select/dist/select.js")
 		
-		
-		
-		//- script(data-require="jquery@1.11.0" data-semver="1.11.0" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js")
-		//- script(data-require="select2@3.5.1" data-semver="3.5.1" src="//cdn.jsdelivr.net/select2/3.4.8/select2.min.js")
-		//- script(data-require="angular.js@1.2.20" data-semver="1.2.20" src="https://code.angularjs.org/1.2.20/angular.js")
-		script(data-require="angular-ui@0.4.0" data-semver="0.4.0" src="http://rawgithub.com/angular-ui/angular-ui/master/build/angular-ui.js")
-		//- 
-		//- link(data-require="select2@3.5.1" data-semver="3.5.1" rel="stylesheet" href="//cdn.jsdelivr.net/select2/3.4.8/select2.css")
-		
 		script.
 			$(document).ready(function() {
 				$(".selectpicker").select2({
@@ -88,7 +79,7 @@ html(lang="en")
 				div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
 					ul(class="nav navbar-nav")
 						+navElement("/stammdaten/", "Stammdaten")
-						+navElement("/rwks/", "Rundenwettkämpfe")
+						//- +navElement("/rwks/", "Rundenwettkämpfe")
 						+navElement("/staende/", "Stände")
 						
 						//- +navElement("/staende", "Stände")
