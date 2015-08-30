@@ -1,16 +1,314 @@
 extends ../layout.jade
 
 block body
-	section(class="col-lg-offset-1 col-lg-3  col-sm-4")
-		h2 Übersicht
-		ul(class="nav nav-pills nav-stacked")
-			+navElement("/staende/overview", "Übersicht")
+	div(ng-app="stände" ng-controller="stände")
+		section(class="col-xs-offset-1 col-xs-2")
+			h2 Stände
+			ul(class="nav nav-pills nav-stacked")
+				li(ng-repeat="stand in staende track by $index" class="col-xs-12")
+					button(href="#/staende/stand/key/" type="button" ng-click="toggle(stand._id)" class="btn col-xs-12 {{stand.isConnected ? 'btn-success' : 'btn-default' }} {{state[stand._id] ? 'selected' : 'deselected'}}") {{stand.label}}
+				li(class="col-xs-12 btn-group" role="group")
+					button(href="#/staende/stand/key/" type="button" ng-click="toggleAll(true)" class="btn col-xs-6 btn-default") Alle markieren
+					button(href="#/staende/stand/key/" type="button" ng-click="toggleAll(false)" class="btn col-xs-6 btn-default") Zurücksetzen
 			
-		h2 Stände
-		ul(class="nav nav-pills nav-stacked")
-			- for(var key in stände){
-				+navElement("/staende/stand/"+key+"/", stände[key].label)
-			- }
+			
+		section(class="col-lg-7 col-sm-8")
+			h1 Verwalten
+			ul(class="nav nav-tabs")
+				li(class="active")
+					a(href=url) Verwalten
+				li(class="")
+					a(href=url) Betrachten
+			//- block main
+			
+			
+			.col-xs-6
+				div(class="panel panel-default power")
+					div(class="panel-heading") Allgemein
+					div(class="panel-body")
+						div(class="form-horizontal")
+							div(class="form-group")
+								label(for="" class="col-xs-2 control-label") Status
+								div(class="btn-group col-xs-10" role="group")
+									button(type="submit" class="btn btn-default col-xs-6" ng-click="setPower(false)") Herunterfahren
+									button(type="submit" class="btn btn-success col-xs-6" ng-click="setPower(true)") Hochfahren
+							div(class="form-group")
+								label(for="" class="col-xs-2 control-label") Drucken
+								div(class="btn-group col-xs-10" role="group")
+									button(type="submit" class="btn btn-default col-xs-6" ng-click="print('current')") Akteulle Session
+									button(type="submit" class="btn btn-default col-xs-6" ng-click="print('all')") Alle Session
+			
+			
+			.col-xs-6
+				div(class="panel panel-default")
+					div(class="panel-heading") Disziplin
+					div(class="panel-body")
+						div(class="form-horizontal")
+							div(class="form-group")
+								label(class="col-sm-2 control-label") Disziplin
+								div(class="col-sm-10")
+									ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectDisziplin()")
+										ui-select-match {{selected.disziplin.title}}
+										ui-select-choices(group-by="groupByType" repeat="disziplin in disziplinen | propsFilter: {title: $select.search}" )
+											div {{disziplin.title}}
 		
-	section(class="col-lg-7 col-sm-8")
-		block main
+							div(class="form-group")
+								label(class="col-sm-2 control-label") Mode
+								div(class="col-sm-10")
+									ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectPart()")
+										ui-select-match {{selected.part.title}}
+										ui-select-choices(repeat="part in parts | propsFilter: {title: $select.search}")
+											div {{part.title}}
+
+			.col-xs-12
+				div(class="panel panel-default")
+					div(class="panel-heading") Schütze
+					div(class="panel-body")
+						div(class="form-horizontal")
+							.col-xs-6
+								div(class="form-group")
+									label(class="col-sm-2 control-label") Verein
+									div(class="col-sm-10")
+										ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectPart()")
+											ui-select-match {{selected.part.title}}
+											ui-select-choices(repeat="verein in vereine | propsFilter: {title: $select.search}")
+												div {{verein.title}}
+							.col-xs-6
+								div(class="form-group")
+									label(class="col-sm-2 control-label") Schütze
+									div(class="col-sm-10")
+										select(name=name class="selectpicker "+name style="width:100%")
+
+
+	script.
+		var config = {}
+		config.staende = !{JSON.stringify(stände)};
+	
+		angular.module('dsm.controllers.stände.overview', ["ui", 'ui.select', 'ngSanitize'])
+		
+		.controller('stände', ["$scope", "staende", "dsmSocket", function ($scope, staende, dsmSocket) {
+			$scope.staende = staende
+			
+			// Selected stände
+			$scope.state = {}
+			
+			// Selected values
+			$scope.selected = {}
+				
+			
+			// toggle selected for stand
+			$scope.toggle = function(key){
+				$scope.state[key] = !$scope.state[key]
+				console.log($scope.state)
+			}
+			// toggel selection for all
+			$scope.toggleAll = function(value){
+				$scope.staende.forEach(function(stand){
+					$scope.state[stand._id] = value
+				})
+			}
+			// toggel default all (on)
+			$scope.toggleAll(true)
+			
+		
+		
+			// Update ui values
+			var updateUI = function() {
+				for (i in staende){
+					var stand = staende[i]
+					
+					if (stand.session){
+						
+						// Format Parts for select
+						$scope.parts = []
+						for (var id in stand.session.disziplin.parts){
+							var part = stand.session.disziplin.parts[id]
+							part.id = id
+							$scope.parts.push(part)
+						}
+						
+						// Set current disziplin
+						if (stand.config){
+							$scope.selected.disziplin = stand.config.disziplinen.all[stand.session.disziplin._id]
+						}
+						
+						// Set current part
+						$scope.selected.part = stand.session.disziplin.parts[stand.session.type]
+						
+					}
+					
+					
+					if (stand.config){
+						
+						// Set disziplinen for select
+						$scope.disziplinen = []
+						for (var i in stand.config.disziplinen.groups){
+							var group = stand.config.disziplinen.groups[i]
+							for (var key in group.disziplinen){
+								var disziplin = stand.config.disziplinen.all[group.disziplinen[key]]
+								disziplin.type = group.title
+								$scope.disziplinen.push(disziplin)
+							}
+							
+						}
+						
+					}
+				}
+			}
+			
+			
+			for (i in staende){
+				var stand = staende[i]
+				setUpSocket(stand)
+			}
+			function setUpSocket(stand){
+				stand.socket.on("setSession", function(session){
+					stand.session = session
+					$scope.selectedPart = session.type
+					console.log(session.type)
+					updateUI()
+				})
+				stand.socket.on("setConfig", function(config){
+					stand.config = config
+					updateUI()
+				})
+			}
+			
+			
+			
+			// Performs method on all selected clients
+			function performOnSelected(callback){
+				$scope.staende.forEach(function(stand){
+					if($scope.state[stand._id] == true){
+						if (stand.isConnected == true){
+							callback(stand)
+						}
+					}
+				})
+			}
+			
+			
+			
+			
+			// Send selected disziplin
+			$scope.selectDisziplin = function(){
+				performOnSelected(function(stand){
+					stand.socket.emit('setDisziplin', $scope.selected.disziplin._id)
+				})
+			}
+			
+			// Send selected part
+			$scope.selectPart = function(){
+				performOnSelected(function(stand){
+					stand.socket.emit('switchToPart', $scope.selected.part.id)
+				})
+			}
+			
+			// Set power for line
+			$scope.setPower = function(value){
+				performOnSelected(function(stand){
+					console.log("Set Power " + value + " " + stand._id)
+					
+					dsmSocket.emit('setPower', {
+						state: value,
+						stand: stand._id,
+					})
+				})
+			}
+			
+			// Print
+			$scope.print = function(type){
+				if (type == "all"){
+					
+				}
+				else if (type == "current"){
+					
+				}
+			}
+			
+			
+			// Select Helper
+			$scope.groupByType = function (item){
+				return item.type;
+			};
+			$scope.groupSetup = {
+				theme: "bootstrap"
+			};
+			
+		}])
+		.filter('propsFilter', function() {
+			return function(items, props) {
+				var out = [];
+				if (angular.isArray(items)) {
+					var keys = Object.keys(props);
+					items.forEach(function(item) {
+						var itemMatches = false;
+						for (var i = 0; i < keys.length; i++) {
+							var prop = keys[i];
+							var text = props[prop].toLowerCase();
+							if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+								itemMatches = true;
+								break;
+							}
+						}
+						if (itemMatches) {
+							out.push(item);
+						}
+					});
+				} else {
+					out = items;
+				}
+				return out;
+			};
+		});
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		angular.module('dsm.services.socketio', ["btford.socket-io"])
+		.factory('dsmSocket', function (socketFactory) {
+			var myIoSocket = io.connect();
+			mySocket = socketFactory({
+				ioSocket: myIoSocket
+			});
+
+			return mySocket; 
+		})
+		.factory('staende', ["socketFactory", function (socketFactory) {
+			var staende = []
+			
+			function watch(stand){
+				stand.socket.on("connect", function(){
+					stand.isConnected = true
+				})
+				stand.socket.on("disconnect", function(){
+					stand.isConnected = false
+				})
+			}
+			
+			for (var key in config.staende){
+				var stand = config.staende[key]
+				stand.socket = socketFactory({
+					ioSocket: io.connect(stand.ip+":"+stand.port)
+				})
+				
+				watch(stand)
+				
+				staende.push(stand)
+			}
+			
+			return staende; 
+		}])
+		
+		
+		
+		angular.module('stände', [
+			'dsm.services.socketio',
+			'dsm.controllers.stände.overview',
+		])

@@ -37,7 +37,6 @@ html(lang="en")
 			
 		link(href="/css/style.css", rel="stylesheet")
 		link(href="/libs/select2/dist/css/select2.min.css", rel="stylesheet")
-		//- link(href="/libs/select2/select2.css", rel="stylesheet")
 		link(href="/libs/angular-ui-select/dist/select.css", rel="stylesheet")
 		
 		link(href="/libs/select2-bootstrap-theme/dist/select2-bootstrap.min.css", rel="stylesheet")
@@ -52,19 +51,24 @@ html(lang="en")
 		script(src="/libs/angular-socket-io/socket.js")
 		
 		script(src="/libs/select2/dist/js/select2.full.min.js")
-		//- script(src="/libs/select2/select2.min.js")
 		
 		script(src="/libs/angular-ui-select/dist/select.js")
 		
 		
-		//- script(src="/js/demo.js")
+		
+		//- script(data-require="jquery@1.11.0" data-semver="1.11.0" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+		//- script(data-require="select2@3.5.1" data-semver="3.5.1" src="//cdn.jsdelivr.net/select2/3.4.8/select2.min.js")
+		//- script(data-require="angular.js@1.2.20" data-semver="1.2.20" src="https://code.angularjs.org/1.2.20/angular.js")
+		script(data-require="angular-ui@0.4.0" data-semver="0.4.0" src="http://rawgithub.com/angular-ui/angular-ui/master/build/angular-ui.js")
+		//- 
+		//- link(data-require="select2@3.5.1" data-semver="3.5.1" rel="stylesheet" href="//cdn.jsdelivr.net/select2/3.4.8/select2.css")
 		
 		script.
-			//- $(document).ready(function() {
-			//- 	$(".selectpicker").select2({
-			//- 		theme: "bootstrap"
-			//- 	})
-			//- })
+			$(document).ready(function() {
+				$(".selectpicker").select2({
+					theme: "bootstrap"
+				})
+			})
 			
 		script.
 			var dsmSocket = io()

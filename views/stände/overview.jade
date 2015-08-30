@@ -1,44 +1,60 @@
 extends index.jade
 
-block title
-	| Übersicht
-
-block main
-	script.
-		var stände = !{JSON.stringify(stände)}
-		
-		angular.module('dsm.services.sockets', ["btford.socket-io"]).
-		factory('sockets', ["socketFactory", function (socketFactory) {
-			var sockets = []
-			
-			for (var key in stände){
-				var stand = stände[key]
-				sockets.push(socketFactory({
-					ioSocket: io.connect(stand.ip+":"+stand.port)
-				}))
-			}
-			
-			return sockets; 
-		}])
-		
-		angular.module('overview', [
-			'dsm.services.sockets',
-		])
-		.controller('list', function ($scope, sockets) {
-			$scope.staende = stände
-			
-			for (var i in sockets){
-				var socket = sockets[i]
-				socket.on("setSession", function (session) {
-					console.log(session)
-				})
-			}
-		})
-		
-	div(ng-app="overview")
-		h1
-			block title
-
-			div(class="" ng-controller="list")
-				div(ng-repeat="stand in staende track by $index" class="col-xs-4")
-					p(href="#" class="thumbnail") {{stand.label}}
+//- block title
+//- 	| Übersicht
+//- 
+//- block main
+//- 	script.
+//- 		var stände = !{JSON.stringify(stände)}
+//- 		
+//- 		angular.module('dsm.services.sockets', ["btford.socket-io"]).
+//- 		factory('sockets', ["socketFactory", function (socketFactory) {
+//- 			var sockets = []
+//- 			
+//- 			for (var key in stände){
+//- 				var stand = stände[key]
+//- 				sockets.push(socketFactory({
+//- 					ioSocket: io.connect(stand.ip+":"+stand.port)
+//- 				}))
+//- 			}
+//- 			
+//- 			return sockets; 
+//- 		}])
+//- 		
+//- 		angular.module('overview', [
+//- 			'dsm.services.sockets',
+//- 		])
+//- 		.controller('list', function ($scope, sockets) {
+//- 			$scope.staende = stände
+//- 			
+//- 			for (var i in sockets){
+//- 				var socket = sockets[i]
+//- 				socket.on("setSession", function (session) {
+//- 					console.log(session)
+//- 				})
+//- 			}
+//- 		})
+//- 		
+//- 	div(ng-app="overview")
+//- 		h1
+//- 			block title
+//- 
+//- 			div(class="" ng-controller="list")
+//- 				
+//- 				.col-xs-4
+//- 					div(class="panel panel-default")
+//- 						div(class="panel-heading") Stände
+//- 						div(class="panel-body")
+//- 							div(class="form-horizontal")
+//- 								
+//- 								
+//- 								div(ng-repeat="stand in staende track by $index" class="col-xs-6")
+//- 									p(href="#" class="thumbnail") {{stand.labelShort}}
+//- 				
+//- 				
+//- 				.col-xs-8
+//- 					div(class="panel panel-default")
+//- 						div(class="panel-heading") Optionen
+//- 						div(class="panel-body")
+//- 							div(class="form-horizontal")
+//- 							
