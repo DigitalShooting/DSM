@@ -23,6 +23,9 @@ block body
 				//- li(class="")
 				//- 	a(href=url) Betrachten
 			
+			.col-xs-12
+				div(class="alert alert-info animate" role="alert" ng-hide="selectedLines != 0") Kein Stand ausgewählt.
+			
 			.col-xs-6
 				div(class="panel panel-default power animate" ng-hide="selectedLines == 0")
 					div(class="panel-heading") Allgemein
@@ -82,6 +85,9 @@ block body
 											ui-select-match {{selected.schuetze.vorname}} {{selected.schuetze.name}}
 											ui-select-choices(repeat="schuetze in schuetzen | propsFilter: {vorname: $select.search, name: $select.search} | propsFilter: {vereinID: selected.verein._id}")
 												div {{schuetze.vorname}} {{schuetze.name}}
+												
+												
+			
 
 	
 	script.

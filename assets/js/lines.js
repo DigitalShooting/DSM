@@ -110,9 +110,7 @@ angular.module("lines", [
 	function performOnSelected(callback){
 		$scope.lines.forEach(function(line){
 			if($scope.state[line._id] == true){
-				if (line.isConnected == true){
-					callback(line)
-				}
+				callback(line)
 			}
 		})
 	}
@@ -123,14 +121,18 @@ angular.module("lines", [
 	// Send selected disziplin
 	$scope.selectDisziplin = function(){
 		performOnSelected(function(line){
-			line.socket.emit("setDisziplin", $scope.selected.disziplin._id)
+			if (line.isConnected == true){
+				line.socket.emit("setDisziplin", $scope.selected.disziplin._id)
+			}
 		})
 	}
 
 	// Send selected part
 	$scope.selectPart = function(){
 		performOnSelected(function(line){
-			line.socket.emit("switchToPart", $scope.selected.part.id)
+			if (line.isConnected == true){
+				line.socket.emit("switchToPart", $scope.selected.part.id)
+			}
 		})
 	}
 
@@ -165,7 +167,9 @@ angular.module("lines", [
 		}
 
 		performOnSelected(function(line){
-			line.socket.emit("setUser", user)
+			if (line.isConnected == true){
+				line.socket.emit("setUser", user)
+			}
 		})
 	}
 

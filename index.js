@@ -80,24 +80,24 @@ server.on('listening', function() {
 io.on('connection', function(socket){
 
 	for(var id in statusCache){
-		var stand = config.lines[id]
+		var line = config.lines[id]
 
 		socket.emit('setStatus', {
-			stand: stand,
+			line: line,
 			alive: statusCache[id],
 		})
 	}
 
 	socket.on('setPower', function(data){
-		var stand = config.lines[data.stand]
+		var line = config.lines[data.line]
 		if (data.state == true){
 			// Power On
-			exec(["wakeonlan", stand.mac], function(err, out, code) { })
+			exec(["wakeonlan", line.mac], function(err, out, code) { })
 		}
 		else {
 			// Power Off
-			console.log("ssh -t "+stand.user+"@"+stand.ip+" 'sudo shutdown -h now'")
-			child_process.exec(["ssh -t "+stand.user+"@"+stand.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
+			// console.log("ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'")
+			child_process.exec(["ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
 		}
 	})
 
@@ -112,20 +112,20 @@ io.on('connection', function(socket){
 
 var lines = []
 for(var key in config.lines){
-	var stand = config.lines[key]
-	lines.push(stand)
+	var line = config.lines[key]
+	lines.push(line)
 }
 
 var statusCache = {}
 
 setInterval(function(){
-	lines.forEach(function(stand){
-		ping.sys.probe(stand.ip, function(isAlive){
+	lines.forEach(function(line){
+		ping.sys.probe(line.ip, function(isAlive){
 			io.emit('setStatus', {
-				stand: stand,
+				line: line,
 				alive: isAlive,
 			})
-			statusCache[stand._id] = isAlive
+			statusCache[line._id] = isAlive
 		})
 	})
 }, 5000)
