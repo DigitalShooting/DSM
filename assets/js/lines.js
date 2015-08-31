@@ -1,13 +1,15 @@
-angular.module("dsm.controllers.stände.overview", [
+angular.module("lines", [
+	"dsm.services.sockets",
+	"dsm.services.filter",
+
 	"ui.select",
 	"ngSanitize",
-
-	"dsm.services.filter",
+	"ngAnimate",
 ])
-.controller("stände", ["$scope", "lines", "dsmSocket", function ($scope, lines, dsmSocket) {
-	$scope.staende = lines
+.controller("lines", ["$scope", "lines", "dsmSocket", function ($scope, lines, dsmSocket) {
+	$scope.lines = lines
 
-	// Selected stände
+	// Selected lines
 	$scope.state = {}
 
 	// Selected values
@@ -27,37 +29,37 @@ angular.module("dsm.controllers.stände.overview", [
 			}
 		}
 
-		performOnSelected(function(stand){
+		performOnSelected(function(line){
 
-			if (stand.session){
+			if (line.session){
 
 				// Format Parts for select
 				$scope.parts = []
-				for (var id in stand.session.disziplin.parts){
-					var part = stand.session.disziplin.parts[id]
+				for (var id in line.session.disziplin.parts){
+					var part = line.session.disziplin.parts[id]
 					part.id = id
 					$scope.parts.push(part)
 				}
 
 				// Set current disziplin
-				if (stand.config){
-					$scope.selected.disziplin = stand.config.disziplinen.all[stand.session.disziplin._id]
+				if (line.config){
+					$scope.selected.disziplin = line.config.disziplinen.all[line.session.disziplin._id]
 				}
 
 				// Set current part
-				$scope.selected.part = stand.session.disziplin.parts[stand.session.type]
+				$scope.selected.part = line.session.disziplin.parts[line.session.type]
 
 			}
 
 
-			if (stand.config){
+			if (line.config){
 
 				// Set disziplinen for select
 				$scope.disziplinen = []
-				for (var i in stand.config.disziplinen.groups){
-					var group = stand.config.disziplinen.groups[i]
+				for (var i in line.config.disziplinen.groups){
+					var group = line.config.disziplinen.groups[i]
 					for (var key in group.disziplinen){
-						var disziplin = stand.config.disziplinen.all[group.disziplinen[key]]
+						var disziplin = line.config.disziplinen.all[group.disziplinen[key]]
 						disziplin.type = group.title
 						$scope.disziplinen.push(disziplin)
 					}
@@ -69,15 +71,15 @@ angular.module("dsm.controllers.stände.overview", [
 	}
 
 
-	// toggle selected for stand
+	// toggle selected for line
 	$scope.toggle = function(key){
 		$scope.state[key] = !$scope.state[key]
 		updateUI()
 	}
 	// toggel selection for all
 	$scope.toggleAll = function(value){
-		$scope.staende.forEach(function(stand){
-			$scope.state[stand._id] = value
+		$scope.lines.forEach(function(line){
+			$scope.state[line._id] = value
 		})
 		updateUI()
 	}
@@ -87,17 +89,17 @@ angular.module("dsm.controllers.stände.overview", [
 
 
 	for (i in lines){
-		var stand = lines[i]
-		setUpSocket(stand)
+		var line = lines[i]
+		setUpSocket(line)
 	}
-	function setUpSocket(stand){
-		stand.socket.on("setSession", function(session){
-			stand.session = session
+	function setUpSocket(line){
+		line.socket.on("setSession", function(session){
+			line.session = session
 			$scope.selectedPart = session.type
 			updateUI()
 		})
-		stand.socket.on("setConfig", function(config){
-			stand.config = config
+		line.socket.on("setConfig", function(config){
+			line.config = config
 			updateUI()
 		})
 	}
@@ -106,10 +108,10 @@ angular.module("dsm.controllers.stände.overview", [
 
 	// Performs method on all selected clients
 	function performOnSelected(callback){
-		$scope.staende.forEach(function(stand){
-			if($scope.state[stand._id] == true){
-				if (stand.isConnected == true){
-					callback(stand)
+		$scope.lines.forEach(function(line){
+			if($scope.state[line._id] == true){
+				if (line.isConnected == true){
+					callback(line)
 				}
 			}
 		})
@@ -120,26 +122,26 @@ angular.module("dsm.controllers.stände.overview", [
 
 	// Send selected disziplin
 	$scope.selectDisziplin = function(){
-		performOnSelected(function(stand){
-			stand.socket.emit("setDisziplin", $scope.selected.disziplin._id)
+		performOnSelected(function(line){
+			line.socket.emit("setDisziplin", $scope.selected.disziplin._id)
 		})
 	}
 
 	// Send selected part
 	$scope.selectPart = function(){
-		performOnSelected(function(stand){
-			stand.socket.emit("switchToPart", $scope.selected.part.id)
+		performOnSelected(function(line){
+			line.socket.emit("switchToPart", $scope.selected.part.id)
 		})
 	}
 
 	// Set power for line
 	$scope.setPower = function(value){
-		performOnSelected(function(stand){
-			console.log("Set Power " + value + " " + stand._id)
+		performOnSelected(function(line){
+			console.log("Set Power " + value + " " + line._id)
 
 			dsmSocket.emit("setPower", {
 				state: value,
-				stand: stand._id,
+				line: line._id,
 			})
 		})
 	}
@@ -162,8 +164,8 @@ angular.module("dsm.controllers.stände.overview", [
 			manschaft: "",
 		}
 
-		performOnSelected(function(stand){
-			stand.socket.emit("setUser", user)
+		performOnSelected(function(line){
+			line.socket.emit("setUser", user)
 		})
 	}
 
@@ -177,13 +179,3 @@ angular.module("dsm.controllers.stände.overview", [
 	};
 
 }])
-
-
-
-
-angular.module("staende", [
-	"dsm.services.sockets",
-	"dsm.controllers.stände.overview",
-
-	"ngAnimate",
-])

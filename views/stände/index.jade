@@ -1,18 +1,18 @@
 extends ../layout.jade
 
 block body
-	div(ng-app="staende" ng-controller="stände")
+	div(ng-app="lines" ng-controller="lines")
 		section(class="col-xs-offset-1 col-xs-2")
 			h2 Stände
 			ul(class="nav nav-pills nav-stacked")
-				li(ng-repeat="stand in staende track by $index" class="col-xs-12")
+				li(ng-repeat="line in lines track by $index" class="col-xs-12")
 					div(class="btn-group fullWidth" role="group")
-						button(href="#/staende/stand/key/" type="button" ng-click="toggleAll(false); toggle(stand._id);" class="btn col-xs-10 {{stand.isConnected ? 'btn-success' : 'btn-default' }} {{state[stand._id] ? 'selected' : 'deselected'}}") {{stand.label}}
-						button(href="#/staende/stand/key/" type="button" ng-click="toggle(stand._id)" class="btn col-xs-2 {{stand.isConnected ? 'btn-success' : 'btn-default' }} {{state[stand._id] ? 'selected' : 'deselected'}}") {{state[stand._id] ? '-' : '+'}}
+						button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-xs-10 {{line.isConnected ? 'btn-success' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
+						button(type="button" ng-click="toggle(line._id)" class="btn col-xs-2 {{line.isConnected ? 'btn-success' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{state[line._id] ? '-' : '+'}}
 				
 				li(class="col-xs-12 btn-group" role="group")
-					button(href="#/staende/stand/key/" type="button" ng-click="toggleAll(true)" class="btn col-xs-6 btn-default") Alle markieren
-					button(href="#/staende/stand/key/" type="button" ng-click="toggleAll(false)" class="btn col-xs-6 btn-default") Zurücksetzen
+					button(type="button" ng-click="toggleAll(true)" class="btn col-xs-6 btn-default") Alle markieren
+					button(type="button" ng-click="toggleAll(false)" class="btn col-xs-6 btn-default") Zurücksetzen
 			
 			
 		section(class="col-lg-7 col-sm-8")
@@ -86,7 +86,7 @@ block body
 	
 	script.
 		var config = {
-			staende: !{JSON.stringify(stände)},
+			lines: !{JSON.stringify(stände)},
 		}
 		var vereine = !{JSON.stringify(vereine)};
 		var schuetzen = !{JSON.stringify(schuetzen)};

@@ -8,27 +8,27 @@ angular.module("dsm.services.sockets", ["btford.socket-io"])
 	return mySocket;
 })
 .factory("lines", ["socketFactory", function (socketFactory) {
-	var staende = []
+	var lines = []
 
-	function watch(stand){
-		stand.socket.on("connect", function(){
-			stand.isConnected = true
+	function watch(line){
+		line.socket.on("connect", function(){
+			line.isConnected = true
 		})
-		stand.socket.on("disconnect", function(){
-			stand.isConnected = false
+		line.socket.on("disconnect", function(){
+			line.isConnected = false
 		})
 	}
 
-	for (var key in config.staende){
-		var stand = config.staende[key]
-		stand.socket = socketFactory({
-			ioSocket: io.connect(stand.ip+":"+stand.port)
+	for (var key in config.lines){
+		var line = config.lines[key]
+		line.socket = socketFactory({
+			ioSocket: io.connect(line.ip+":"+line.port)
 		})
 
-		watch(stand)
+		watch(line)
 
-		staende.push(stand)
+		lines.push(line)
 	}
 
-	return staende;
+	return lines;
 }])
