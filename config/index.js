@@ -1,11 +1,11 @@
 var database = require("./database.js")
-var stände = require("./stände.js")
+var lines = require("./lines.js")
 var network = require("./network.js")
 
 module.exports = {
 	database: database,
 
-	stände : stände,
+	lines : lines,
 
 	network	: network,
 }

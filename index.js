@@ -54,7 +54,7 @@ app.use("/rwks/", routes.rwks)
 // app.use("/schuetzen", routes.schützen)
 // app.use("/vereine", routes.vereine)
 //
-app.use("/staende", routes.stände)
+app.use("/lines", routes.lines)
 // app.use("/auswertung", routes.auswertung)
 
 
@@ -80,7 +80,7 @@ server.on('listening', function() {
 io.on('connection', function(socket){
 
 	for(var id in statusCache){
-		var stand = config.stände[id]
+		var stand = config.lines[id]
 
 		socket.emit('setStatus', {
 			stand: stand,
@@ -89,7 +89,7 @@ io.on('connection', function(socket){
 	}
 
 	socket.on('setPower', function(data){
-		var stand = config.stände[data.stand]
+		var stand = config.lines[data.stand]
 		if (data.state == true){
 			// Power On
 			exec(["wakeonlan", stand.mac], function(err, out, code) { })
@@ -110,16 +110,16 @@ io.on('connection', function(socket){
 
 
 
-var stände = []
-for(var key in config.stände){
-	var stand = config.stände[key]
-	stände.push(stand)
+var lines = []
+for(var key in config.lines){
+	var stand = config.lines[key]
+	lines.push(stand)
 }
 
 var statusCache = {}
 
 setInterval(function(){
-	stände.forEach(function(stand){
+	lines.forEach(function(stand){
 		ping.sys.probe(stand.ip, function(isAlive){
 			io.emit('setStatus', {
 				stand: stand,

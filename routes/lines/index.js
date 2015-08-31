@@ -11,7 +11,9 @@ var mongodb = require("../../lib/mongodb")(function(db){
 })
 
 router.use("/", function(req, res, next){
-	res.locals.stände = config.stände
+	res.locals.config = {
+		lines: config.lines,
+	}
 
 	var collection = database.collection('vereine')
 	collection.find().toArray(function(err, results) {
@@ -27,7 +29,7 @@ router.use("/", function(req, res, next){
 })
 
 router.get("/", function(req, res){
-	res.render("stände/index")
+	res.render("lines/index")
 })
 
 
