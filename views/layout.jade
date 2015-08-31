@@ -35,24 +35,37 @@ html(lang="en")
 		title
 			block title
 			
+			
+		// Custom style
 		link(href="/css/style.css", rel="stylesheet")
-		link(href="/libs/select2/dist/css/select2.min.css", rel="stylesheet")
-		link(href="/libs/angular-ui-select/dist/select.css", rel="stylesheet")
 		
-		link(href="/libs/select2-bootstrap-theme/dist/select2-bootstrap.min.css", rel="stylesheet")
-		
+		// Socket.io
 		script(src="/socket.io/socket.io.js")
 		
+		// jquery
 		script(src="/libs/jquery/dist/jquery.js")
+		
+		// bootstap
 		script(src="/libs/bootstrap/dist/js/bootstrap.min.js")
+		link(href="/libs/select2-bootstrap-theme/dist/select2-bootstrap.min.css", rel="stylesheet")
+		
+		// Angular
 		script(src="/libs/angularjs/angular.min.js")
 		script(src="/libs/angular-sanitize/angular-sanitize.min.js")
 		script(src='/libs/angular-route/angular-route.js')
 		script(src="/libs/angular-socket-io/socket.js")
+		script(src='/libs/angular-animate/angular-animate.min.js')
 		
+		// Select2
 		script(src="/libs/select2/dist/js/select2.full.min.js")
-		
+		link(href="/libs/select2/dist/css/select2.min.css", rel="stylesheet")
 		script(src="/libs/angular-ui-select/dist/select.js")
+		link(href="/libs/angular-ui-select/dist/select.css", rel="stylesheet")
+		
+		// Custom Services
+		script(src='/js/services/filter.js')
+		script(src='/js/services/sockets.js')
+		
 		
 		script.
 			$(document).ready(function() {
