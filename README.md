@@ -1,6 +1,11 @@
 # DigitalShootingManager (DSM)
 Verwaltungsoberfläche für DSCs, basierend auf der Socket.io API.
 
+![Demo](https://raw.githubusercontent.com/DigitalShooting/assets/master/dsm1.png)
+
+
+
+
 ## Funktionen
 
 ### Stammdaten
