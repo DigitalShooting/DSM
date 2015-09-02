@@ -32,6 +32,7 @@ TODO
 
 ### v1.0
 - [ ] Stände Viewer
+- [ ] Export
 
 ### v2.0
 - [ ] RWK
