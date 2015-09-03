@@ -32,6 +32,13 @@ angular.module("lines", [
 		performOnSelected(function(line){
 
 			if (line.session){
+				$scope.selected.schuetze = {}
+				$scope.selected.schuetze.firstName = line.session.user.firstName
+				$scope.selected.schuetze.lastName = line.session.user.lastName
+
+				$scope.selected.verein = {}
+				$scope.selected.verein.name = line.session.user.verein
+				$scope.selected.verein._id = line.session.user.vereinID
 
 				// Format Parts for select
 				$scope.parts = []
@@ -160,9 +167,10 @@ angular.module("lines", [
 
 	$scope.selectSchuetze = function(){
 		var user = {
-			vorname: $scope.selected.schuetze.vorname,
-			name: $scope.selected.schuetze.name,
+			firstName: $scope.selected.schuetze.firstName,
+			lastName: $scope.selected.schuetze.lastName,
 			verein: $scope.selected.verein.name,
+			vereinID: $scope.selected.verein._id,
 			manschaft: "",
 		}
 

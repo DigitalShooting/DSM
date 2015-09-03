@@ -10,8 +10,8 @@ block main
 		div(class="panel-heading") Infos
 		div(class="panel-body")
 			form(role='form' method="post" class="form-horizontal")
-				+inputDefault("vorname", schuetze ? schuetze.vorname : "", "Vorname")
-				+inputDefault("name", schuetze ? schuetze.name : "", "Name")
+				+inputDefault("firstName", schuetze ? schuetze.firstName : "", "Vorname")
+				+inputDefault("lastName", schuetze ? schuetze.lastName : "", "Name")
 				+inputDefault("passnummer", schuetze ? schuetze.passnummer : "", "Passnummer")
 				
 				- var optionVerein = []

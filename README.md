@@ -33,6 +33,7 @@ TODO
 ### v1.0
 - [ ] Stände Viewer
 - [ ] Export
+- [ ] Bug Stand Selected -> Next Get User
 
 ### v2.0
 - [ ] RWK

@@ -13,8 +13,8 @@ block main
 			th Bearbeiten
 		- schuetzen.forEach(function(schuetze){
 			tr
-				td #{schuetze.vorname}
-				td #{schuetze.name}
+				td #{schuetze.firstName}
+				td #{schuetze.lastName}
 				td
 					a(href="./edit/" + schuetze._id) Bearbeiten
 		- })

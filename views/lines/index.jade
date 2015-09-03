@@ -82,9 +82,9 @@ block body
 									label(class="col-sm-2 control-label") Schütze
 									div(class="col-sm-10")
 										ui-select(ng-model="selected.schuetze" theme="bootstrap" ng-disabled="selected.verein == undefined" reset-search-input="false" on-select="selectSchuetze()")
-											ui-select-match {{selected.schuetze.vorname}} {{selected.schuetze.name}}
-											ui-select-choices(repeat="schuetze in schuetzen | propsFilter: {vorname: $select.search, name: $select.search} | propsFilter: {vereinID: selected.verein._id}")
-												div {{schuetze.vorname}} {{schuetze.name}}
+											ui-select-match {{selected.schuetze.firstName}} {{selected.schuetze.lastName}}
+											ui-select-choices(repeat="schuetze in schuetzen | propsFilter: {firstName: $select.search, lastName: $select.search} | propsFilter: {vereinID: selected.verein._id}")
+												div {{schuetze.firstName}} {{schuetze.lastName}}
 												
 												
 			
