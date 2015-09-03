@@ -30,7 +30,7 @@ mixin inputSelect(name, options, selectedID, title)
 				- })
 
 doctype html
-html(lang="en" ng-app="dsm")
+html(lang="en")
 	head
 		title
 			block title
@@ -78,17 +78,17 @@ html(lang="en" ng-app="dsm")
 			})
 			
 			
-			angular.module("dsm", [
-				"dsm.services.confirm",
-				"dsm.services.sockets",
-				
-				"dsm.conrtollers.lines",
-			])
-			.controller("exit", ["$scope", "dsmSocket", function ($scope, dsmSocket) {
-				$scope.exit = function(){
-					dsmSocket.emit("exit", {})
-				}
-			}])
+			//- angular.module("dsm", [
+			//- 	"dsm.services.confirm",
+			//- 	"dsm.services.sockets",
+			//- 	
+			//- 	"dsm.conrtollers.lines",
+			//- ])
+			//- .controller("exit", ["$scope", "dsmSocket", function ($scope, dsmSocket) {
+			//- 	$scope.exit = function(){
+			//- 		dsmSocket.emit("exit", {})
+			//- 	}
+			//- }])
 			
 			
 			
