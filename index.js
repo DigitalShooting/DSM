@@ -96,6 +96,14 @@ io.on('connection', function(socket){
 		}
 	})
 
+	socket.on("exit", function(){
+		for (var i in config.lines){
+			var line = config.lines[i]
+			child_process.exec(["ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
+		}
+		child_process.exec(["sudo shutdown -h now"], function(err, out, code) { })
+	})
+
 })
 
 

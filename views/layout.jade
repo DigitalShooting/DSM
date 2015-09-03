@@ -30,7 +30,7 @@ mixin inputSelect(name, options, selectedID, title)
 				- })
 
 doctype html
-html(lang="en")
+html(lang="en" ng-app="dsm")
 	head
 		title
 			block title
@@ -63,8 +63,11 @@ html(lang="en")
 		link(href="/libs/angular-ui-select/dist/select.css", rel="stylesheet")
 		
 		// Custom Services
+		script(src='/js/services/confirm.js')
 		script(src='/js/services/filter.js')
 		script(src='/js/services/sockets.js')
+		
+		script(src="/js/lines.js")
 		
 		
 		script.
@@ -73,6 +76,21 @@ html(lang="en")
 					theme: "bootstrap"
 				})
 			})
+			
+			
+			angular.module("dsm", [
+				"dsm.services.confirm",
+				"dsm.services.sockets",
+				
+				"dsm.conrtollers.lines",
+			])
+			.controller("exit", ["$scope", "dsmSocket", function ($scope, dsmSocket) {
+				$scope.exit = function(){
+					dsmSocket.emit("exit", {})
+				}
+			}])
+			
+			
 			
 		script.
 			var dsmSocket = io()
@@ -87,7 +105,7 @@ html(lang="en")
 						span(class="icon-bar")
 						span(class="icon-bar")
 						span(class="icon-bar")
-					a(class="navbar-brand" href="/") DSM
+					//- a(class="navbar-brand" href="/") DSM
 				
 				div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
 					ul(class="nav navbar-nav")
@@ -97,6 +115,8 @@ html(lang="en")
 						
 						//- +navElement("/live", "Live")
 						//- +navElement("/auswertung", "Auswertung")
+					ul(class="nav navbar-nav navbar-right" ng-controller="exit")
+						button(type="submit" class="btn btn-danger" confirm="Verlassen und alle Rechner Stoppen?" ng-click="exit()") Verlassen
 					
 		block body
 

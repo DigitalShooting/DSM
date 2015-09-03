@@ -1,4 +1,4 @@
-angular.module("lines", [
+angular.module("dsm.conrtollers.lines", [
 	"dsm.services.sockets",
 	"dsm.services.filter",
 
