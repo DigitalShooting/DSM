@@ -9,6 +9,6 @@ router.get("/", function(req, res){
 
 
 router.use("/vereine/", require("./vereine"))
-router.use("/schuetzen/", require("./schützen"))
+router.use("/schuetzen/", require("./schuetzen"))
 
 module.exports = router
