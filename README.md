@@ -37,3 +37,9 @@ TODO
 
 ### v2.0
 - [ ] RWK
+
+
+
+
+## Licence
+GNU GENERAL PUBLIC LICENSE Version 3
