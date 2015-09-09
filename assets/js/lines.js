@@ -156,13 +156,11 @@ angular.module("dsm.conrtollers.lines", [
 	}
 
 	// Print
-	$scope.print = function(type){
-		if (type == "all"){
-
-		}
-		else if (type == "current"){
-
-		}
+	$scope.print = function(all){
+		performOnSelected(function(line){
+			console.log(line, all)
+			line.dscAPI.print(all)
+		})
 	}
 
 	$scope.selectSchuetze = function(){
