@@ -4,7 +4,7 @@ var fs = require("fs")
 var path = require("path")
 
 router.get("/", function(req, res){
-	res.render("rwks")
+	res.redirect("./manschaften/")
 })
 
 router.use("/manschaften/", require("./manschaften"))

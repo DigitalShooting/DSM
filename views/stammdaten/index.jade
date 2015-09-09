@@ -1,11 +1,12 @@
 extends ../layout.jade
 
 block body
-	section(class="col-lg-offset-1 col-lg-3  col-sm-4")
+	section(class="col-md-3")
 		h2
 			| Stammdaten
 		ul(class="nav nav-pills nav-stacked")
-			+navElement("/stammdaten/vereine/", "Vereine")
-			+navElement("/stammdaten/schuetzen/", "Schützen")
-	section(class="col-lg-7 col-sm-8")
+			+navElement("/stammdaten/schuetzen/", "Schützen", "glyphicon-user")
+			+navElement("/stammdaten/vereine/", "Vereine", "glyphicon glyphicon-home")
+			
+	section(class="col-md-9")
 		block main

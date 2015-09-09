@@ -6,16 +6,22 @@ block title
 block main
 	h1
 		block title
-	table(class="table table-hover" id="example")
+	table(class="table table-hover table-striped")
 		tr
 			th Vorname
 			th Name
 			th Bearbeiten
+		tr
+			td(colspan="2")
+				input(type="text" class="form-control" placeholder="Suchen" style="width:100%;")
+			td
+				a(href="./edit/new" class="btn btn-success")
+					span(class="glyphicon glyphicon-plus" aria-hidden="true")
+					|  Neu
 		- schuetzen.forEach(function(schuetze){
 			tr
 				td #{schuetze.firstName}
 				td #{schuetze.lastName}
 				td
-					a(href="./edit/" + schuetze._id) Bearbeiten
+					a(href="./edit/#{schuetze._id}") Bearbeiten
 		- })
-	a(href="./edit/new") Neu

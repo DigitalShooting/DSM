@@ -4,11 +4,12 @@ var fs = require("fs")
 var path = require("path")
 
 router.get("/", function(req, res){
-	res.render("stammdaten")
+	res.redirect("./schuetzen/")
 })
 
 
-router.use("/vereine/", require("./vereine"))
 router.use("/schuetzen/", require("./schuetzen"))
+router.use("/vereine/", require("./vereine"))
+
 
 module.exports = router

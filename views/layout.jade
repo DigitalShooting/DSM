@@ -4,7 +4,7 @@ mixin navElement(url, text, icon)
 	li(class=(req.originalUrl.indexOf(urlPath) > -1 ? "active" : ""))
 		a(href=url)
 			- if (icon != undefined){
-				span(class="glyphicon glyphicon #{icon}" aria-hidden="true")
+				span(class="glyphicon #{icon}" aria-hidden="true")
 				|  #{text}
 			- } else {
 				| #{text}
@@ -116,8 +116,9 @@ html(lang="en")
 				div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
 					ul(class="nav navbar-nav")
 						+navElement("/stammdaten/", "Stammdaten", "glyphicon-user")
-						//- +navElement("/rwks/", "Rundenwettkämpfe")
+						+navElement("/rwks/", "RWKs", "glyphicon-list-alt")
 						+navElement("/lines/", "Stände", "glyphicon-list")
+						+navElement("#/stats/", "Statistiken", "glyphicon-signal")
 						
 						//- +navElement("/live", "Live")
 						//- +navElement("/auswertung", "Auswertung")

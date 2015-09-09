@@ -4,9 +4,8 @@ block title
 	| #{verein.name}
 	
 block main
-	h1
-		block title
-	div(class="panel panel-primary")
+	h1 #{verein.name}
+	div(class="panel panel-default")
 		div(class="panel-heading") Infos
 		div(class="panel-body")
 			form(role='form' method="post" class="form-horizontal")

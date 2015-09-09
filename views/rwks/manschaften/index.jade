@@ -6,14 +6,20 @@ block title
 block main
 	h1
 		block title
-	table(class="table table-hover")
+	table(class="table table-hover table-striped")
 		tr
 			th Manschaft Name
 			th Bearbeiten
+		tr
+			td(colspan="1")
+				input(type="text" class="form-control" placeholder="Suchen" style="width:100%;")
+			td
+				a(href="./edit/new" class="btn btn-success")
+					span(class="glyphicon glyphicon-plus" aria-hidden="true")
+					|  Neu
 		- manschaften.forEach(function(manschaft){
 			tr
 				td #{manschaft.name}
 				td
-					a(href="./edit/" + manschaft._id) Bearbeiten
+					a(href="./edit/#{manschaft._id}") Bearbeiten
 		- })
-	a(href="./edit/new") New
