@@ -139,7 +139,6 @@ angular.module('ds.services.grafik', [])
 			}
 			window.addEventListener('load', resize, false);
 			window.addEventListener('resize', resize, false);
-			window.addEventListener('grafikReload', resize, false);
 
 			var render = function(a_canvas){
 				var context = a_canvas.getContext("2d");

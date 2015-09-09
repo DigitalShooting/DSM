@@ -209,12 +209,13 @@ angular.module("dsm.conrtollers.lines", [
 
 	$timeout(function(){
 		$scope.$watch('stand', function(value, old){
-			console.log(value)
 			$scope.stand = value
 			updateUI()
 		})
 	})
 
+
+	$('a[data-toggle="tab"]').on('shown.bs.tab', updateUI)
 	function updateUI(){
 		var socket = $scope.stand.socket
 
@@ -275,6 +276,7 @@ angular.module("dsm.conrtollers.lines", [
 			}
 		})
 	}
+	$scope.updateUI = updateUI
 
 	return {
 		scope: {

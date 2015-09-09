@@ -103,7 +103,7 @@ block body
 														div {{schuetze.firstName}} {{schuetze.lastName}}
 												
 				div(role="tabpanel" class="tab-pane" id="view")
-					div(ng-controller="stand" stand="stand" class="col-md-4 fullHeight" ng-repeat="stand in selectedConnectedLines")
+					div(ng-controller="stand" stand="stand" class="col-md-6 fullHeight" ng-repeat="stand in selectedConnectedLines")
 						div(class="standLabel")
 							h1 {{stand.labelShort}}
 						div(class="col-xs-4")
@@ -139,6 +139,7 @@ block body
 	
 	script.
 		var dsmSocket = io()
+		var event = new Event('build')
 		
 		var config = !{JSON.stringify(config)}
 		var vereine = !{JSON.stringify(vereine)}
