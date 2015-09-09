@@ -6,22 +6,30 @@ block body
 			h2 Stände
 			ul(class="nav nav-pills nav-stacked")
 				li(ng-repeat="line in lines track by $index" class="col-md-12")
-					div(class="btn-group fullWidth col-md-12" role="group")
+					div(class="btn-group fullWidth" role="group")
 						button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-md-10 {{line.isConnected ? 'btn-success' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
-						button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-success' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{state[line._id] ? '-' : '+'}}
+						button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-success' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}")
+							span(class="glyphicon {{state[line._id] ? 'glyphicon-ok' : 'glyphicon-remove'}}" aria-hidden="true")
 				
 				li(class="col-md-12 btn-group" role="group")
-					button(type="button" ng-click="toggleAll(true)" class="btn col-md-6 btn-default") Alle markieren
-					button(type="button" ng-click="toggleAll(false)" class="btn col-md-6 btn-default") Zurücksetzen
+					button(type="button" ng-click="toggleAll(true)" class="btn col-md-10 btn-default") Alle markieren
+					button(type="button" ng-click="toggleAll(false)" class="btn col-md-2 btn-default")
+						span(class="glyphicon glyphicon-remove" aria-hidden="true")
 			
 			
 		section(class="col-md-8")
 			h1 Verwalten
 			ul(class="nav nav-tabs")
 				li(class="active")
-					a(href=url) Verwalten
-				//- li(class="")
-				//- 	a(href=url) Betrachten
+					a(href=url)
+						span(class="glyphicon glyphicon glyphicon-wrench" aria-hidden="true")
+						|  Verwalten
+				li(class="")
+					a(href=url)
+						span(class="glyphicon glyphicon glyphicon-stats" aria-hidden="true")
+						|  Betrachten
+			
+			
 			
 			.col-md-12
 				div(class="alert alert-info animate" role="alert" ng-hide="selectedLines != 0") Kein Stand ausgewählt.

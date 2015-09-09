@@ -1,8 +1,14 @@
-mixin navElement(url, text)
+mixin navElement(url, text, icon)
 	- var urlPath = url
 	- if (urlPath.substring(0, 1) == ".") urlPath = urlPath.substring(1, urlPath.length) 
 	li(class=(req.originalUrl.indexOf(urlPath) > -1 ? "active" : ""))
-		a(href=url) #{text}
+		a(href=url)
+			- if (icon != undefined){
+				span(class="glyphicon glyphicon #{icon}" aria-hidden="true")
+				|  #{text}
+			- } else {
+				| #{text}
+			- }
 	
 mixin inputDefault(name, value, label)
 	div(class="form-group")
@@ -109,14 +115,17 @@ html(lang="en")
 				
 				div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
 					ul(class="nav navbar-nav")
-						+navElement("/stammdaten/", "Stammdaten")
+						+navElement("/stammdaten/", "Stammdaten", "glyphicon-user")
 						//- +navElement("/rwks/", "Rundenwettkämpfe")
-						+navElement("/lines/", "Stände")
+						+navElement("/lines/", "Stände", "glyphicon-list")
 						
 						//- +navElement("/live", "Live")
 						//- +navElement("/auswertung", "Auswertung")
 					ul(class="nav navbar-nav navbar-right" ng-controller="exit")
-						button(type="submit" class="btn btn-danger" confirm="Verlassen und alle Rechner Stoppen?" ng-click="exit()") Verlassen
+						a(href="/exit/")
+							button(type="submit" class="btn btn-danger")
+								span(class="glyphicon glyphicon-log-out" aria-hidden="true")
+								|  Verlassen
 					
 		block body
 

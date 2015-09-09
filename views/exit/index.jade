@@ -1,0 +1,13 @@
+extends ../layout.jade
+
+block body
+	section(class="col-md-offset-4 col-md-4")
+		h2 Verlassen
+		div(class="alert alert-danger" role="alert")
+			p
+				span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
+				|  Verlassen und alle Rechner Stoppen?
+		a(href="/exit/confirm")
+			button(type="submit" class="btn btn-danger col-md-12")
+				span(class="glyphicon glyphicon-log-out" aria-hidden="true")
+				|  Verlassen

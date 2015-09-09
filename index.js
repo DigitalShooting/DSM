@@ -43,6 +43,7 @@ app.use(compression())
 
 app.use("/stammdaten/", routes.stammdaten)
 app.use("/rwks/", routes.rwks)
+app.use("/exit/", routes.exit)
 
 // app.use("/live/", routes.live)
 //
@@ -94,14 +95,6 @@ io.on('connection', function(socket){
 			// Power Off
 			child_process.exec(["ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
 		}
-	})
-
-	socket.on("exit", function(){
-		for (var i in config.lines){
-			var line = config.lines[i]
-			child_process.exec(["ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
-		}
-		child_process.exec(["sudo shutdown -h now"], function(err, out, code) { })
 	})
 
 })
