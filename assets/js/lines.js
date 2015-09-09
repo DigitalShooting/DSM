@@ -22,7 +22,7 @@ angular.module("dsm.conrtollers.lines", [
 
 
 	// Update ui values
-	var updateUI = function() {
+	var updateUI = function(forceNameUpdate) {
 		$scope.selectedLines = 0
 		for (var i in $scope.state){
 			if ($scope.state[i] == true){
@@ -38,13 +38,15 @@ angular.module("dsm.conrtollers.lines", [
 
 
 			if (line.session){
-				$scope.selected.schuetze = {}
-				$scope.selected.schuetze.firstName = line.session.user.firstName
-				$scope.selected.schuetze.lastName = line.session.user.lastName
+				if (forceNameUpdate == true){
+					$scope.selected.schuetze = {}
+					$scope.selected.schuetze.firstName = line.session.user.firstName
+					$scope.selected.schuetze.lastName = line.session.user.lastName
 
-				$scope.selected.verein = {}
-				$scope.selected.verein.name = line.session.user.verein
-				$scope.selected.verein._id = line.session.user.vereinID
+					$scope.selected.verein = {}
+					$scope.selected.verein.name = line.session.user.verein
+					$scope.selected.verein._id = line.session.user.vereinID
+				}
 
 				// Format Parts for select
 				$scope.parts = []
@@ -87,14 +89,14 @@ angular.module("dsm.conrtollers.lines", [
 	// toggle selected for line
 	$scope.toggle = function(key){
 		$scope.state[key] = !$scope.state[key]
-		updateUI()
+		updateUI(true)
 	}
 	// toggel selection for all
 	$scope.toggleAll = function(value){
 		$scope.lines.forEach(function(line){
 			$scope.state[line._id] = value
 		})
-		updateUI()
+		updateUI(true)
 	}
 	// toggel default all (on)
 	$scope.toggleAll(true)
