@@ -16,11 +16,15 @@ block main
 				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
 				|  Bearbeiten
 	
-	div(class="panel panel-default")
-		div(class="panel-heading") Infos
-		div(class="panel-body")
-			form(role='form' method="post" class="form-horizontal")
+	form(role='form' method="post" class="form-horizontal")
+		div(class="panel panel-default")
+			div(class="panel-heading") Infos
+			div(class="panel-body")
 				+inputDefault("name", verein ? verein.name : "", "Name")
 				+inputDisabled(verein ? verein._id : "", "ID")
-				input(type="submit" class="btn btn-primary pull-right")
-			a(href="../delete/" + verein._id class="btn btn-danger pull-left") Löschen
+				+inputTextArea("note", verein ? verein.note : "", "Notiz")
+				
+		input(type="submit" class="btn btn-primary pull-right col-xs-2")
+		a(href="../delete/" + verein._id class="btn btn-danger pull-left col-xs-2")
+			span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
+			|  Löschen

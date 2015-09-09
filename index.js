@@ -53,7 +53,7 @@ app.use("/lines", routes.lines)
 app.use("/exit/", routes.exit)
 
 app.get("/", function(req, res){
-	res.render("index.jade")
+	res.redirect("lines/")
 })
 
 

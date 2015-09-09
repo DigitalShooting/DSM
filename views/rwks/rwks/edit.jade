@@ -17,10 +17,10 @@ block main
 				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
 				|  Bearbeiten
 	
-	div(class="panel panel-primary")
-		div(class="panel-heading") Infos
-		div(class="panel-body")
-			form(role='form' method="post" class="form-horizontal")
+	form(role='form' method="post" class="form-horizontal")
+		div(class="panel panel-primary")
+			div(class="panel-heading") Infos
+			div(class="panel-body")
 				+inputDefault("name", rwk ? rwk.name : "", "Name")
 				
 				- var optionHeim = []
@@ -31,7 +31,11 @@ block main
 				- manschaften.forEach(function(manschaft){ optionGast.push({ id: manschaft.id, title: manschaft.verein+" "+manschaft.name+" ("+manschaft.saison+" "+manschaft.disziplin+")" }) })
 				+inputSelect("manschaftID_Gast", optionGast, rwk ? rwk.manschaftID_Gast : "", "Manschaft (Gast)")
 				
+				+inputTextArea("note", rwk ? rwk.note : "", "Notiz")
+				
 				//- Datum
 				
-				input(type="submit" class="btn btn-primary pull-right")
-			a(href="../delete/" + rwk._id class="btn btn-danger pull-left") Löschen
+		input(type="submit" class="btn btn-primary pull-right col-xs-2")
+		a(href="../delete/" + rwk._id class="btn btn-danger pull-left col-xs-2")
+			span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
+			|  Löschen

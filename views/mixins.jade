@@ -15,6 +15,12 @@ mixin inputDefault(name, value, label)
 		label(class="col-sm-2 control-label") #{label}
 		div(class="col-sm-10")
 			input(type="" name=name value=value class="form-control" placeholder=label)
+			
+mixin inputTextArea(name, value, label)
+	div(class="form-group")
+		label(class="col-sm-2 control-label") #{label}
+		div(class="col-sm-10")
+			textarea(name=name class="form-control" rows="3") #{value}
 		
 mixin inputDisabled(value, label)
 	div(class="form-group")

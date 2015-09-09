@@ -17,9 +17,10 @@ block main
 		tr
 			th Vorname
 			th Name
+			th Passnummer
 			th Bearbeiten
 		tr
-			td(colspan="2")
+			td(colspan="3")
 				input(type="text" class="form-control" placeholder="Suchen" style="width:100%;")
 			td
 				a(href="./edit/new" class="btn btn-success")
@@ -29,6 +30,7 @@ block main
 			tr
 				td #{schuetze.firstName}
 				td #{schuetze.lastName}
+				td #{schuetze.passnummer}
 				td
 					a(href="./edit/#{schuetze._id}") Bearbeiten
 		- })
