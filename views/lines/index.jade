@@ -9,7 +9,7 @@ block body
 					div(class="btn-group fullWidth" role="group")
 						button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-md-10 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
 						button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}")
-							span(class="glyphicon {{state[line._id] ? 'glyphicon-ok' : 'glyphicon-remove'}}" aria-hidden="true")
+							span(class="glyphicon {{state[line._id] ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
 				
 				li(class="col-md-12 btn-group" role="group")
 					button(type="button" ng-click="toggleAll(true)" class="btn col-md-10 btn-default") Alle markieren
@@ -119,6 +119,9 @@ block body
 											th Verein
 											td {{session.user.verein}} {{session.user.manschaft}}
 										tr
+											th Disziplin
+											td {{session.disziplin.title}}
+										tr
 											th Aktueller Schuss
 											td {{activeShot.ring}}
 										tr
@@ -126,7 +129,7 @@ block body
 											td {{anzahlShots}}.
 										tr
 											th Schnitt
-											td {{schnitt}} &Oslash;
+											td {{schnitt}} &Oslash; ({{session.schnittCalc}} Ringe)
 										tr
 											th Gesamt
 											td {{gesamt}} Ringe
