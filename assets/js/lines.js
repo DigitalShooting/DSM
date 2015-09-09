@@ -242,16 +242,6 @@ angular.module("dsm.conrtollers.lines", [
 					$scope.serieSums.push(sum)
 				}
 
-				$scope.gesamt = 0
-				$scope.anzahlShots = 0
-				for (var i in session.serieHistory){
-					for (var ii in session.serieHistory[i]){
-						$scope.gesamt += session.serieHistory[i][ii].ringInt
-						$scope.anzahlShots++
-					}
-				}
-				$scope.schnitt = (Math.round($scope.gesamt / $scope.anzahlShots * 10)/10).toFixed(1)
-
 				$scope.serie = session.serieHistory[session.selection.serie]
 				$scope.selectedshotindex = session.selection.shot
 				$scope.activeShot = session.serieHistory[session.selection.serie][session.selection.shot]
