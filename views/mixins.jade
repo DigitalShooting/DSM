@@ -1,0 +1,36 @@
+mixin navElement(url, text, icon)
+	- var urlPath = url
+	- if (urlPath.substring(0, 1) == ".") urlPath = urlPath.substring(1, urlPath.length) 
+	li(class=(req.originalUrl.indexOf(urlPath) > -1 ? "active" : ""))
+		a(href=url)
+			- if (icon != undefined){
+				span(class="glyphicon #{icon}" aria-hidden="true")
+				|  #{text}
+			- } else {
+				| #{text}
+			- }
+	
+mixin inputDefault(name, value, label)
+	div(class="form-group")
+		label(class="col-sm-2 control-label") #{label}
+		div(class="col-sm-10")
+			input(type="" name=name value=value class="form-control" placeholder=label)
+		
+mixin inputDisabled(value, label)
+	div(class="form-group")
+		label(class="col-sm-2 control-label") #{label}
+		div(class="col-sm-10")
+			p(class="form-control-static") #{value}
+		
+mixin inputSelect(name, options, selectedID, title)
+	div(class="form-group")
+		label(class="col-sm-2 control-label") #{title}
+		div(class="col-sm-10")
+			select(name=name class="selectpicker "+name style="width:100%")
+				- options.forEach(function(option){
+					- if(option.id == selectedID){
+						option(value=option.id selected="selected") #{option.title}
+					- } else {
+						option(value=option.id) #{option.title}
+					- }
+				- })

@@ -1,11 +1,11 @@
 extends ../layout.jade
 
 block body
-	section(class="col-lg-offset-1 col-lg-3  col-sm-4")
+	section(class="col-md-3")
 		h2
 			| RWKs
 		ul(class="nav nav-pills nav-stacked")
 			+navElement("/rwks/manschaften/", "Manschaften", "glyphicon-th-large")
 			+navElement("/rwks/rwks/", "RWKs", "glyphicon glyphicon-th-list")
-	section(class="col-lg-7 col-sm-8")
+	section(class="col-md-9")
 		block main
