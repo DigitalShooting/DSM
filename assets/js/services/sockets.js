@@ -1,4 +1,9 @@
-angular.module("dsm.services.sockets", ["btford.socket-io"])
+angular.module("dsm.services.sockets", [
+	"btford.socket-io",
+	"dsc.services.dscAPI",
+])
+
+
 .factory("dsmSocket", function (socketFactory) {
 	var myIoSocket = io.connect();
 	mySocket = socketFactory({
@@ -7,7 +12,7 @@ angular.module("dsm.services.sockets", ["btford.socket-io"])
 
 	return mySocket;
 })
-.factory("lines", ["socketFactory", function (socketFactory) {
+.factory("lines", function (socketFactory, dscAPI) {
 	var lines = []
 
 	function watch(line){
@@ -24,6 +29,7 @@ angular.module("dsm.services.sockets", ["btford.socket-io"])
 		line.socket = socketFactory({
 			ioSocket: io.connect(line.ip+":"+line.port)
 		})
+		line.dscAPI = dscAPI(line.socket, {key: 123})
 
 		watch(line)
 
@@ -31,4 +37,4 @@ angular.module("dsm.services.sockets", ["btford.socket-io"])
 	}
 
 	return lines;
-}])
+})

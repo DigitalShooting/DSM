@@ -18,12 +18,17 @@ block main
 			th Vorname
 			th Name
 			th Passnummer
-			th Bearbeiten
+			th(class="sizeCoulumToFit")
+				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
+				|  Bearbeiten
+			th(class="sizeCoulumToFit")
+				span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
+				|  Löschen
 		tr
 			td(colspan="3")
 				input(type="text" class="form-control" placeholder="Suchen" style="width:100%;")
-			td
-				a(href="./edit/new" class="btn btn-success")
+			td(colspan="2")
+				a(href="./edit/new" class="btn btn-primary fullWidth")
 					span(class="glyphicon glyphicon-plus" aria-hidden="true")
 					|  Neu
 		- schuetzen.forEach(function(schuetze){
@@ -31,6 +36,12 @@ block main
 				td #{schuetze.firstName}
 				td #{schuetze.lastName}
 				td #{schuetze.passnummer}
-				td
-					a(href="./edit/#{schuetze._id}") Bearbeiten
+				td(class="sizeCoulumToFit")
+					a(href="./edit/#{schuetze._id}")
+						span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
+						|  Bearbeiten
+				td(class="sizeCoulumToFit")
+					a(href="./delete/#{schuetze._id}")
+						span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
+						|  Löschen
 		- })

@@ -129,7 +129,7 @@ angular.module("dsm.conrtollers.lines", [
 	$scope.selectDisziplin = function(){
 		performOnSelected(function(line){
 			if (line.isConnected == true){
-				line.socket.emit("setDisziplin", $scope.selected.disziplin._id)
+				line.dscAPI.setDisziplin($scope.selected.disziplin._id)
 			}
 		})
 	}
@@ -138,7 +138,7 @@ angular.module("dsm.conrtollers.lines", [
 	$scope.selectPart = function(){
 		performOnSelected(function(line){
 			if (line.isConnected == true){
-				line.socket.emit("switchToPart", $scope.selected.part.id)
+				line.dscAPI.setPart($scope.selected.part.id)
 			}
 		})
 	}
@@ -176,7 +176,9 @@ angular.module("dsm.conrtollers.lines", [
 
 		performOnSelected(function(line){
 			if (line.isConnected == true){
-				line.socket.emit("setUser", user)
+				// line.socket.emit("setUser", user)
+				console.log(user)
+				line.dscAPI.setUser(user)
 			}
 		})
 	}

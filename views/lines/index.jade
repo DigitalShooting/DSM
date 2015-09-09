@@ -7,8 +7,8 @@ block body
 			ul(class="nav nav-pills nav-stacked")
 				li(ng-repeat="line in lines track by $index" class="col-md-12")
 					div(class="btn-group fullWidth" role="group")
-						button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-md-10 {{line.isConnected ? 'btn-success' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
-						button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-success' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}")
+						button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-md-10 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
+						button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}")
 							span(class="glyphicon {{state[line._id] ? 'glyphicon-ok' : 'glyphicon-remove'}}" aria-hidden="true")
 				
 				li(class="col-md-12 btn-group" role="group")
@@ -42,8 +42,12 @@ block body
 							div(class="form-group")
 								label(for="" class="col-md-2 control-label") Status
 								div(class="btn-group col-md-10" role="group")
-									button(type="submit" class="btn btn-default col-md-6" ng-click="setPower(false)") Herunterfahren
-									button(type="submit" class="btn btn-success col-md-6" ng-click="setPower(true)") Hochfahren
+									button(type="submit" class="btn btn-default col-md-6" ng-click="setPower(false)")
+										span(class="glyphicon glyphicon glyphicon-flash" aria-hidden="true")
+										|  Herunterfahren
+									button(type="submit" class="btn btn-primary col-md-6" ng-click="setPower(true)")
+										span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
+										|  Hochfahren
 							//- div(class="form-group")
 							//- 	label(for="" class="col-md-2 control-label") Drucken
 							//- 	div(class="btn-group col-md-10" role="group")

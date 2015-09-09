@@ -16,17 +16,28 @@ block main
 	table(class="table table-hover table-striped")
 		tr
 			th Name
-			th Bearbeiten
+			th(class="sizeCoulumToFit")
+				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
+				|  Bearbeiten
+			th(class="sizeCoulumToFit")
+				span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
+				|  Löschen
 		tr
 			td(colspan="1")
 				input(type="text" class="form-control" placeholder="Suchen" style="width:100%;")
-			td
-				a(href="./edit/new" class="btn btn-success")
+			td(colspan="2")
+				a(href="./edit/new" class="btn btn-primary fullWidth")
 					span(class="glyphicon glyphicon-plus" aria-hidden="true")
 					|  Neu
 		- rwks.forEach(function(rwk){
 			tr
 				td #{rwk.name}
-				td
-					a(href="./edit/#{rwk._id}") Bearbeiten
+				td(class="sizeCoulumToFit")
+					a(href="./edit/#{rwk._id}")
+						span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
+						|  Bearbeiten
+				td(class="sizeCoulumToFit")
+					a(href="./delete/#{rwk._id}")
+						span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
+						|  Löschen
 		- })
