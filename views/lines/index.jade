@@ -19,90 +19,121 @@ block body
 			
 		section(class="col-md-9")
 			h1 Verwalten
-			ul(class="nav nav-tabs")
-				li(class="active")
-					a(href=url)
+			ul(class="nav nav-tabs" role="tablist")
+				li(class="active" role="presentation")
+					a(href="#manage" aria-controls="view" role="tab" data-toggle="tab")
 						span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
 						|  Verwalten
-				li(class="")
-					a(href=url)
+				li(class="" role="presentation")
+					a(href="#view" aria-controls="view" role="tab" data-toggle="tab")
 						span(class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true")
 						|  Betrachten
 			
-			
-			
 			.col-md-12
 				div(class="alert alert-info animate" role="alert" ng-hide="selectedLines != 0") Kein Stand ausgewählt.
-			
-			.col-md-6
-				div(class="panel panel-default power animate" ng-hide="selectedLines == 0")
-					div(class="panel-heading") Allgemein
-					div(class="panel-body")
-						div(class="form-horizontal")
-							div(class="form-group")
-								label(for="" class="col-md-2 control-label") Status
-								div(class="btn-group col-md-10" role="group")
-									button(type="submit" class="btn btn-default col-md-6" ng-click="setPower(false)")
-										span(class="glyphicon glyphicon glyphicon-flash" aria-hidden="true")
-										|  Herunterfahren
-									button(type="submit" class="btn btn-primary col-md-6" ng-click="setPower(true)")
-										span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
-										|  Hochfahren
-							div(class="form-group")
-								label(for="" class="col-md-2 control-label") Drucken
-								div(class="btn-group col-md-10" role="group")
-									button(type="submit" class="btn btn-default col-md-6" ng-click="print(false)")
-										span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
-										|  Aktuelle Serien
-									button(type="submit" class="btn btn-default col-md-6" ng-click="print(true)")
-										span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
-										|  Alles
-			
-			
-			.col-md-6
-				div(class="panel panel-default animate" ng-hide="selectedLines == 0")
-					div(class="panel-heading") Disziplin
-					div(class="panel-body")
-						div(class="form-horizontal")
-							div(class="form-group")
-								label(class="col-sm-2 control-label") Disziplin
-								div(class="col-sm-10")
-									ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectDisziplin()")
-										ui-select-match {{selected.disziplin.title}}
-										ui-select-choices(group-by="groupByType" repeat="disziplin in disziplinen | propsFilter: {title: $select.search}" )
-											div {{disziplin.title}}
-		
-							div(class="form-group")
-								label(class="col-sm-2 control-label") Mode
-								div(class="col-sm-10")
-									ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectPart()")
-										ui-select-match {{selected.part.title}}
-										ui-select-choices(repeat="part in parts | propsFilter: {title: $select.search}")
-											div {{part.title}}
+						
+			.tab-content
+				div(role="tabpanel" class="tab-pane active" id="manage")
+					.col-md-6
+						div(class="panel panel-default power animate" ng-hide="selectedLines == 0")
+							div(class="panel-heading") Allgemein
+							div(class="panel-body")
+								div(class="form-horizontal")
+									div(class="form-group")
+										label(for="" class="col-md-2 control-label") Status
+										div(class="btn-group col-md-10" role="group")
+											button(type="submit" class="btn btn-default col-md-6" ng-click="setPower(false)")
+												span(class="glyphicon glyphicon glyphicon-flash" aria-hidden="true")
+												|  Herunterfahren
+											button(type="submit" class="btn btn-primary col-md-6" ng-click="setPower(true)")
+												span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
+												|  Hochfahren
+									div(class="form-group")
+										label(for="" class="col-md-2 control-label") Drucken
+										div(class="btn-group col-md-10" role="group")
+											button(type="submit" class="btn btn-default col-md-6" ng-click="print(false)")
+												span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
+												|  Aktuelle Serien
+											button(type="submit" class="btn btn-default col-md-6" ng-click="print(true)")
+												span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
+												|  Alles
+					
+					
+					.col-md-6
+						div(class="panel panel-default animate" ng-hide="selectedLines == 0")
+							div(class="panel-heading") Disziplin
+							div(class="panel-body")
+								div(class="form-horizontal")
+									div(class="form-group")
+										label(class="col-sm-2 control-label") Disziplin
+										div(class="col-sm-10")
+											ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectDisziplin()")
+												ui-select-match {{selected.disziplin.title}}
+												ui-select-choices(group-by="groupByType" repeat="disziplin in disziplinen | propsFilter: {title: $select.search}" )
+													div {{disziplin.title}}
+				
+									div(class="form-group")
+										label(class="col-sm-2 control-label") Mode
+										div(class="col-sm-10")
+											ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectPart()")
+												ui-select-match {{selected.part.title}}
+												ui-select-choices(repeat="part in parts | propsFilter: {title: $select.search}")
+													div {{part.title}}
 
-			.col-md-12
-				div(class="panel panel-default animate" ng-hide="selectedLines != 1")
-					div(class="panel-heading") Schütze
-					div(class="panel-body")
-						div(class="form-horizontal")
-							.col-md-6
-								div(class="form-group")
-									label(class="col-sm-2 control-label") Verein
-									div(class="col-sm-10")
-										ui-select(ng-model="selected.verein" theme="bootstrap" ng-disabled="false" reset-search-input="true")
-											ui-select-match {{selected.verein.name}}
-											ui-select-choices(repeat="verein in vereine | propsFilter: {name: $select.search}")
-												div {{verein.name}}
-							.col-md-6
-								div(class="form-group")
-									label(class="col-sm-2 control-label") Schütze
-									div(class="col-sm-10")
-										ui-select(ng-model="selected.schuetze" theme="bootstrap" ng-disabled="selected.verein == undefined" reset-search-input="false" on-select="selectSchuetze()")
-											ui-select-match {{selected.schuetze.firstName}} {{selected.schuetze.lastName}}
-											ui-select-choices(repeat="schuetze in schuetzen | propsFilter: {firstName: $select.search, lastName: $select.search} | propsFilter: {vereinID: selected.verein._id}")
-												div {{schuetze.firstName}} {{schuetze.lastName}}
+					.col-md-12
+						div(class="panel panel-default animate" ng-hide="selectedLines != 1")
+							div(class="panel-heading") Schütze
+							div(class="panel-body")
+								div(class="form-horizontal")
+									.col-md-6
+										div(class="form-group")
+											label(class="col-sm-2 control-label") Verein
+											div(class="col-sm-10")
+												ui-select(ng-model="selected.verein" theme="bootstrap" ng-disabled="false" reset-search-input="true")
+													ui-select-match {{selected.verein.name}}
+													ui-select-choices(repeat="verein in vereine | propsFilter: {name: $select.search}")
+														div {{verein.name}}
+									.col-md-6
+										div(class="form-group")
+											label(class="col-sm-2 control-label") Schütze
+											div(class="col-sm-10")
+												ui-select(ng-model="selected.schuetze" theme="bootstrap" ng-disabled="selected.verein == undefined" reset-search-input="false" on-select="selectSchuetze()")
+													ui-select-match {{selected.schuetze.firstName}} {{selected.schuetze.lastName}}
+													ui-select-choices(repeat="schuetze in schuetzen | propsFilter: {firstName: $select.search, lastName: $select.search} | propsFilter: {vereinID: selected.verein._id}")
+														div {{schuetze.firstName}} {{schuetze.lastName}}
 												
-												
+				div(role="tabpanel" class="tab-pane" id="view")
+					div(ng-controller="stand" stand="stand" class="col-md-4 fullHeight" ng-repeat="stand in selectedConnectedLines")
+						div(class="standLabel")
+							h1 {{stand.labelShort}}
+						div(class="col-xs-4")
+							target( zoomlevel="zoomlevel" serie="serie" selectedshotindex="selectedshotindex" scheibe="scheibe" probeecke="probeecke")
+						div(class="col-xs-8")
+							.col-xs-12
+								div(class="grayBoxp" ng-hide="empty")
+									table(class="table")
+										tr
+											th Schütze
+											td {{session.user.firstName}} {{session.user.lastName}}
+										tr
+											th Verein
+											td {{session.user.verein}} {{session.user.manschaft}}
+										tr
+											th Aktueller Schuss
+											td {{activeShot.ring}}
+										tr
+											th Anzahl
+											td {{anzahlShots}}.
+										tr
+											th Schnitt
+											td {{schnitt}} &Oslash;
+										tr
+											th Gesamt
+											td {{gesamt}} Ringe
+										tr
+											th Serien
+											td
+												span(ng-repeat="serieSum in serieSums track by $index" class="col-xs-3") {{serieSum}}
 			
 
 	
