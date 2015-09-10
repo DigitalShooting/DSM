@@ -34,6 +34,8 @@ TODO
 - [ ] Stände Viewer
 - [ ] Export
 - [ ] Bug Stand Selected -> Next Get User
+- [ ] Sperre
+    - Sicherheit
 
 ### v2.0
 - [ ] RWK
