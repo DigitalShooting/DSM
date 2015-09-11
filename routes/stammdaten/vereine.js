@@ -2,53 +2,73 @@ var express = require("express");
 var router = express.Router();
 var fs = require("fs")
 var path = require("path")
-
-var ObjectID = require("mongodb").ObjectID
-var collection
-var mongodb = require("../../lib/mongodb")(function(db){
-	collection = db.collection('vereine')
-})
+var mysql = require("../../lib/mysql.js")
 
 
 router.get("/", function(req, res){
-	collection.find().toArray(function(err, results) {
-		res.locals.vereine = results
-		res.render("stammdaten/vereine")
-	})
+	mysql.query(
+		"SELECT * " +
+		"FROM verein ",
+		function(err, rows, fields) {
+			res.locals.vereine = rows
+			res.render("stammdaten/vereine")
+		}
+	);
 })
 
 
 router.get("/edit/new", function(req, res){
-	var newObject = {}
-	collection.insert(newObject, function(err, results){
-		res.redirect(newObject._id)
-	})
+	mysql.query(
+		"INSERT INTO verein () " +
+		"VALUES () ",
+		function(err, result){
+			res.redirect(result.insertId)
+		}
+	)
 })
 
 
 router.get("/edit/:id", function(req, res){
-	collection.find({"_id": new ObjectID(req.params.id)}).toArray(function(err, results) {
-		if(results.length >= 1){
-			res.locals.verein = results[0]
-			res.render("stammdaten/vereine/edit")
-		} else {
-			res.redirect("../")
+	mysql.query(
+		"SELECT * " +
+		"FROM verein " +
+		"WHERE verein.id = ?",
+		[req.params.id],
+		function(err, rows, fields) {
+			if(rows.length > 0){
+				res.locals.verein = rows[0]
+				res.render("stammdaten/vereine/edit")
+			}
+			else {
+				res.redirect("../")
+			}
 		}
-	})
+	);
 })
 
 router.post("/edit/:id", function(req, res){
-	collection.update({"_id": new ObjectID(req.params.id)}, req.body, function(err){
-		res.redirect("../")
-	})
+	mysql.query(
+		"UPDATE verein " +
+		"SET name = ?, note = ?" +
+		"WHERE id = ? ",
+		[req.body.name, req.body.note, req.params.id],
+		function(err, rows, fields) {
+			res.redirect("../")
+		}
+	);
 })
 
 
 
 router.get("/delete/:id", function(req, res){
-	collection.remove({"_id": new ObjectID(req.params.id)}, function(err){
-		res.redirect("../")
-	})
+	mysql.query(
+		"DELETE FROM verein " +
+		"WHERE id = ? ",
+		[req.params.id],
+		function(err){
+			res.redirect("../")
+		}
+	)
 })
 
 

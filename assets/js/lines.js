@@ -45,7 +45,7 @@ angular.module("dsm.conrtollers.lines", [
 
 					$scope.selected.verein = {}
 					$scope.selected.verein.name = line.session.user.verein
-					$scope.selected.verein._id = line.session.user.vereinID
+					$scope.selected.verein.id = line.session.user.vereinID
 				}
 
 				// Format Parts for select
