@@ -33,11 +33,11 @@ block main
 			tr
 				td #{verein.name}
 				td(class="sizeCoulumToFit")
-					a(href="./edit/#{verein._id}")
+					a(href="./edit/#{verein.id}")
 						span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
 						|  Bearbeiten
 				td(class="sizeCoulumToFit")
-					a(href="./delete/#{verein._id}")
+					a(href="./delete/#{verein.id}")
 						span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
 						|  Löschen
 		- })

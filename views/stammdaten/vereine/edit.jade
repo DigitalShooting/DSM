@@ -21,10 +21,10 @@ block main
 			div(class="panel-heading") Infos
 			div(class="panel-body")
 				+inputDefault("name", verein ? verein.name : "", "Name")
-				+inputDisabled(verein ? verein._id : "", "ID")
 				+inputTextArea("note", verein ? verein.note : "", "Notiz")
+				+inputDisabled(verein ? verein.id : "", "ID")
 				
 		input(type="submit" class="btn btn-primary pull-right col-xs-2")
-		a(href="../delete/" + verein._id class="btn btn-danger pull-left col-xs-2")
+		a(href="../delete/" + verein.id class="btn btn-danger pull-left col-xs-2")
 			span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
 			|  Löschen

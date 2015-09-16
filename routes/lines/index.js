@@ -3,29 +3,31 @@ var router = express.Router();
 var fs = require("fs")
 var path = require("path")
 var config = require("../../config/")
-
-var ObjectID = require("mongodb").ObjectID
-var database
-var mongodb = require("../../lib/mongodb")(function(db){
-	database = db
-})
+var mysql = require("../../lib/mysql.js")
 
 router.use("/", function(req, res, next){
 	res.locals.config = {
 		lines: config.lines,
 	}
 
-	var collection = database.collection('vereine')
-	collection.find().toArray(function(err, results) {
-		res.locals.vereine = results
+	mysql.query(
+		"SELECT * " +
+		"FROM verein ",
+		function(err, rows, fields) {
+			res.locals.vereine = rows
 
-		collection = database.collection('schuetzen')
-		collection.find().toArray(function(err, results) {
-			res.locals.schuetzen = results
 
-			next()
-		})
-	})
+			mysql.query(
+				"SELECT * " +
+				"FROM user ",
+				function(err, rows, fields) {
+					res.locals.schuetzen = rows
+					next()
+				}
+			);
+
+		}
+	);
 })
 
 router.get("/", function(req, res){

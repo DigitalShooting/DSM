@@ -4,11 +4,11 @@ var fs = require("fs")
 var path = require("path")
 var async = require("async")
 
-var ObjectID = require("mongodb").ObjectID
-var database
-var mongodb = require("../../lib/mongodb")(function(db){
-	database = db
-})
+// var ObjectID = require("mongodb").ObjectID
+// var database
+// var mongodb = require("../../lib/mongodb")(function(db){
+// 	database = db
+// })
 
 
 
