@@ -65,7 +65,7 @@ router.get("/edit/:id", function(req, res){
 router.post("/edit/:id", function(req, res){
 	mysql.query(
 		"UPDATE user " +
-		"SET firstName = ?, lastName = ?, passnummer = ?, groupID = ?, note = ?" +
+		"SET firstName = ?, lastName = ?, passnummer = ?, vereinID = ?, note = ?" +
 		"WHERE id = ? ",
 		[req.body.firstName, req.body.lastName, req.body.passnummer, req.body.vereinID, req.body.note, req.params.id],
 		function(err, rows, fields) {
