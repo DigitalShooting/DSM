@@ -27,11 +27,9 @@ TODO
 
 ## TODOs
 
-### v0.7
-- [x] Port to MongoDB
-
 ### v1.0
-- [ ] Stände Viewer
+- [ ] Paging in den Tabellen
+- [x] Stände Viewer
 - [ ] Export
 - [ ] Bug Stand Selected -> Next Get User
 - [ ] Sperre

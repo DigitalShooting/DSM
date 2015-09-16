@@ -8,7 +8,6 @@ var config = require("./config/")
 var routes = require("./routes")
 var exec = require("exec")
 var child_process = require('child_process')
-var ping = require('ping')
 
 
 
