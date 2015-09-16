@@ -230,21 +230,12 @@ angular.module("dsm.conrtollers.lines", [
 
 			$scope.session = session
 
-			if (session.serieHistory.length > 0){
-				$scope.activeSerie = session.serieHistory[session.selection.serie]
+			if (session.serien.length > 0){
+				$scope.activeSerie = session.serien[session.selection.serie].shots
 
-				$scope.serieSums = []
-				for (var i = (session.serieHistory.length<4 ? 0 : session.serieHistory.length-4); i < session.serieHistory.length; i++){
-					var sum = 0
-					for (var ii in session.serieHistory[i]){
-						sum += session.serieHistory[i][ii].ringInt
-					}
-					$scope.serieSums.push(sum)
-				}
-
-				$scope.serie = session.serieHistory[session.selection.serie]
+				$scope.serie = session.serien[session.selection.serie].shots
 				$scope.selectedshotindex = session.selection.shot
-				$scope.activeShot = session.serieHistory[session.selection.serie][session.selection.shot]
+				$scope.activeShot = session.serien[session.selection.serie].shots[session.selection.shot]
 				$scope.empty = false
 
 				if ($scope.serie != undefined && $scope.serie.length != 0) {
@@ -260,7 +251,6 @@ angular.module("dsm.conrtollers.lines", [
 				}
 			}
 			else {
-				$scope.serieSums = []
 				$scope.activeShot = undefined
 				$scope.serie = []
 				$scope.selectedshotindex = -1
