@@ -82,7 +82,7 @@ io.on('connection', function(socket){
 		}
 		else {
 			// Power Off
-			exec(["ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
+			child_process.exec(["ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
 		}
 	})
 })
