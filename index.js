@@ -28,6 +28,7 @@ app.use("/fonts/", express.static("./node_modules/bootstrap/fonts"))
 // route js/libs
 app.use("/js/", express.static(__dirname + "/assets/js"))
 app.use("/libs/", express.static(__dirname + "/assets/libs"))
+app.use("/favicon.ico", express.static("./assets/img/favicon.ico"))
 
 // route/render css
 app.use("/css/", lessMiddleware(__dirname + "/stylesheets"))
