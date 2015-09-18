@@ -4,14 +4,48 @@ var fs = require("fs")
 var path = require("path")
 var mysql = require("../../lib/mysql.js")
 
+var itemsPerPage = 30
 
 router.get("/", function(req, res){
+	res.redirect("./0")
+})
+
+router.get("/:id", function(req, res){
+	var selectedPage = parseInt(req.params.id)
+	res.locals.selectedPageIndex = selectedPage
+
+	var order = "verein.name"
 	mysql.query(
 		"SELECT * " +
-		"FROM verein ",
+		"FROM verein " +
+		"ORDER BY "+order+" DESC " +
+		"LIMIT ? OFFSET ?",
+		[itemsPerPage, selectedPage*itemsPerPage],
 		function(err, rows, fields) {
 			res.locals.vereine = rows
-			res.render("stammdaten/vereine")
+
+			mysql.query(
+				"SELECT COUNT(*) AS count FROM verein;",
+				function(err, rows, fields) {
+					var pagesCount = Math.ceil(rows[0].count/itemsPerPage)
+					res.locals.lastPageIndex = pagesCount
+
+					var pages = []
+					for (var i = 4; i > 0; i--){
+						if (req.params.id - i >= 0){
+							pages.push(req.params.id - i)
+						}
+					}
+					for (var i = 0; i < 5; i++){
+						if (selectedPage + i < pagesCount){
+							pages.push(selectedPage + i)
+						}
+					}
+					res.locals.pages = pages
+
+					res.render("stammdaten/vereine")
+				}
+			)
 		}
 	);
 })

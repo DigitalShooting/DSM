@@ -15,10 +15,14 @@ block main
 		
 	table(class="table table-hover table-striped")
 		tr
-			th Vorname
-			th Name
-			th Passnummer
-			th Verein
+			th 
+				a(href="?order=firstName") Vorname
+			th
+				a(href="?order=lastName") Name
+			th
+				a(href="?order=passnummer") Passnummer
+			th
+				a(href="?order=verein") Verein
 			th(class="sizeCoulumToFit")
 				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
 				|  Bearbeiten
@@ -27,7 +31,7 @@ block main
 				|  Löschen
 		tr
 			td(colspan="4")
-				input(type="text" class="form-control" placeholder="Suchen" style="width:100%;")
+				//- input(type="text" class="form-control" placeholder="Suchen" style="width:100%;")
 			td(colspan="2")
 				a(href="./edit/new" class="btn btn-primary fullWidth")
 					span(class="glyphicon glyphicon-plus" aria-hidden="true")
@@ -47,3 +51,15 @@ block main
 						span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
 						|  Löschen
 		- })
+	nav
+		ul(class="pagination")
+			li
+				a(href="./0" aria-label="Previous")
+					span(aria-hidden="true") &laquo;
+			- pages.forEach(function(page){
+				li(class="#{selectedPageIndex == page ? 'active' : ''}")
+					a(href="./#{page}") #{page+1}
+			- })
+			li
+				a(href="./#{lastPageIndex-1}" aria-label="Next")
+					span(aria-hidden="true") &raquo;
