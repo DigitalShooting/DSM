@@ -38,14 +38,14 @@ angular.module("dsm.conrtollers.lines", [
 
 
 			if (line.session){
-				if (forceNameUpdate == true){
-					$scope.selected.schuetze = {}
-					$scope.selected.schuetze.firstName = line.session.user.firstName
-					$scope.selected.schuetze.lastName = line.session.user.lastName
+				if (forceNameUpdate == true && line.isConnected){
+					$scope.selected.schuetze = line.session.user
 
 					$scope.selected.verein = {}
 					$scope.selected.verein.name = line.session.user.verein
 					$scope.selected.verein.id = line.session.user.vereinID
+
+					$scope.selectVerein()
 				}
 
 				// Format Parts for select
@@ -171,12 +171,27 @@ angular.module("dsm.conrtollers.lines", [
 		})
 	}
 
+	$scope.selectVerein = function(){
+		dsmSocket.emit("getUsersForVerein", {
+			vereinID: $scope.selected.verein.id,
+		})
+		if ($scope.selected.schuetze != undefined){
+			console.log($scope.selected.schuetze)
+			if ($scope.selected.schuetze.vereinID != $scope.selected.verein.id){
+				$scope.selected.schuetze = {}
+			}
+		}
+	}
+	dsmSocket.on("setUsersForVerein", function(users){
+		$scope.schuetzen = users
+	})
+
 	$scope.selectSchuetze = function(){
 		var user = {
 			firstName: $scope.selected.schuetze.firstName,
 			lastName: $scope.selected.schuetze.lastName,
 			verein: $scope.selected.verein.name,
-			vereinID: $scope.selected.verein._id,
+			vereinID: $scope.selected.verein.id,
 			manschaft: "",
 		}
 
@@ -197,6 +212,11 @@ angular.module("dsm.conrtollers.lines", [
 	$scope.groupSetup = {
 		theme: "bootstrap"
 	};
+
+	function init(){
+		$scope.selectVerein()
+	}
+	init()
 
 }])
 

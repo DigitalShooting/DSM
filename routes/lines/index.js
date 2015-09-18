@@ -12,14 +12,16 @@ router.use("/", function(req, res, next){
 
 	mysql.query(
 		"SELECT * " +
-		"FROM verein ",
+		"FROM verein " +
+		"ORDER BY verein.name DESC ",
 		function(err, rows, fields) {
 			res.locals.vereine = rows
 
 
 			mysql.query(
 				"SELECT * " +
-				"FROM user ",
+				"FROM user " +
+				"ORDER BY user.lastName, user.firstName DESC ",
 				function(err, rows, fields) {
 					res.locals.schuetzen = rows
 					next()

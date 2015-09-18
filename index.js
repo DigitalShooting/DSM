@@ -8,7 +8,7 @@ var config = require("./config/")
 var routes = require("./routes")
 var exec = require("exec")
 var child_process = require('child_process')
-
+var mysql = require("./lib/mysql.js")
 
 
 
@@ -84,5 +84,19 @@ io.on('connection', function(socket){
 			// Power Off
 			child_process.exec(["ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
 		}
+	})
+
+
+	socket.on("getUsersForVerein", function(data){
+		mysql.query(
+			"SELECT * " +
+			"FROM user " +
+			"WHERE vereinID = ? " +
+			"ORDER BY user.lastName, user.firstName DESC ",
+			[data.vereinID],
+			function(err, rows, fields) {
+				socket.emit("setUsersForVerein", rows)
+			}
+		);
 	})
 })
