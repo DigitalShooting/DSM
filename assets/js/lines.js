@@ -205,6 +205,31 @@ angular.module("dsm.conrtollers.lines", [
 	}
 
 
+	$scope.messageType = "danger"
+	$scope.showMessage = function(show){
+		performOnSelected(function(line){
+			if (show == true){
+				line.dscAPI.showMessage($scope.messageType, $scope.messageTitle)
+			}
+			else {
+				line.dscAPI.hideMessage()
+			}
+		})
+	}
+	$scope.showMessageType = function(type){
+		if (type == "sicherheit"){
+			performOnSelected(function(line){
+				line.dscAPI.showMessage("danger", "Sicherheit")
+			})
+		}
+		else if (type == "pause"){
+			performOnSelected(function(line){
+				line.dscAPI.showMessage("default", "Pause")
+			})
+		}
+	}
+
+
 	// Select Helper
 	$scope.groupByType = function (item){
 		return item.type;

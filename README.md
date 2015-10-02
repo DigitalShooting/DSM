@@ -25,21 +25,5 @@ TODO
 
 
 
-## TODOs
-
-### v1.0
-- [ ] Paging in den Tabellen
-- [x] Stände Viewer
-- [ ] Export
-- [ ] Bug Stand Selected -> Next Get User
-- [ ] Sperre
-    - Sicherheit
-
-### v2.0
-- [ ] RWK
-
-
-
-
 ## Licence
 GNU GENERAL PUBLIC LICENSE Version 3

@@ -29,7 +29,7 @@ angular.module("dsm.services.sockets", [
 		line.socket = socketFactory({
 			ioSocket: io.connect(line.ip+":"+line.port)
 		})
-		line.dscAPI = dscAPI(line.socket, {key: 123})
+		line.dscAPI = dscAPI(line.socket, {key: "123"})
 
 		watch(line)
 

@@ -50,6 +50,20 @@ angular.module('dsc.services.dscAPI', [])
 					auth: auth,
 				})
 			},
+
+
+			showMessage: function(type, title){
+				socket.emit("showMessage", {
+					auth: auth,
+					type: type,
+					title: title,
+				})
+			},
+			hideMessage: function(){
+				socket.emit("hideMessage", {
+					auth: auth,
+				})
+			},
 		}
 	}
 })
