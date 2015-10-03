@@ -78,7 +78,7 @@ angular.module('ds.services.grafik', [])
 
 			function drawShot(context, scheibe, shot, zoom, last){
 				var lastRing = scheibe.ringe[scheibe.ringe.length-1]
-				var currentRing = scheibe.ringe[scheibe.ringe.length - shot.ringInt]
+				var currentRing = scheibe.ringe[scheibe.ringe.length - shot.ring.int]
 
 				if (last){
 					if (currentRing){
