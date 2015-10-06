@@ -284,7 +284,7 @@ angular.module("dsm.conrtollers.lines", [
 				$scope.empty = false
 
 				if ($scope.serie != undefined && $scope.serie.length != 0) {
-					var ringInt = $scope.serie[session.selection.shot].ringInt
+					var ringInt = $scope.serie[session.selection.shot].ring.int
 					var ring = $scope.scheibe.ringe[$scope.scheibe.ringe.length - ringInt]
 
 					if (ring){
