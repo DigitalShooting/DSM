@@ -4,62 +4,57 @@ block title
 	| Schützen
 
 block main
-	h1
-		block title
+	div(ng-app="dsm.conrtollers.stammdaten" ng-controller="mainCtrl")
+		h1
+			block title
+			
+		ul(class="nav nav-tabs")
+			li(class="active")
+				a
+					span(class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true")
+					|  Übersicht
+			
+		a(href="./edit/new" class="btn btn-primary")
+			span(class="glyphicon glyphicon-plus" aria-hidden="true")
+			|  Neu
+		table(datatable="" dt-options="dtOptions" class="table table-hover table-striped")
+			thead
+				tr
+					th Vorname
+					th Name
+					th Passnummer
+					th Verein
+					th(class="sizeCoulumToFit")
+			tbody
+				- schuetzen.forEach(function(schuetze){
+					tr
+						td #{schuetze.firstName}
+						td #{schuetze.lastName}
+						td #{schuetze.passnummer}
+						td #{schuetze.verein}
+						td(class="sizeCoulumToFit")
+							a(href="./edit/#{schuetze.id}")
+								//- button(type="button" ng-click="showCase.modifyPerson($index)" class="btn btn-warning")
+								span(class="glyphicon glyphicon-pencil" aria-hidden="true")
+							a(href="./delete/#{schuetze.id}")
+								//- button(type="button" ng-click="showCase.removePerson($index)" class="btn btn-danger")
+								span(class="glyphicon glyphicon-trash" aria-hidden="true")
+						
+				- })
+			tfoot
+				tr
+					th ID
+					th First Name
+					th Last Name
+	
+	script.
+		angular.module("dsm.conrtollers.stammdaten", [
+			'datatables', 'datatables.bootstrap',
+		])
+		.controller('mainCtrl', function($scope, DTOptionsBuilder) {
+			$scope.dtOptions = DTOptionsBuilder.newOptions().withBootstrap()
+			
+		})
 		
-	ul(class="nav nav-tabs")
-		li(class="active")
-			a
-				span(class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true")
-				|  Übersicht
 		
-	table(class="table table-hover table-striped")
-		tr
-			th 
-				a(href="?order=firstName") Vorname
-			th
-				a(href="?order=lastName") Name
-			th
-				a(href="?order=passnummer") Passnummer
-			th
-				a(href="?order=verein") Verein
-			th(class="sizeCoulumToFit")
-				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
-				|  Bearbeiten
-			th(class="sizeCoulumToFit")
-				span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
-				|  Löschen
-		tr
-			td(colspan="4")
-				//- input(type="text" class="form-control" placeholder="Suchen" style="width:100%;")
-			td(colspan="2")
-				a(href="./edit/new" class="btn btn-primary fullWidth")
-					span(class="glyphicon glyphicon-plus" aria-hidden="true")
-					|  Neu
-		- schuetzen.forEach(function(schuetze){
-			tr
-				td #{schuetze.firstName}
-				td #{schuetze.lastName}
-				td #{schuetze.passnummer}
-				td #{schuetze.verein}
-				td(class="sizeCoulumToFit")
-					a(href="./edit/#{schuetze.id}")
-						span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
-						|  Bearbeiten
-				td(class="sizeCoulumToFit")
-					a(href="./delete/#{schuetze.id}")
-						span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
-						|  Löschen
-		- })
-	nav
-		ul(class="pagination")
-			li
-				a(href="./0" aria-label="Previous")
-					span(aria-hidden="true") &laquo;
-			- pages.forEach(function(page){
-				li(class="#{selectedPageIndex == page ? 'active' : ''}")
-					a(href="./#{page}") #{page+1}
-			- })
-			li
-				a(href="./#{lastPageIndex-1}" aria-label="Next")
-					span(aria-hidden="true") &raquo;
+		

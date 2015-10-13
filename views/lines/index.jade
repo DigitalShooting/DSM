@@ -61,7 +61,7 @@ block body
 					
 					
 						.col-md-6
-							div(class="panel panel-default animate" ng-hide="selectedLines == 0")
+							div(class="panel panel-default animate" ng-hide="selectedConnectedLines.length == 0")
 								div(class="panel-heading") Disziplin
 								div(class="panel-body")
 									div(class="form-horizontal")
@@ -83,7 +83,7 @@ block body
 					
 					.col-md-12
 						.col-md-6
-							div(class="panel panel-default animate" ng-hide="selectedLines == 0")
+							div(class="panel panel-default animate" ng-hide="selectedConnectedLines.length == 0")
 								div(class="panel-heading") Nachricht
 								div(class="panel-body")
 									div(class="form-horizontal")
