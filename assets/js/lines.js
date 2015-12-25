@@ -1,13 +1,12 @@
-// angular.module("dsm.conrtollers.lines", [
-	// "dsm.services.sockets",
-	// "dsm.services.filter",
-	// "ds.services.grafik",
-	//
-	// "ui.select",
-	// "ngSanitize",
-	// "ngAnimate",
-// ])
-module.controller("lines", ["$scope", "lines", "dsmSocket", function ($scope, lines, dsmSocket) {
+angular.module("dsm", [
+	"dsm.services.sockets",
+	"dsm.services.filter",
+	"ds.services.grafik",
+
+	"ui.select",
+	"ngAnimate",
+])
+.controller("lines", ["$scope", "lines", "dsmSocket", function ($scope, lines, dsmSocket) {
 	$scope.lines = lines
 
 	// Selected lines

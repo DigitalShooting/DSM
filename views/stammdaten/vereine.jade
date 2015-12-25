@@ -1,0 +1,118 @@
+extends index.jade
+
+block title
+	| Vereine
+
+block head
+	//- Main AngularJS
+	script(src="/libs/angularjs/angular.min.js")
+	//- Aangular Cookies
+	script(src="/libs/angular-cookies/angular-cookies.js")
+	//- Angular UI
+	script(src="/libs/angular-bootstrap/ui-bootstrap.min.js")
+	script(src="/libs/angular-bootstrap/ui-bootstrap-tpls.min.js")
+	//- Angular rest lib
+	script(src="/libs/restangular/dist/restangular.min.js")
+	//- Helper Lib
+	script(src="/libs/lodash/lodash.js")
+
+	script(src="/js/stammsdaten/verein.js")
+
+
+	// Generate table header colum with order arrow
+	mixin tableHeader(title, varName)
+		th(ng-click="changeOrder('#{varName}')")
+			span(class="glyphicon glyphicon-arrow-up" aria-hidden="true" ng-hide="store.selectedOrder.field != '#{varName}' || store.selectedOrder.dir == false")
+			span(class="glyphicon glyphicon-arrow-down" aria-hidden="true" ng-hide="store.selectedOrder.field != '#{varName}' || store.selectedOrder.dir")
+			|  #{title}
+
+
+block main
+	div(ng-controller="VereinController")
+		h1 
+			| Vereine 
+			small ({{totalItems}} {{totalItems == 1 ? "Ergebniss" : "Ergebnisse"}})
+		table(class="table")
+			thead
+				tr
+					+tableHeader("ID", "id")
+					+tableHeader("Name", "name")
+					th Bearbeiten
+				tr
+					td(colspan="2")
+						input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
+					td
+						button(type="button" class="btn btn-success btn noMargin col-xs-12" ng-click="newEntry()")
+							span(class="glyphicon glyphicon-plus" aria-hidden="true")
+							|  Neu
+			tbody
+				tr(ng-repeat="verein in vereine track by $index")
+					td {{verein.id}}
+					td {{verein.name}}
+					td
+						button(type="button" class="btn btn-info btn-sm noMargin col-xs-12" ng-click="editEntry(verein)")
+							span(class="glyphicon glyphicon-pencil" aria-hidden="true")
+							|  Bearbeiten
+		div(class="dropup noMargin")
+			div(class="btn-group pull-left" uib-dropdown is-open="status.isopen")
+				button(id="single-button" type="button" class="btn btn-default noMargin" uib-dropdown-toggle ng-disabled="disabled")
+					| Einträge pro Seite: {{store.itemsPerPage}} 
+					span(class="caret")
+				ul(class="uib-dropdown-menu" role="menu" aria-labelledby="single-button")
+					li(role="menuitem")
+						a(ng-click="store.itemsPerPage = 10;") 10
+					li(role="menuitem")
+						a(ng-click="store.itemsPerPage = 20") 20
+					li(role="menuitem")
+						a(ng-click="store.itemsPerPage = 50") 50
+					li(role="menuitem")
+						a(ng-click="store.itemsPerPage = 100") 100
+		div(class="noMargin pull-right")
+			uib-pagination(total-items="totalItems" items-per-page="store.itemsPerPage" ng-model="currentPage" max-size="paginationMaxSize" class="pagination noMargin" boundary-links="true" previous-text="Zurück" next-text="Weiter" first-text="Erste" last-text="Letzte")
+		
+		
+		//- modalEditingOverlay template
+		script(type="text/ng-template" id="modalEditingOverlay.html")
+
+			div(class="modal-header")
+				button(type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()")
+					span(aria-hidden="true") &times
+				h4(class="modal-title" id="exampleModalLabel")
+					span(class="glyphicon glyphicon-user" aria-hidden="true")
+					|  {{verein.name}}
+			div(class="modal-body")
+				form
+					div(class="row")
+						div(class="form-group col-xs-6")
+							label(class="control-label") ID:
+							input(class="form-control" id="disabledInput" type="text" placeholder="{{verein.id}}" disabled)
+					div(class="form-group")
+						label(class="control-label") Name:
+						input(type="text" class="form-control" ng-model="verein.name")
+					div(class="form-group")
+						label(for="message-text" class="control-label") Notiz:
+						textarea(class="form-control" id="message-text" ng-model="verein.note")
+			div(class="modal-footer")
+				button(class="btn btn-danger pull-left" type="button" ng-click="delete()")
+					span(class="glyphicon glyphicon-trash" aria-hidden="true")
+					|  Löschen
+				button(class="btn btn-primary" type="button" ng-click="save()")
+					span(class="glyphicon glyphicon-floppy-disk" aria-hidden="true")
+					|  Speichern
+
+
+
+
+	//- script.
+	//- 	var helloApp = angular.module("sampleApp", ["restangular"]);
+	//- 	helloApp.controller("HelloCtrl", function($scope, Restangular) {
+	//- 		$scope.vereine = Restangular.all("/api/verein").getList().$object
+	//- 	});
+	//- div(ng-controller="HelloCtrl")
+	//- 	table(class="table")
+	//- 		tr
+	//- 			th ID
+	//- 			th Name
+	//- 		tr(ng-repeat="verein in vereine")
+	//- 			td {{verein.id}}
+	//- 			td {{verein.name}}

@@ -1,14 +1,31 @@
 extends ../layout.jade
 
+block title
+	| Stände
+
 block head
-	// Angular
+	script(src="/socket.io/socket.io.js")
+	
+	link(href="/libs/angular-ui-select/dist/select.min.css", rel="stylesheet")
+	
+	// AngularJS
 	script(src="/libs/angularjs/angular.min.js")
-	script(src="/libs/angular-sanitize/angular-sanitize.min.js")
-	script(src="/libs/angular-route/angular-route.js")
+	// SocketIO
 	script(src="/libs/angular-socket-io/socket.js")
+	// Angular animate
 	script(src="/libs/angular-animate/angular-animate.min.js")
-	script(src="/libs/restangular/dist/restangular.min.js")
-	script(src="/libs/lodash/lodash.js")
+	//- script(src="/libs/restangular/dist/restangular.min.js")
+	//- script(src="/libs/lodash/lodash.js")
+	// select2
+	script(src="/libs/angular-ui-select/dist/select.min.js")
+	
+	script(src='/js/services/confirm.js')
+	script(src='/js/services/filter.js')
+	script(src='/js/services/sockets.js')
+	script(src='/js/services/grafik.js')
+	script(src='/js/services/dscAPI.js')
+	
+	script(src="/js/lines.js")
 
 block body
 	div
@@ -27,16 +44,6 @@ block body
 						button(type="button" ng-click="toggleAll(false)" class="btn col-md-2 btn-default")
 							span(class="glyphicon glyphicon-remove" aria-hidden="true")
 			
-		
-			//- div(class="box")
-			//- 	div(class="box-header")
-			//- 		h3(class="box-title") Stände
-			//- 	div(class="box-body")
-			//- 		p Stände auswählen:
-			//- 		a(class="btn btn-app" ng-repeat="line in lines track by $index")
-			//- 			| {{line.label}}
-						
-		
 			
 		section(class="col-md-9")
 			h1 Verwalten
@@ -45,10 +52,7 @@ block body
 					a(href="#manage" aria-controls="view" role="tab" data-toggle="tab")
 						span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
 						|  Verwalten
-				li(class="" role="presentation")
-					a(href="#view" aria-controls="view" role="tab" data-toggle="tab")
-						span(class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true")
-						|  Betrachten
+				
 			
 			.col-md-12
 				div(class="alert alert-info animate" role="alert" ng-hide="selectedLines != 0") Kein Stand ausgewählt.
@@ -161,49 +165,14 @@ block body
 													ui-select-choices(repeat="schuetze in schuetzen | propsFilter: {firstName: $select.search, lastName: $select.search}")
 														div {{schuetze.firstName}} {{schuetze.lastName}}
 												
-				div(role="tabpanel" class="tab-pane" id="view")
-					div(ng-controller="stand" stand="stand" class="col-md-6 fullHeight" ng-repeat="stand in selectedConnectedLines")
-						div(class="standLabel")
-							h1 {{stand.labelShort}}
-						div(class="col-xs-4")
-							target( zoomlevel="zoomlevel" serie="serie" selectedshotindex="selectedshotindex" scheibe="scheibe" probeecke="probeecke")
-						div(class="col-xs-8")
-							.col-xs-12
-								div(class="grayBoxp")
-									table(class="table")
-										tr
-											th Schütze
-											td {{session.user.firstName}} {{session.user.lastName}}
-										tr
-											th Verein
-											td {{session.user.verein}} {{session.user.manschaft}}
-										tr
-											th Disziplin
-											td {{session.disziplin.title}}
-										tr
-											th Aktueller Schuss
-											td {{activeShot.ring.display}}
-										tr
-											th Anzahl
-											td {{session.anzahl}}
-										tr
-											th Schnitt
-											td {{session.schnitt}} &Oslash; ({{session.schnittCalc}} Ringe)
-										tr
-											th Gesamt
-											td {{gesamt}} Ringe
-										tr
-											th Serien
-											td
-												span(ng-repeat="serie in session.serien track by $index" class="col-xs-3") {{serie.gesamt}}
-			
+				
 
 	
 	script.
-		//- var dsmSocket = io()
-		//- var event = new Event('build')
-		//- 
-		//- var config = !{JSON.stringify(config)}
-		//- var vereine = !{JSON.stringify(vereine)}
-		//- var schuetzen = []
+		var dsmSocket = io()
+		var event = new Event('build')
+		
+		var config = !{JSON.stringify(config)}
+		var vereine = !{JSON.stringify(vereine)}
+		var schuetzen = []
 	
