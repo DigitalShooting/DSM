@@ -8,24 +8,29 @@ var server = restify.createServer({
 });
 server.listen(3000);
 
-
-// server.use(restify.acceptParser(server.acceptable));
-// server.use(restify.jsonp());
 server.use(restify.bodyParser({ mapParams: false }));
 server.use(restify.queryParser());
 
 
+
+
+// ------------------------------------------
+// session
+// ------------------------------------------
 server.get('/session', function create(req, res, next) {
 	return res.send(201, Math.random().toString(36).substr(3, 8));
 });
+// ------------------------------------------
+// ------------------------------------------
+// ------------------------------------------
 
 
 
 
 
-
-
-
+// ------------------------------------------
+// verein
+// ------------------------------------------
 server.get('/verein/info', function create(req, res, next) {
 	var query = {
 		searchSQL: "", // search
@@ -128,7 +133,7 @@ server.get('/verein/:id', function create(req, res, next) {
 });
 
 server.post('/verein/:id', function create(req, res, next) {
-	console.log(req.body)
+	console.log("hallo",req.body)
 	mysql.query(
 		"UPDATE verein " +
 		"SET verein.name = ?, verein.note = ?" +
@@ -156,7 +161,7 @@ server.del('/verein/:id', function create(req, res, next) {
 
 function getVerein(id, callback){
 	mysql.query(
-		"SELECT verein.id, verein.name " +
+		"SELECT verein.id, verein.name, verein.note " +
 		"FROM verein " +
 		"WHERE verein.id = ? ",
 		[id],
@@ -169,6 +174,9 @@ function getVerein(id, callback){
 
 
 
+// ------------------------------------------
+// ------------------------------------------
+// ------------------------------------------
 
 
 
@@ -177,8 +185,9 @@ function getVerein(id, callback){
 
 
 
-
-
+// ------------------------------------------
+// user
+// ------------------------------------------
 server.get('/user/info', function create(req, res, next) {
 	var query = {
 		searchSQL: "",
@@ -315,7 +324,7 @@ server.del('/user/:id', function create(req, res, next) {
 
 function getUser(id, callback){
 	mysql.query(
-		"SELECT user.lastName, user.firstName, user.id, user.vereinID, user.note, user.passnummer, verein.name " +
+		"SELECT user.lastName, user.firstName, user.id, user.vereinID, user.note, user.passnummer, verein.name as 'verein' " +
 		"FROM user " +
 		"LEFT JOIN verein ON user.vereinID = verein.id " +
 		"WHERE user.id = ? ",
@@ -326,3 +335,7 @@ function getUser(id, callback){
 		}
 	);
 }
+
+// ------------------------------------------
+// ------------------------------------------
+// ------------------------------------------
