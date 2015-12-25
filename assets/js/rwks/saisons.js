@@ -4,16 +4,16 @@ var app = angular.module("dsm", [
 	"ngCookies",
 ]);
 
-// UserController
-// Lists users and perfor search and order
-app.controller("UserController", function($scope, Restangular, $uibModal, $cookies, $log) {
+// SaisonController
+// Lists saisons and perfor search and order
+app.controller("SaisonController", function($scope, Restangular, $uibModal, $cookies, $log) {
 	$scope.store = {
 		itemsPerPage: 20, // items per page
 		selectedOrder: { // Ordering Infos
-			field: "lastName",
+			field: "name",
 			dir: false,
 		},
-		search: "", // User Search Property
+		search: "", // Search Property
 	}
 
 	$scope.$watch('currentPage', function() {
@@ -36,49 +36,47 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 	// pagination pages listed
 	$scope.paginationMaxSize = 10;
 
-	// Reload total item count and users
+	// Reload total item count and saisons
 	function reload(){
-		Restangular.one('/api/user/info').get({
+		Restangular.one('/api/saison/info').get({
 			search: $scope.store.search,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
-			console.log($scope.totalItems)
 		});
-		Restangular.all('/api/user').getList({
+		Restangular.all('/api/saison').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
 			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
-		}).then(function(users) {
-			$scope.users = users;
+		}).then(function(saisons) {
+			$scope.saisons = saisons;
 		});
 	}
 
-	// open edit for user
-	$scope.editEntry = function(user){
+	// open edit for saison
+	$scope.editEntry = function(saison){
 		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'modalEditingOverlay.html',
-			controller: 'UserEditController',
+			controller: 'SaisonEditController',
 			size: "lg",
 			resolve: {
-				user: function () {
-					return user;
+				saison: function () {
+					return saison;
 				}
 			}
 		});
 
-		modalInstance.result.then(function (user) {
+		modalInstance.result.then(function (saison) {
 			reload()
 		}, function () {
 			$log.info('Modal dismissed at: ' + new Date());
 		});
 	}
 	$scope.newEntry = function(){
-		Restangular.one('/api/user').post().then(function(user) {
-			console.log(user);
-			$scope.editEntry(user);
+		Restangular.one('/api/saison').post().then(function(saison) {
+			$scope.editEntry(saison);
 		});
 	};
 
@@ -90,7 +88,6 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 		else {
 			$scope.store.selectedOrder.field = field;
 		}
-		console.log($scope.store.selectedOrder, $scope.store.selectedOrder.dir == true ? "DESC" : "ASC");
 		reload();
 
 		writeToCookie();
@@ -98,64 +95,36 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 
 	// initial load
 	reload();
-	var cookieData = $cookies.getObject('user_vars');
+	var cookieData = $cookies.getObject('saison_vars');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('user_vars', $scope.store, {});
+		$cookies.putObject('saison_vars', $scope.store, {});
 	}
 });
 
-// UserEditController
-// Displays an overlay to edit user object
-app.controller('UserEditController', function (Restangular, $scope, $uibModalInstance, user) {
-	$scope.user = user;
-	$scope.verein = {
-		id: "",
-		name: "",
-	}
-	if (user.vereinID != 0){
-		$scope.verein = {
-			id: user.vereinID,
-			name: user.verein,
-		}
-	}
+// SaisonEditController
+// Displays an overlay to edit saison object
+app.controller('SaisonEditController', function (Restangular, $scope, $uibModalInstance, saison) {
+	$scope.saison = saison;
 
 
 	// save and close overlay
 	$scope.save = function () {
-		console.log($scope.verein)
-		$scope.user.vereinID = $scope.verein.id;
-		$scope.user.verein = $scope.verein.name;
-		console.log($scope.user)
 		$scope.cancel();
-		$scope.user.post();
+		$scope.saison.post();
 	};
 
-	// delete user and close
+	// delete saison and close
 	// TODO: ALERT
 	$scope.delete = function () {
 		$scope.cancel();
-		$scope.user.remove();
+		$scope.saison.remove();
 	};
 
 	// close
 	$scope.cancel = function () {
-		$uibModalInstance.close($scope.user);
-	};
-
-
-
-	$scope.getVereine = function(serachString) {
-		return Restangular.one('/api/verein').get({
-			search: serachString,
-			limit: 1000,
-		}).then(function(vereine) {
-			return vereine.map(function(verein){
-				return verein;
-			});
-		});
-
+		$uibModalInstance.close($scope.saison);
 	};
 });

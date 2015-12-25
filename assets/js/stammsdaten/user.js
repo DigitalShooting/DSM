@@ -4,13 +4,13 @@ var app = angular.module("dsm", [
 	"ngCookies",
 ]);
 
-// VereinController
-// Lists vereine and perfor search and order
-app.controller("VereinController", function($scope, Restangular, $uibModal, $cookies, $log) {
+// UserController
+// Lists users and perfor search and order
+app.controller("UserController", function($scope, Restangular, $uibModal, $cookies, $log) {
 	$scope.store = {
 		itemsPerPage: 20, // items per page
 		selectedOrder: { // Ordering Infos
-			field: "name",
+			field: "lastName",
 			dir: false,
 		},
 		search: "", // Search Property
@@ -36,47 +36,47 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 	// pagination pages listed
 	$scope.paginationMaxSize = 10;
 
-	// Reload total item count and vereine
+	// Reload total item count and users
 	function reload(){
-		Restangular.one('/api/verein/info').get({
+		Restangular.one('/api/user/info').get({
 			search: $scope.store.search,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
-		Restangular.all('/api/verein').getList({
+		Restangular.all('/api/user').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
 			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
-		}).then(function(vereine) {
-			$scope.vereine = vereine;
+		}).then(function(users) {
+			$scope.users = users;
 		});
 	}
 
-	// open edit for verein
-	$scope.editEntry = function(verein){
+	// open edit for user
+	$scope.editEntry = function(user){
 		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'modalEditingOverlay.html',
-			controller: 'VereinEditController',
+			controller: 'UserEditController',
 			size: "lg",
 			resolve: {
-				verein: function () {
-					return verein;
+				user: function () {
+					return user;
 				}
 			}
 		});
 
-		modalInstance.result.then(function (verein) {
+		modalInstance.result.then(function (user) {
 			reload()
 		}, function () {
 			$log.info('Modal dismissed at: ' + new Date());
 		});
 	}
 	$scope.newEntry = function(){
-		Restangular.one('/api/verein').post().then(function(verein) {
-			$scope.editEntry(verein);
+		Restangular.one('/api/user').post().then(function(user) {
+			$scope.editEntry(user);
 		});
 	};
 
@@ -95,36 +95,60 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 
 	// initial load
 	reload();
-	var cookieData = $cookies.getObject('verein_vars');
+	var cookieData = $cookies.getObject('user_vars');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('verein_vars', $scope.store, {});
+		$cookies.putObject('user_vars', $scope.store, {});
 	}
 });
 
-// VereinEditController
-// Displays an overlay to edit verein object
-app.controller('VereinEditController', function (Restangular, $scope, $uibModalInstance, verein) {
-	$scope.verein = verein;
+// UserEditController
+// Displays an overlay to edit user object
+app.controller('UserEditController', function (Restangular, $scope, $uibModalInstance, user) {
+	$scope.user = user;
+	$scope.verein = {
+		id: "",
+		name: "",
+	}
+	if (user.vereinID != 0){
+		$scope.verein = {
+			id: user.vereinID,
+			name: user.verein,
+		}
+	}
 
 
 	// save and close overlay
 	$scope.save = function () {
+		$scope.user.vereinID = $scope.verein.id;
+		$scope.user.verein = $scope.verein.name;
+
 		$scope.cancel();
-		$scope.verein.post();
+		$scope.user.post();
 	};
 
-	// delete verein and close
+	// delete user and close
 	// TODO: ALERT
 	$scope.delete = function () {
 		$scope.cancel();
-		$scope.verein.remove();
+		$scope.user.remove();
 	};
 
 	// close
 	$scope.cancel = function () {
-		$uibModalInstance.close($scope.verein);
+		$uibModalInstance.close($scope.user);
+	};
+
+
+
+	$scope.getVereine = function(serachString) {
+		return Restangular.one('/api/verein').get({
+			search: serachString,
+			limit: 1000,
+		}).then(function(vereine) {
+			return vereine;
+		});
 	};
 });

@@ -4,9 +4,9 @@ var app = angular.module("dsm", [
 	"ngCookies",
 ]);
 
-// VereinController
-// Lists vereine and perfor search and order
-app.controller("VereinController", function($scope, Restangular, $uibModal, $cookies, $log) {
+// RWKsController
+// Lists rwks and perfor search and order
+app.controller("RWKsController", function($scope, Restangular, $uibModal, $cookies, $log) {
 	$scope.store = {
 		itemsPerPage: 20, // items per page
 		selectedOrder: { // Ordering Infos
@@ -36,47 +36,47 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 	// pagination pages listed
 	$scope.paginationMaxSize = 10;
 
-	// Reload total item count and vereine
+	// Reload total item count and rwks
 	function reload(){
-		Restangular.one('/api/verein/info').get({
+		Restangular.one('/api/rwk/info').get({
 			search: $scope.store.search,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
-		Restangular.all('/api/verein').getList({
+		Restangular.all('/api/rwk').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
 			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
-		}).then(function(vereine) {
-			$scope.vereine = vereine;
+		}).then(function(rwks) {
+			$scope.rwks = rwks;
 		});
 	}
 
-	// open edit for verein
-	$scope.editEntry = function(verein){
+	// open edit for rwk
+	$scope.editEntry = function(rwk){
 		var modalInstance = $uibModal.open({
 			animation: true,
 			templateUrl: 'modalEditingOverlay.html',
-			controller: 'VereinEditController',
+			controller: 'RWKEditController',
 			size: "lg",
 			resolve: {
-				verein: function () {
-					return verein;
+				rwk: function () {
+					return rwk;
 				}
 			}
 		});
 
-		modalInstance.result.then(function (verein) {
+		modalInstance.result.then(function (rwk) {
 			reload()
 		}, function () {
 			$log.info('Modal dismissed at: ' + new Date());
 		});
 	}
 	$scope.newEntry = function(){
-		Restangular.one('/api/verein').post().then(function(verein) {
-			$scope.editEntry(verein);
+		Restangular.one('/api/rwk').post().then(function(rwk) {
+			$scope.editEntry(rwk);
 		});
 	};
 
@@ -95,36 +95,36 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 
 	// initial load
 	reload();
-	var cookieData = $cookies.getObject('verein_vars');
+	var cookieData = $cookies.getObject('rwk_vars');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('verein_vars', $scope.store, {});
+		$cookies.putObject('rwk_vars', $scope.store, {});
 	}
 });
 
-// VereinEditController
-// Displays an overlay to edit verein object
-app.controller('VereinEditController', function (Restangular, $scope, $uibModalInstance, verein) {
-	$scope.verein = verein;
+// RWKEditController
+// Displays an overlay to edit rwk object
+app.controller('RWKEditController', function (Restangular, $scope, $uibModalInstance, rwk) {
+	$scope.rwk = rwk;
 
 
 	// save and close overlay
 	$scope.save = function () {
 		$scope.cancel();
-		$scope.verein.post();
+		$scope.rwk.post();
 	};
 
-	// delete verein and close
+	// delete rwk and close
 	// TODO: ALERT
 	$scope.delete = function () {
 		$scope.cancel();
-		$scope.verein.remove();
+		$scope.rwk.remove();
 	};
 
 	// close
 	$scope.cancel = function () {
-		$uibModalInstance.close($scope.verein);
+		$uibModalInstance.close($scope.rwk);
 	};
 });

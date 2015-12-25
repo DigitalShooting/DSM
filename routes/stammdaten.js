@@ -9,7 +9,7 @@ router.get("/", function(req, res){
 
 
 router.use("/schuetzen/", function(req, res){
-	res.render("stammdaten/schuetzen")
+	res.render("stammdaten/user")
 })
 router.use("/vereine/", function(req, res){
 	res.render("stammdaten/vereine")

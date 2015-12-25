@@ -3,41 +3,128 @@ extends index.jade
 block title
 	| Manschaften
 
+block head
+	//- Main AngularJS
+	script(src="/libs/angularjs/angular.min.js")
+	//- Aangular Cookies
+	script(src="/libs/angular-cookies/angular-cookies.js")
+	//- Angular UI
+	script(src="/libs/angular-bootstrap/ui-bootstrap.min.js")
+	script(src="/libs/angular-bootstrap/ui-bootstrap-tpls.min.js")
+	//- Angular rest lib
+	script(src="/libs/restangular/dist/restangular.min.js")
+	//- Helper Lib
+	script(src="/libs/lodash/lodash.js")
+
+	script(src="/js/rwks/manschaften.js")
+
+
+// Generate table header colum with order arrow
+mixin tableHeader(title, varName)
+	th(ng-click="changeOrder('#{varName}')")
+		span(class="glyphicon glyphicon-arrow-up" aria-hidden="true" ng-hide="store.selectedOrder.field != '#{varName}' || store.selectedOrder.dir == false")
+		span(class="glyphicon glyphicon-arrow-down" aria-hidden="true" ng-hide="store.selectedOrder.field != '#{varName}' || store.selectedOrder.dir")
+		|  #{title}
+
+
 block main
-	h1
-		block title
+	div(ng-controller="ManschaftenController")
+		h1 
+			block title
+			small ({{totalItems}} {{totalItems == 1 ? "Ergebniss" : "Ergebnisse"}})
+		table(class="table")
+			thead
+				tr
+					//- +tableHeader("ID", "id")
+					+tableHeader("Saison", "saison")
+					+tableHeader("Verein", "verein")
+					+tableHeader("Name", "name")
+					th Bearbeiten
+				tr
+					td(colspan="3")
+						input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
+					td
+						button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
+							span(class="glyphicon glyphicon-plus" aria-hidden="true")
+							|  Neu
+			tbody
+				tr(ng-repeat="manschaft in manschaften track by $index")
+					//- td {{manschaft.id}}
+					td {{manschaft.saison}}
+					td {{manschaft.verein}}
+					td {{manschaft.name}}
+					td
+						button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(manschaft)")
+							span(class="glyphicon glyphicon-pencil" aria-hidden="true")
+							|  Bearbeiten
+		div(class="dropup noMargin")
+			div(class="btn-group pull-left" uib-dropdown is-open="status.isopen")
+				button(id="single-button" type="button" class="btn btn-default noMargin" uib-dropdown-toggle ng-disabled="disabled")
+					| Einträge pro Seite: {{store.itemsPerPage}} 
+					span(class="caret")
+				ul(class="uib-dropdown-menu" role="menu" aria-labelledby="single-button")
+					li(role="menuitem")
+						a(ng-click="store.itemsPerPage = 10;") 10
+					li(role="menuitem")
+						a(ng-click="store.itemsPerPage = 20") 20
+					li(role="menuitem")
+						a(ng-click="store.itemsPerPage = 50") 50
+					li(role="menuitem")
+						a(ng-click="store.itemsPerPage = 100") 100
+		div(class="noMargin pull-right")
+			uib-pagination(total-items="totalItems" items-per-page="store.itemsPerPage" ng-model="currentPage" max-size="paginationMaxSize" class="pagination noMargin" boundary-links="true" previous-text="Zurück" next-text="Weiter" first-text="Erste" last-text="Letzte")
 		
-	ul(class="nav nav-tabs")
-		li(class="active")
-			a
-				span(class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true")
-				|  Übersicht
-	
-	table(class="table table-hover table-striped")
-		tr
-			th Manschaft Name
-			th(class="sizeCoulumToFit")
-				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
-				|  Bearbeiten
-			th(class="sizeCoulumToFit")
-				span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
-				|  Löschen
-		tr
-			td(colspan="1")
-				input(type="text" class="form-control" placeholder="Suchen" style="width:100%;")
-			td(colspan="2")
-				a(href="./edit/new" class="btn btn-primary fullWidth")
-					span(class="glyphicon glyphicon-plus" aria-hidden="true")
-					|  Neu
-		//- - manschaften.forEach(function(manschaft){
-		//- 	tr
-		//- 		td #{manschaft.name}
-		//- 		td(class="sizeCoulumToFit")
-		//- 			a(href="./edit/#{manschaft._id}")
-		//- 				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
-		//- 				|  Bearbeiten
-		//- 		td(class="sizeCoulumToFit")
-		//- 			a(href="./delete/#{manschaft._id}")
-		//- 				span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
-		//- 				|  Löschen
-		//- - })
+		
+		//- saisonTypeahead template
+		script(type="text/ng-template" id="saisonTypeahead.html")
+			a {{match.model.name}}
+		
+		
+		//- vereinTypeahead template
+		script(type="text/ng-template" id="vereinTypeahead.html")
+			a {{match.model.name}}
+		
+		
+		//- modalEditingOverlay template
+		script(type="text/ng-template" id="modalEditingOverlay.html")
+
+			div(class="modal-header")
+				button(type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()")
+					span(aria-hidden="true") &times
+				h4(class="modal-title" id="exampleModalLabel")
+					span(class="glyphicon glyphicon-th-large" aria-hidden="true")
+					|  {{verein.name}} {{manschaft.name}}
+			div(class="modal-body")
+				form
+					div(class="row")
+						div(class="form-group col-xs-6")
+							label(class="control-label") ID:
+							input(class="form-control" id="disabledInput" type="text" placeholder="{{manschaft.id}}" disabled)
+					div(class="form-group")
+						label(class="control-label") Manschafts Name/ Nummer:
+						input(type="text" class="form-control" ng-model="manschaft.name")
+					div(class="row")
+						div(class="form-group col-xs-6")
+							label(class="control-label") Runde:
+							input(type="text" ng-model="saison" placeholder="" uib-typeahead="saison as saison.name for saison in getSaison($viewValue)" typeahead-loading="loadingSaisons" typeahead-template-url="saisonTypeahead.html" typeahead-no-results="noResults" class="form-control")
+							i(ng-show="loadingSaisons" class="glyphicon glyphicon-refresh")
+							div(ng-show="noResults")
+								i(class="glyphicon glyphicon-remove")
+								| Keine Runde gefunden
+						div(class="form-group col-xs-6")
+							label(class="control-label") Verein:
+							input(type="text" ng-model="verein" placeholder="" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-template-url="vereinTypeahead.html" typeahead-no-results="noResults" class="form-control")
+							i(ng-show="loadingVereine" class="glyphicon glyphicon-refresh")
+							div(ng-show="noResults")
+								i(class="glyphicon glyphicon-remove")
+								| Kein Verein gefunden
+					div(class="form-group")
+						label(for="message-text" class="control-label") Notiz:
+						textarea(class="form-control" id="message-text" ng-model="manschaft.note")
+			div(class="modal-footer")
+				button(class="btn btn-danger pull-left" type="button" ng-click="delete()")
+					span(class="glyphicon glyphicon-trash" aria-hidden="true")
+					|  Löschen
+				button(class="btn btn-primary" type="button" ng-click="save()")
+					span(class="glyphicon glyphicon-floppy-disk" aria-hidden="true")
+					|  Speichern

@@ -13,5 +13,8 @@ router.use("/manschaften/", function(req, res){
 router.use("/rwks/", function(req, res){
 	res.render("rwks/rwks")
 })
+router.use("/saisons/", function(req, res){
+	res.render("rwks/saisons")
+})
 
 module.exports = router
