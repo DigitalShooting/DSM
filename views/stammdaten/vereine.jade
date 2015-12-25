@@ -42,7 +42,7 @@ block main
 					td(colspan="2")
 						input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
 					td
-						button(type="button" class="btn btn-success btn noMargin col-xs-12" ng-click="newEntry()")
+						button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
 							span(class="glyphicon glyphicon-plus" aria-hidden="true")
 							|  Neu
 			tbody
@@ -50,7 +50,7 @@ block main
 					td {{verein.id}}
 					td {{verein.name}}
 					td
-						button(type="button" class="btn btn-info btn-sm noMargin col-xs-12" ng-click="editEntry(verein)")
+						button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(verein)")
 							span(class="glyphicon glyphicon-pencil" aria-hidden="true")
 							|  Bearbeiten
 		div(class="dropup noMargin")

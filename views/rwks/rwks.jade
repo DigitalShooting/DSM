@@ -1,7 +1,7 @@
-extends ../index.jade
+extends index.jade
 
 block title
-	| Manschaften
+	| RWKs
 
 block main
 	h1
@@ -15,7 +15,7 @@ block main
 	
 	table(class="table table-hover table-striped")
 		tr
-			th Manschaft Name
+			th Name
 			th(class="sizeCoulumToFit")
 				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
 				|  Bearbeiten
@@ -29,15 +29,15 @@ block main
 				a(href="./edit/new" class="btn btn-primary fullWidth")
 					span(class="glyphicon glyphicon-plus" aria-hidden="true")
 					|  Neu
-		- manschaften.forEach(function(manschaft){
-			tr
-				td #{manschaft.name}
-				td(class="sizeCoulumToFit")
-					a(href="./edit/#{manschaft._id}")
-						span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
-						|  Bearbeiten
-				td(class="sizeCoulumToFit")
-					a(href="./delete/#{manschaft._id}")
-						span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
-						|  Löschen
-		- })
+		//- - rwks.forEach(function(rwk){
+		//- 	tr
+		//- 		td #{rwk.name}
+		//- 		td(class="sizeCoulumToFit")
+		//- 			a(href="./edit/#{rwk._id}")
+		//- 				span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
+		//- 				|  Bearbeiten
+		//- 		td(class="sizeCoulumToFit")
+		//- 			a(href="./delete/#{rwk._id}")
+		//- 				span(class="glyphicon glyphicon glyphicon-trash" aria-hidden="true")
+		//- 				|  Löschen
+		//- - })

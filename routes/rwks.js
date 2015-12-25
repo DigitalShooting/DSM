@@ -7,7 +7,11 @@ router.get("/", function(req, res){
 	res.redirect("./manschaften/")
 })
 
-router.use("/manschaften/", require("./manschaften"))
-router.use("/rwks/", require("./rwks"))
+router.use("/manschaften/", function(req, res){
+	res.render("rwks/manschaften")
+})
+router.use("/rwks/", function(req, res){
+	res.render("rwks/rwks")
+})
 
 module.exports = router

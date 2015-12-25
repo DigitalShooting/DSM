@@ -32,7 +32,7 @@ block main
 		h1
 			| Schützen 
 			small ({{totalItems}} {{totalItems == 1 ? "Ergebniss" : "Ergebnisse"}})
-		table(class="table")
+		table(class="table table-hover table-striped")
 			thead
 				tr
 					+tableHeader("ID", "id")
@@ -45,7 +45,7 @@ block main
 					td(colspan="5")
 						input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
 					td
-						button(type="button" class="btn btn-success btn noMargin col-xs-12" ng-click="newEntry()")
+						button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
 							span(class="glyphicon glyphicon-plus" aria-hidden="true")
 							|  Neu
 			tbody
@@ -56,7 +56,7 @@ block main
 					td {{user.firstName}}
 					td {{user.lastName}}
 					td
-						button(type="button" class="btn btn-info btn-sm noMargin col-xs-12" ng-click="editEntry(user)")
+						button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(user)")
 							span(class="glyphicon glyphicon-pencil" aria-hidden="true")
 							|  Bearbeiten
 		div(class="dropup noMargin")
