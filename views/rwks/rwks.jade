@@ -35,11 +35,13 @@ block main
 		table(class="table")
 			thead
 				tr
-					+tableHeader("ID", "id")
+					//- +tableHeader("ID", "id")
+					+tableHeader("Heim", "heim")
+					+tableHeader("Gast", "gast")
 					+tableHeader("Name", "name")
 					th Bearbeiten
 				tr
-					td(colspan="2")
+					td(colspan="3")
 						input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
 					td
 						button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
@@ -47,7 +49,9 @@ block main
 							|  Neu
 			tbody
 				tr(ng-repeat="rwk in rwks track by $index")
-					td {{rwk.id}}
+					//- td {{rwk.id}}
+					td {{rwk.heim}}
+					td {{rwk.gast}}
 					td {{rwk.name}}
 					td
 						button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(rwk)")
@@ -71,6 +75,11 @@ block main
 			uib-pagination(total-items="totalItems" items-per-page="store.itemsPerPage" ng-model="currentPage" max-size="paginationMaxSize" class="pagination noMargin" boundary-links="true" previous-text="Zurück" next-text="Weiter" first-text="Erste" last-text="Letzte")
 		
 		
+		//- manschaftTypeahead template
+		script(type="text/ng-template" id="manschaftTypeahead.html")
+			a {{match.model.verein}} {{match.model.name}} ({{match.model.saison}})
+		
+		
 		//- modalEditingOverlay template
 		script(type="text/ng-template" id="modalEditingOverlay.html")
 
@@ -89,6 +98,21 @@ block main
 					div(class="form-group")
 						label(class="control-label") Name:
 						input(type="text" class="form-control" ng-model="rwk.name")
+					div(class="row")
+						div(class="form-group col-xs-6")
+							label(class="control-label") Heim Manschaft:
+							input(type="text" ng-model="heim" placeholder="" uib-typeahead="heim as heim for heim in getManschaft($viewValue)" typeahead-loading="loadingHeim" typeahead-template-url="manschaftTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResults" class="form-control")
+							i(ng-show="loadingHeim" class="glyphicon glyphicon-refresh")
+							div(ng-show="noResults")
+								i(class="glyphicon glyphicon-remove")
+								| Keine Manschaft gefunden
+						div(class="form-group col-xs-6")
+							label(class="control-label") Gast Manschaft:
+							input(type="text" ng-model="gast" placeholder="" uib-typeahead="gast as gast.name for gast in getManschaft($viewValue)" typeahead-loading="loadingGast" typeahead-template-url="manschaftTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResults" class="form-control")
+							i(ng-show="loadingGast" class="glyphicon glyphicon-refresh")
+							div(ng-show="noResults")
+								i(class="glyphicon glyphicon-remove")
+								| Keine Manschaft gefunden
 					div(class="form-group")
 						label(for="message-text" class="control-label") Notiz:
 						textarea(class="form-control" id="message-text" ng-model="rwk.note")

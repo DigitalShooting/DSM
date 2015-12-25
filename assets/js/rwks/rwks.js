@@ -109,9 +109,39 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 app.controller('RWKEditController', function (Restangular, $scope, $uibModalInstance, rwk) {
 	$scope.rwk = rwk;
 
+	$scope.heim = {
+		id: "",
+		name: "",
+	}
+	if (rwk.manschaftHeim != 0){
+		$scope.heim = {
+			id: rwk.manschaftHeim,
+			name: rwk.heim,
+		}
+	}
+
+	$scope.gast = {
+		id: "",
+		name: "",
+	}
+	if (rwk.manschaftGast != 0){
+		$scope.gast = {
+			id: rwk.manschaftGast,
+			name: rwk.gast,
+		}
+	}
+
 
 	// save and close overlay
 	$scope.save = function () {
+		console.log($scope.heim, $scope.gast)
+
+		$scope.rwk.manschaftHeim = $scope.heim.id;
+		$scope.rwk.heim = $scope.heim.name;
+
+		$scope.rwk.manschaftGast = $scope.gast.id;
+		$scope.rwk.gast = $scope.gast.name;
+
 		$scope.cancel();
 		$scope.rwk.post();
 	};
@@ -127,4 +157,22 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 	$scope.cancel = function () {
 		$uibModalInstance.close($scope.rwk);
 	};
+
+
+	$scope.getManschaft = function(serachString) {
+		return Restangular.one('/api/manschaft').get({
+			search: serachString,
+			limit: 1000,
+		}).then(function(manschaften) {
+			return manschaften;
+		});
+	};
+	$scope.getManschaftTitle = function(manschaft){
+		console.log(manschaft)
+		if (manschaft.verein != undefined){
+			return manschaft.verein + manschaft.name + " ("+manschaft.saison+")";
+		}
+		return "";
+
+	}
 });

@@ -5,5 +5,6 @@ module.exports = function(mysql, config){
 		saison: require("./saison.js")(mysql, config),
 		disziplinen: require("./disziplinen.js")(mysql, config),
 		manschaft: require("./manschaft.js")(mysql, config),
+		rwk: require("./rwk.js")(mysql, config),
 	}
 }

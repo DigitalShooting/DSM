@@ -66,3 +66,15 @@ server.get('/manschaft/info', routes.manschaft.info.get);
 server.get('/manschaft/:id', routes.manschaft.id.get);
 server.post('/manschaft/:id', routes.manschaft.id.post);
 server.del('/manschaft/:id', routes.manschaft.id.del);
+
+
+
+// rwk
+server.get('/rwk', routes.rwk.get);
+server.post('/rwk', routes.rwk.post);
+
+server.get('/rwk/info', routes.rwk.info.get);
+
+server.get('/rwk/:id', routes.rwk.id.get);
+server.post('/rwk/:id', routes.rwk.id.post);
+server.del('/rwk/:id', routes.rwk.id.del);
