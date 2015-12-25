@@ -1,60 +1,25 @@
 include mixins.jade
 
 doctype html
-html(lang="en")
+html
 	head
+		meta(charset="utf-8")
 		title
+			| DSM - 
 			block title
-		
-		// favicon
-		link(rel="shortcut icon" href="/favicon.ico" type="image/x-icon")
-		link(rel="icon" href="/favicon.ico" type="image/x-icon")
-		
+			
 		// Custom style
 		link(href="/css/style.css", rel="stylesheet")
-		
-		// Socket.io
-		script(src="/socket.io/socket.io.js")
-		
+
 		// jquery
 		script(src="/libs/jquery/dist/jquery.js")
-		
+
 		// bootstap
 		script(src="/libs/bootstrap/dist/js/bootstrap.min.js")
+
+		block head
 		
-		// Angular
-		script(src="/libs/angularjs/angular.min.js")
-		script(src="/libs/angular-sanitize/angular-sanitize.min.js")
-		script(src='/libs/angular-route/angular-route.js')
-		script(src="/libs/angular-socket-io/socket.js")
-		script(src='/libs/angular-animate/angular-animate.min.js')
-		
-		// Select2
-		script(src="/libs/select2/dist/js/select2.full.min.js")
-		link(href="/libs/select2/dist/css/select2.min.css", rel="stylesheet")
-		link(href="/libs/select2-bootstrap-theme/dist/select2-bootstrap.min.css", rel="stylesheet")
-		script(src="/libs/angular-ui-select/dist/select.js")
-		link(href="/libs/angular-ui-select/dist/select.css", rel="stylesheet")
-		
-		// Custom Services
-		script(src='/js/services/confirm.js')
-		script(src='/js/services/filter.js')
-		script(src='/js/services/sockets.js')
-		script(src='/js/services/grafik.js')
-		script(src='/js/services/dscAPI.js')
-		
-		script(src="/js/lines.js")
-		
-		script.
-			// Init Select2
-			$(document).ready(function() {
-				$(".selectpicker").select2({
-					theme: "bootstrap"
-				})
-			})
-		
-		meta(name="viewport", content="width=device-width")
-	body
+	body(ng-app="dsm")
 		nav(class="navbar navbar-default")
 			div(class="container-fluid")
 				div(class="navbar-header")
@@ -70,10 +35,10 @@ html(lang="en")
 						+navElement("/stammdaten/", "Stammdaten", "glyphicon-user")
 						+navElement("#/rwks/", "RWKs", "glyphicon-list-alt")
 						+navElement("#/stats/", "Statistiken", "glyphicon-stats")
-					ul(class="nav navbar-nav navbar-right" ng-controller="exit")
+					ul(class="nav navbar-nav navbar-right")
 						a(href="/exit/")
 							button(type="submit" class="btn btn-danger")
 								span(class="glyphicon glyphicon-log-out" aria-hidden="true")
-								|  Verlassen
-		
+								|  Verlassen
+								
 		block body

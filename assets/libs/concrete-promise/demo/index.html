@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo: Promise</title>
+</head>
+<body>
+
+	<p>
+		Open your browser's console and click the buttons below. View source on this
+		page to see how it works.
+	</p>
+
+	<button value="success">Success</button>
+	<button value="invalid">Invalid</button>
+	<button value="failure">Failure</button>
+
+	<script type="text/javascript" src="../src/promise.js"></script>
+	<script type="text/javascript">
+
+		var DelayPromise = Promise.create([
+			"success",
+			"invalid",
+			"failure",
+			"complete"
+		]);
+
+		function delay(type) {
+			var promise = new DelayPromise();
+
+			setTimeout(function() {
+				promise
+					.fulfill(type)
+					.fulfill("complete");
+			}, 1500);
+
+			return promise;
+		}
+
+		document.addEventListener("click", function(event) {
+			event = event || window.event;
+
+			if (event.target.nodeName === "BUTTON") {
+				delay(event.target.value)
+					.success(function() {
+						console.info("Success!");
+					})
+					.invalid(function() {
+						console.warn("Oops! You did something wrong");
+					})
+					.failure(function() {
+						console.error("Fail!");
+					})
+					.complete(function() {
+						console.log("Done");
+					});
+			}
+		});
+	</script>
+</body>
+</html>

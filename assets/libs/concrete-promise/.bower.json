@@ -1,0 +1,21 @@
+{
+  "name": "concrete-promise",
+  "description": "Roll your own custom promises with this dead simple base class allowing you to easily tame the Promise Programming Pattern.",
+  "version": "1.0.1",
+  "author": "Greg Burghardt <greg_burghardt@yahoo.com>",
+  "homepage": "https://github.com/gburghardt/promise",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gburghardt/promise.git"
+  },
+  "main": "src/promise.js",
+  "_release": "1.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.1",
+    "commit": "f13114e3a336c04e39cd7a8fd4f6cb40bc5057a3"
+  },
+  "_source": "git://github.com/gburghardt/promise.git",
+  "_target": "~1.0.0",
+  "_originalSource": "concrete-promise"
+}

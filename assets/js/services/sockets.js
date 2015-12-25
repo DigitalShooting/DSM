@@ -24,17 +24,17 @@ angular.module("dsm.services.sockets", [
 		})
 	}
 
-	for (var key in config.lines){
-		var line = config.lines[key]
-		line.socket = socketFactory({
-			ioSocket: io.connect(line.ip+":"+line.port)
-		})
-		line.dscAPI = dscAPI(line.socket, {key: "123"})
-
-		watch(line)
-
-		lines.push(line)
-	}
+	// for (var key in config.lines){
+	// 	var line = config.lines[key]
+	// 	line.socket = socketFactory({
+	// 		ioSocket: io.connect(line.ip+":"+line.port)
+	// 	})
+	// 	line.dscAPI = dscAPI(line.socket, {key: "123"})
+	//
+	// 	watch(line)
+	//
+	// 	lines.push(line)
+	// }
 
 	return lines;
 })

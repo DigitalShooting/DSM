@@ -7,9 +7,9 @@ module.exports = {
 	collection	:	"dsm",
 
 	mysql : {
-		host     : "localhost",
-		user     : "root",
+		host     : "",
+		user     : "",
 		password : "",
-		database : "DSM_main"
+		database : ""
 	}
 }

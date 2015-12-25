@@ -1,5 +1,5 @@
 {
-  "name": "morbid",
+  "name": "DSM",
   "version": "0.0.0",
   "description": "",
   "private": true,
@@ -8,9 +8,11 @@
     "body-parser": "x",
     "bootstrap": "x",
     "compression": "x",
+    "cors": "^2.7.1",
     "datatables": "x",
     "exec": "x",
     "express": "~4.12.2",
+    "express-http-proxy": "^0.6.0",
     "flash": "x",
     "jade": "x",
     "jquery": "x",
@@ -19,6 +21,7 @@
     "mongodb": "x",
     "mysql": "^2.9.0",
     "path": "x",
+    "restify": "^4.0.3",
     "socket.io": "^1.3.6"
   },
   "main": "index.js"

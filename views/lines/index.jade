@@ -1,21 +1,42 @@
 extends ../layout.jade
 
+block head
+	// Angular
+	script(src="/libs/angularjs/angular.min.js")
+	script(src="/libs/angular-sanitize/angular-sanitize.min.js")
+	script(src="/libs/angular-route/angular-route.js")
+	script(src="/libs/angular-socket-io/socket.js")
+	script(src="/libs/angular-animate/angular-animate.min.js")
+	script(src="/libs/restangular/dist/restangular.min.js")
+	script(src="/libs/lodash/lodash.js")
+
 block body
-	div(ng-controller="lines" ng-app="dsm.conrtollers.lines")
-		section(class="col-md-3")
-			h2 Stände
-			ul(class="nav nav-pills nav-stacked")
-				li(ng-repeat="line in lines track by $index" class="col-md-12")
-					div(class="btn-group fullWidth" role="group")
-						button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-md-10 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
-						button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}")
-							span(class="glyphicon {{state[line._id] ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
-				
-				li(class="col-md-12 btn-group" role="group")
-					button(type="button" ng-click="toggleAll(true)" class="btn col-md-10 btn-default") Alle markieren
-					button(type="button" ng-click="toggleAll(false)" class="btn col-md-2 btn-default")
-						span(class="glyphicon glyphicon-remove" aria-hidden="true")
+	div
+		div(ng-controller="lines")
+			section(class="col-md-3")
+				h2 Stände
+				ul(class="nav nav-pills nav-stacked")
+					li(ng-repeat="line in lines track by $index" class="col-md-12")
+						div(class="btn-group fullWidth" role="group")
+							button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-md-10 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
+							button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}")
+								span(class="glyphicon {{state[line._id] ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
+					
+					li(class="col-md-12 btn-group" role="group")
+						button(type="button" ng-click="toggleAll(true)" class="btn col-md-10 btn-default") Alle markieren
+						button(type="button" ng-click="toggleAll(false)" class="btn col-md-2 btn-default")
+							span(class="glyphicon glyphicon-remove" aria-hidden="true")
 			
+		
+			//- div(class="box")
+			//- 	div(class="box-header")
+			//- 		h3(class="box-title") Stände
+			//- 	div(class="box-body")
+			//- 		p Stände auswählen:
+			//- 		a(class="btn btn-app" ng-repeat="line in lines track by $index")
+			//- 			| {{line.label}}
+						
+		
 			
 		section(class="col-md-9")
 			h1 Verwalten
@@ -34,7 +55,7 @@ block body
 						
 			.tab-content
 				div(role="tabpanel" class="tab-pane active" id="manage")
-					.col-md-12
+					.fullWidth
 						.col-md-6
 							div(class="panel panel-default power animate" ng-hide="selectedLines == 0")
 								div(class="panel-heading") Allgemein
@@ -179,10 +200,10 @@ block body
 
 	
 	script.
-		var dsmSocket = io()
-		var event = new Event('build')
-		
-		var config = !{JSON.stringify(config)}
-		var vereine = !{JSON.stringify(vereine)}
-		var schuetzen = []
+		//- var dsmSocket = io()
+		//- var event = new Event('build')
+		//- 
+		//- var config = !{JSON.stringify(config)}
+		//- var vereine = !{JSON.stringify(vereine)}
+		//- var schuetzen = []
 	

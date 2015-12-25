@@ -16,14 +16,16 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.5",
-    "select2": "4.x.x",
-    "angularjs": "~1.4.4",
-    "angular-socket-io": "~0.7.0",
-    "angular-route": "~1.4.4",
-    "select2-bootstrap-theme": "~0.1.0-beta.4",
-    "angular-ui-select": "~0.12.1",
+    "AdminLTE": "admin-lte#~2.3.0",
+    "angular-animate": "~1.4.5",
+    "angular-route": "~1.4.7",
     "angular-sanitize": "~1.4.4",
-    "angular-animate": "~1.4.5"
+    "angular-socket-io": "~0.7.0",
+    "angular-ui-select": "~0.12.1",
+    "angularjs": "~1.4.4",
+    "bootstrap": "~3.3.5",
+    "restangular": "~1.5.1",
+    "select2": "4.x.x",
+    "select2-bootstrap-theme": "~0.1.0-beta.4"
   }
 }

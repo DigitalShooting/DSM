@@ -9,7 +9,7 @@ var routes = require("./routes")
 var exec = require("exec")
 var child_process = require('child_process')
 var mysql = require("./lib/mysql.js")
-
+var proxy = require('express-http-proxy');
 
 
 var app = express({ strict: true })
@@ -45,16 +45,30 @@ app.use(compression())
 
 
 
+
 // Main routes
 app.use("/stammdaten/", routes.stammdaten)
 app.use("/rwks/", routes.rwks)
 app.use("/lines", routes.lines)
+app.use("/dashboard", function(req, res){
+	res.render("dashboard")
+})
 
 app.use("/exit/", routes.exit)
 
 app.get("/", function(req, res){
-	res.redirect("lines/")
+	res.render("layout")
 })
+
+
+
+
+app.use('/api/', proxy('127.0.0.1:3000', {
+  forwardPath: function(req, res) {
+    return require('url').parse(req.url).path;
+  }
+}));
+
 
 
 
@@ -98,5 +112,15 @@ io.on('connection', function(socket){
 				socket.emit("setUsersForVerein", rows)
 			}
 		);
+	})
+
+
+
+
+	// DSC Gateway
+	socket.on("setLine", function(data){
+		var line = data.line
+		var method = data.method
+		var object = data.data
 	})
 })

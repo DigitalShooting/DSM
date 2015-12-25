@@ -1,13 +1,13 @@
-angular.module("dsm.conrtollers.lines", [
-	"dsm.services.sockets",
-	"dsm.services.filter",
-	"ds.services.grafik",
-
-	"ui.select",
-	"ngSanitize",
-	"ngAnimate",
-])
-.controller("lines", ["$scope", "lines", "dsmSocket", function ($scope, lines, dsmSocket) {
+// angular.module("dsm.conrtollers.lines", [
+	// "dsm.services.sockets",
+	// "dsm.services.filter",
+	// "ds.services.grafik",
+	//
+	// "ui.select",
+	// "ngSanitize",
+	// "ngAnimate",
+// ])
+module.controller("lines", ["$scope", "lines", "dsmSocket", function ($scope, lines, dsmSocket) {
 	$scope.lines = lines
 
 	// Selected lines
@@ -172,15 +172,15 @@ angular.module("dsm.conrtollers.lines", [
 	}
 
 	$scope.selectVerein = function(){
-		dsmSocket.emit("getUsersForVerein", {
-			vereinID: $scope.selected.verein.id,
-		})
-		if ($scope.selected.schuetze != undefined){
-			console.log($scope.selected.schuetze)
-			if ($scope.selected.schuetze.vereinID != $scope.selected.verein.id){
-				$scope.selected.schuetze = {}
-			}
-		}
+		// dsmSocket.emit("getUsersForVerein", {
+		// 	vereinID: $scope.selected.verein.id,
+		// })
+		// if ($scope.selected.schuetze != undefined){
+		// 	console.log($scope.selected.schuetze)
+		// 	if ($scope.selected.schuetze.vereinID != $scope.selected.verein.id){
+		// 		$scope.selected.schuetze = {}
+		// 	}
+		// }
 	}
 	dsmSocket.on("setUsersForVerein", function(users){
 		$scope.schuetzen = users
