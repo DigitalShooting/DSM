@@ -112,22 +112,30 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 	$scope.heim = {
 		id: "",
 		name: "",
+		verein: "",
+		saison: "",
 	}
 	if (rwk.manschaftHeim != 0){
 		$scope.heim = {
 			id: rwk.manschaftHeim,
 			name: rwk.heim,
+			verein: rwk.heimVerein,
+			saison: rwk.heimSaison,
 		}
 	}
 
 	$scope.gast = {
 		id: "",
 		name: "",
+		verein: "",
+		saison: "",
 	}
 	if (rwk.manschaftGast != 0){
 		$scope.gast = {
 			id: rwk.manschaftGast,
 			name: rwk.gast,
+			verein: rwk.gastVerein,
+			saison: rwk.gastSaison,
 		}
 	}
 
@@ -170,7 +178,7 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 	$scope.getManschaftTitle = function(manschaft){
 		console.log(manschaft)
 		if (manschaft.verein != undefined){
-			return manschaft.verein + manschaft.name + " ("+manschaft.saison+")";
+			return manschaft.verein + " " + manschaft.name + " ("+manschaft.saison+")";
 		}
 		return "";
 

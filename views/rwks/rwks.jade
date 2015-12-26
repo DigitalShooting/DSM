@@ -50,8 +50,8 @@ block main
 			tbody
 				tr(ng-repeat="rwk in rwks track by $index")
 					//- td {{rwk.id}}
-					td {{rwk.heim}}
-					td {{rwk.gast}}
+					td {{rwk.heimVerein}} {{rwk.heim}} ({{rwk.heimSaison}})
+					td {{rwk.gastVerein}} {{rwk.gast}} ({{rwk.gastSaison}})
 					td {{rwk.name}}
 					td
 						button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(rwk)")

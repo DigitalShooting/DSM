@@ -19,7 +19,7 @@ module.exports = function(mysql, config){
 			var strings = req.query.search.split(" ");
 			var sql = ""
 			for (i in strings){
-				sql += "AND CONCAT_WS('|', rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name, gast.name) LIKE "+mysql.escape("%"+strings[i]+"%")+" COLLATE utf8_general_ci ";
+				sql += "AND CONCAT_WS('|', rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name, gast.name, heimSaison.name, gastSaison.name) LIKE "+mysql.escape("%"+strings[i]+"%")+" COLLATE utf8_general_ci ";
 			}
 			query.searchSQL = sql;
 		}
@@ -44,17 +44,26 @@ module.exports = function(mysql, config){
 			query.orderDir = req.query.orderDir
 		}
 
+
 		mysql.query(
-			"SELECT rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name as 'heim', gast.name as 'gast' " +
+			"SELECT rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, " +
+				// manschaftID      manschaft name       saison name                      verein name
+				"rwk.manschaftHeim, heim.name as 'heim', heimSaison.name as 'heimSaison', heimVerein.name as 'heimVerein', " +
+				"rwk.manschaftGast, gast.name as 'gast', gastSaison.name as 'gastSaison', gastVerein.name as 'gastVerein' " +
 			"FROM rwk " +
 			"LEFT JOIN manschaft heim ON rwk.manschaftHeim = heim.id " +
+				"LEFT JOIN saison heimSaison ON heim.saisonID = heimSaison.id " +
+				"LEFT JOIN verein heimVerein ON heim.vereinID = heimVerein.id " +
 			"LEFT JOIN manschaft gast ON rwk.manschaftGast = gast.id " +
+				"LEFT JOIN saison gastSaison ON gast.saisonID = gastSaison.id " +
+				"LEFT JOIN verein gastVerein ON gast.vereinID = gastVerein.id " +
 			"WHERE 1 = 1 " +
 			query.searchSQL +
 			"ORDER BY " + query.order + " " + query.orderDir + " " +
 			"LIMIT ? OFFSET ? ",
 			[query.limit, query.limit*query.page],
 			function(err, rows, fields) {
+				console.log(err)
 				return res.send(201, rows);
 			}
 		);
@@ -89,7 +98,7 @@ module.exports = function(mysql, config){
 			var strings = req.query.search.split(" ");
 			var sql = ""
 			for (i in strings){
-				sql += "AND CONCAT_WS('|', rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name, gast.name) LIKE "+mysql.escape("%"+strings[i]+"%")+" COLLATE utf8_general_ci ";
+				sql += "AND CONCAT_WS('|', rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name, gast.name, heimSaison.name, gastSaison.name) LIKE "+mysql.escape("%"+strings[i]+"%")+" COLLATE utf8_general_ci ";
 			}
 			query.searchSQL = sql;
 		}
@@ -98,7 +107,9 @@ module.exports = function(mysql, config){
 			"SELECT COUNT(*) as count " +
 			"FROM rwk " +
 			"LEFT JOIN manschaft heim ON rwk.manschaftHeim = heim.id " +
+				"LEFT JOIN saison heimSaison ON heim.saisonID = heimSaison.id " +
 			"LEFT JOIN manschaft gast ON rwk.manschaftGast = gast.id " +
+				"LEFT JOIN saison gastSaison ON gast.saisonID = gastSaison.id " +
 			"WHERE 1 = 1 " +
 			query.searchSQL,
 			[query.search],
@@ -150,10 +161,14 @@ module.exports = function(mysql, config){
 	// Helper
 	function getRWK(id, callback){
 		mysql.query(
-			"SELECT rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name as 'heim', gast.name as 'gast' " +
+			"SELECT rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, " +
+				"rwk.manschaftHeim, heim.name as 'heim', heimSaison.name as 'heimSaison', " +
+				"rwk.manschaftGast, gast.name as 'gast', gastSaison.name as 'gastSaison' " +
 			"FROM rwk " +
 			"LEFT JOIN manschaft heim ON rwk.manschaftHeim = heim.id " +
+				"LEFT JOIN saison heimSaison ON heim.saisonID = heimSaison.id " +
 			"LEFT JOIN manschaft gast ON rwk.manschaftGast = gast.id " +
+				"LEFT JOIN saison gastSaison ON gast.saisonID = gastSaison.id " +
 			"WHERE rwk.id = ? ",
 			[id],
 			function(err, rows, fields) {
