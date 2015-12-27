@@ -1,7 +1,9 @@
+
+// nav item, with active clsss if current url is matching
 mixin navElement(url, text, icon)
 	- var urlPath = url
-	- if (urlPath.substring(0, 1) == ".") urlPath = urlPath.substring(1, urlPath.length) 
-	li(class=(req.originalUrl.indexOf(urlPath) > -1 ? "active" : ""))
+	- if (urlPath.substring(0, 1) == "#") urlPath = urlPath.substring(1, urlPath.length) 
+	li(class="{{path.indexOf('#{urlPath}') > -1 ? 'active' : ''}}")
 		a(href=url)
 			- if (icon != undefined){
 				span(class="glyphicon #{icon}" aria-hidden="true")
@@ -9,34 +11,11 @@ mixin navElement(url, text, icon)
 			- } else {
 				| #{text}
 			- }
-	
-mixin inputDefault(name, value, label)
-	div(class="form-group")
-		label(class="col-sm-2 control-label") #{label}
-		div(class="col-sm-10")
-			input(type="" name=name value=value class="form-control" placeholder=label)
-			
-mixin inputTextArea(name, value, label)
-	div(class="form-group")
-		label(class="col-sm-2 control-label") #{label}
-		div(class="col-sm-10")
-			textarea(name=name class="form-control" rows="3") #{value}
-		
-mixin inputDisabled(value, label)
-	div(class="form-group")
-		label(class="col-sm-2 control-label") #{label}
-		div(class="col-sm-10")
-			p(class="form-control-static") #{value}
-		
-mixin inputSelect(name, options, selectedID, title)
-	div(class="form-group")
-		label(class="col-sm-2 control-label") #{title}
-		div(class="col-sm-10")
-			select(name=name class="selectpicker "+name style="width:100%")
-				- options.forEach(function(option){
-					- if(option.id == selectedID){
-						option(value=option.id selected="selected") #{option.title}
-					- } else {
-						option(value=option.id) #{option.title}
-					- }
-				- })
+
+
+// Generate table header colum with order arrow
+mixin tableHeader(title, varName)
+	th(ng-click="changeOrder('#{varName}')")
+		span(class="glyphicon glyphicon-arrow-up" aria-hidden="true" ng-hide="store.selectedOrder.field != '#{varName}' || store.selectedOrder.dir == false")
+		span(class="glyphicon glyphicon-arrow-down" aria-hidden="true" ng-hide="store.selectedOrder.field != '#{varName}' || store.selectedOrder.dir")
+		|  #{title}

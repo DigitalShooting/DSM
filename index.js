@@ -43,9 +43,6 @@ app.use(bodyParser.urlencoded({
 app.use(compression())
 
 
-
-
-
 // Main routes
 app.use("/stammdaten/", routes.stammdaten)
 app.use("/rwks/", routes.rwks)

@@ -1,12 +1,12 @@
-extends ../layout.jade
+extends ../base.jade
 
 block body
 	section(class="col-md-3")
 		h2
 			| RWKs
 		ul(class="nav nav-pills nav-stacked")
-			+navElement("/rwks/saisons/", "Runden", "glyphicon glyphicon-calendar")
-			+navElement("/rwks/manschaften/", "Manschaften", "glyphicon-th-large")
-			+navElement("/rwks/rwks/", "Wettkämpfe", "glyphicon glyphicon-th-list")
+			+navElement("#/rwks/saisons/", "Runden", "glyphicon glyphicon-calendar")
+			+navElement("#/rwks/manschaften/", "Manschaften", "glyphicon-th-large")
+			+navElement("#/rwks/rwks/", "Wettkämpfe", "glyphicon glyphicon-th-list")
 	section(class="col-md-9")
 		block main

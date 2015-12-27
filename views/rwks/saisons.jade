@@ -3,29 +3,6 @@ extends index.jade
 block title
 	| Runden
 
-block head
-	//- Main AngularJS
-	script(src="/libs/angularjs/angular.min.js")
-	//- Aangular Cookies
-	script(src="/libs/angular-cookies/angular-cookies.js")
-	//- Angular UI
-	script(src="/libs/angular-bootstrap/ui-bootstrap.min.js")
-	script(src="/libs/angular-bootstrap/ui-bootstrap-tpls.min.js")
-	//- Angular rest lib
-	script(src="/libs/restangular/dist/restangular.min.js")
-	//- Helper Lib
-	script(src="/libs/lodash/lodash.js")
-
-	script(src="/js/rwks/saisons.js")
-
-
-	// Generate table header colum with order arrow
-	mixin tableHeader(title, varName)
-		th(ng-click="changeOrder('#{varName}')")
-			span(class="glyphicon glyphicon-arrow-up" aria-hidden="true" ng-hide="store.selectedOrder.field != '#{varName}' || store.selectedOrder.dir == false")
-			span(class="glyphicon glyphicon-arrow-down" aria-hidden="true" ng-hide="store.selectedOrder.field != '#{varName}' || store.selectedOrder.dir")
-			|  #{title}
-
 
 block main
 	div(ng-controller="SaisonController")

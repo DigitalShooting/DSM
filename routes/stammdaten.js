@@ -4,11 +4,11 @@ var fs = require("fs")
 var path = require("path")
 
 router.get("/", function(req, res){
-	res.redirect("./schuetzen/")
+	res.redirect("./user/")
 })
 
 
-router.use("/schuetzen/", function(req, res){
+router.use("/user/", function(req, res){
 	res.render("stammdaten/user")
 })
 router.use("/vereine/", function(req, res){

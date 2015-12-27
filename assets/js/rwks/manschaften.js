@@ -1,4 +1,4 @@
-var app = angular.module("dsm", [
+var app = angular.module("dsm.rwks.manschaften", [
 	"restangular",
 	"ui.bootstrap",
 	"ngCookies",

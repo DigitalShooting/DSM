@@ -6,7 +6,7 @@ html
 		meta(charset="utf-8")
 		title
 			| DSM - 
-			block title
+			//- block title
 			
 		// Custom style
 		link(href="/css/style.css", rel="stylesheet")
@@ -17,7 +17,33 @@ html
 		// bootstap
 		script(src="/libs/bootstrap/dist/js/bootstrap.min.js")
 
-		block head
+		//- block head
+		
+		//- Main AngularJS
+		script(src="/libs/angularjs/angular.min.js")
+		//- Aangular Cookies
+		script(src="/libs/angular-cookies/angular-cookies.js")
+		//- Angular UI
+		script(src="/libs/angular-bootstrap/ui-bootstrap.min.js")
+		script(src="/libs/angular-bootstrap/ui-bootstrap-tpls.min.js")
+		//- Angular rest lib
+		script(src="/libs/restangular/dist/restangular.min.js")
+		//- Helper Lib
+		script(src="/libs/lodash/lodash.js")
+
+		script(src="/libs/angular-route/angular-route.min.js")
+		
+		
+		// stammsdaten controller
+		script(src="/js/stammsdaten/user.js")
+		script(src="/js/stammsdaten/verein.js")
+		
+		// rwks controller
+		script(src="/js/rwks/saisons.js")
+		script(src="/js/rwks/manschaften.js")
+		script(src="/js/rwks/rwks.js")
+		
+		script(src="/js/index.js")
 		
 	body(ng-app="dsm")
 		nav(class="navbar navbar-default")
@@ -31,14 +57,15 @@ html
 				
 				div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
 					ul(class="nav navbar-nav")
-						+navElement("/lines/", "Stände", "glyphicon-list")
-						+navElement("/stammdaten/", "Stammdaten", "glyphicon-user")
-						+navElement("/rwks/", "RWKs", "glyphicon-list-alt")
-						+navElement("#/stats/", "Statistiken", "glyphicon-stats")
+						+navElement("#/lines/", "Stände", "glyphicon-list")
+						+navElement("#/stammdaten/", "Stammdaten", "glyphicon-user")
+						+navElement("#/rwks/", "RWKs", "glyphicon-list-alt")
+						//- +navElement("#/stats/", "Statistiken", "glyphicon-stats")
 					ul(class="nav navbar-nav navbar-right")
 						a(href="/exit/")
 							button(type="submit" class="btn btn-danger")
 								span(class="glyphicon glyphicon-log-out" aria-hidden="true")
 								|  Verlassen
 								
-		block body
+		//- block body
+		div(ng-view)
