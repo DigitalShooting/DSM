@@ -31,6 +31,7 @@ block main
 	div(ng-controller="UserController")
 		h1
 			block title
+			| 
 			small ({{totalItems}} {{totalItems == 1 ? "Ergebniss" : "Ergebnisse"}})
 		table(class="table table-hover table-striped")
 			thead
@@ -40,7 +41,7 @@ block main
 					+tableHeader("Verein", "verein")
 					+tableHeader("Vorname", "firstName")
 					+tableHeader("Nachname", "lastName")
-					th Bearbeiten
+					th(style="width:10%;")
 				tr
 					td(colspan="4")
 						input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
@@ -94,12 +95,13 @@ block main
 			div(class="modal-body")
 				form
 					div(class="row")
-						div(class="form-group col-xs-6")
-							label(class="control-label") ID:
-							input(class="form-control" id="disabledInput" type="text" placeholder="{{user.id}}" disabled)
+						//- div(class="form-group col-xs-6")
+						//- 	label(class="control-label") ID:
+						//- 	p(class="form-control") {{user.id}}
 						div(class="form-group col-xs-6")
 							label(class="control-label") Passnummer:
 							input(type="text" class="form-control" ng-model="user.passnummer")
+					.divider
 					div(class="row")
 						div(class="form-group col-xs-6")
 							label(class="control-label") Vorname:
@@ -107,14 +109,14 @@ block main
 						div(class="form-group col-xs-6")
 							label(class="control-label") Nachname:
 							input(type="text" class="form-control" ng-model="user.lastName")
-					div(class="form-group")
-						label(class="control-label") Verein:
-						input(type="text" ng-model="verein" placeholder="" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-template-url="vereinTypeahead.html" typeahead-no-results="noResults" class="form-control")
-						i(ng-show="loadingVereine" class="glyphicon glyphicon-refresh")
-						div(ng-show="noResults")
-							i(class="glyphicon glyphicon-remove")
-							| Kein Verein gefunden
-
+						div(class="form-group col-xs-6")
+							label(class="control-label") Verein:
+							input(type="text" ng-model="verein" placeholder="" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-template-url="vereinTypeahead.html" typeahead-no-results="noResults" class="form-control")
+							i(ng-show="loadingVereine" class="glyphicon glyphicon-refresh")
+							div(ng-show="noResults")
+								i(class="glyphicon glyphicon-remove")
+								| Kein Verein gefunden
+					.divider
 					div(class="form-group")
 						label(for="message-text" class="control-label") Notiz:
 						textarea(class="form-control" id="message-text" ng-model="user.note")

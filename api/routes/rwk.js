@@ -11,7 +11,7 @@ module.exports = function(mysql, config){
 			searchSQL: "", // search
 			limit: 10,
 			page: 0,
-			order: "rwk.name",		// [name, id]
+			order: "rwk.date",		// [date, id]
 			orderDir: "DESC",
 		}
 
@@ -19,7 +19,7 @@ module.exports = function(mysql, config){
 			var strings = req.query.search.split(" ");
 			var sql = ""
 			for (i in strings){
-				sql += "AND CONCAT_WS('|', rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name, gast.name, heimSaison.name, gastSaison.name) LIKE "+mysql.escape("%"+strings[i]+"%")+" COLLATE utf8_general_ci ";
+				sql += "AND CONCAT_WS('|', rwk.id, rwk.date, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name, gast.name, heimSaison.name, gastSaison.name) LIKE "+mysql.escape("%"+strings[i]+"%")+" COLLATE utf8_general_ci ";
 			}
 			query.searchSQL = sql;
 		}
@@ -33,7 +33,7 @@ module.exports = function(mysql, config){
 		}
 
 		var validOrder = {
-			name: "rwk.name",
+			date: "rwk.date",
 			id: "rwk.id",
 		};
 		if (validOrder[req.query.order] != undefined){
@@ -46,7 +46,7 @@ module.exports = function(mysql, config){
 
 
 		mysql.query(
-			"SELECT rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, " +
+			"SELECT rwk.id, rwk.date, rwk.saisonID, rwk.note, " +
 				// manschaftID      manschaft name       saison name                      verein name
 				"rwk.manschaftHeim, heim.name as 'heim', heimSaison.name as 'heimSaison', heimVerein.name as 'heimVerein', " +
 				"rwk.manschaftGast, gast.name as 'gast', gastSaison.name as 'gastSaison', gastVerein.name as 'gastVerein' " +
@@ -90,15 +90,13 @@ module.exports = function(mysql, config){
 			searchSQL: "", // search
 			limit: 10,
 			page: 0,
-			order: "rwk.name",		// [name, id]
-			orderDir: "DESC",
 		}
 
 		if (req.query.search != undefined){
 			var strings = req.query.search.split(" ");
 			var sql = ""
 			for (i in strings){
-				sql += "AND CONCAT_WS('|', rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name, gast.name, heimSaison.name, gastSaison.name) LIKE "+mysql.escape("%"+strings[i]+"%")+" COLLATE utf8_general_ci ";
+				sql += "AND CONCAT_WS('|', rwk.id, rwk.date, rwk.saisonID, rwk.note, rwk.manschaftHeim, rwk.manschaftGast, heim.name, gast.name, heimSaison.name, gastSaison.name) LIKE "+mysql.escape("%"+strings[i]+"%")+" COLLATE utf8_general_ci ";
 			}
 			query.searchSQL = sql;
 		}
@@ -133,9 +131,9 @@ module.exports = function(mysql, config){
 	rwk.id.post = function create(req, res, next) {
 		mysql.query(
 			"UPDATE rwk " +
-			"SET rwk.name = ?, rwk.note = ?, rwk.manschaftHeim = ?, rwk.manschaftGast = ? " +
+			"SET rwk.date = ?, rwk.note = ?, rwk.manschaftHeim = ?, rwk.manschaftGast = ? " +
 			"WHERE rwk.id = ?; ",
-			[req.body.name, req.body.note, req.body.manschaftHeim, req.body.manschaftGast, req.params.id],
+			[req.body.date, req.body.note, req.body.manschaftHeim, req.body.manschaftGast, req.params.id],
 			function(err, rows, fields) {
 				return res.send(201, rows);
 			}
@@ -161,7 +159,7 @@ module.exports = function(mysql, config){
 	// Helper
 	function getRWK(id, callback){
 		mysql.query(
-			"SELECT rwk.id, rwk.name, rwk.datum, rwk.saisonID, rwk.note, " +
+			"SELECT rwk.id, rwk.date, rwk.saisonID, rwk.note, " +
 				"rwk.manschaftHeim, heim.name as 'heim', heimSaison.name as 'heimSaison', " +
 				"rwk.manschaftGast, gast.name as 'gast', gastSaison.name as 'gastSaison' " +
 			"FROM rwk " +
@@ -176,7 +174,6 @@ module.exports = function(mysql, config){
 			}
 		);
 	}
-
 
 	return rwk;
 };

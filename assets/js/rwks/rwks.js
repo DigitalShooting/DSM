@@ -1,8 +1,19 @@
+Date.prototype.yyyymmdd = function() {
+	var yyyy = this.getFullYear().toString();
+	var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+	var dd  = this.getDate().toString();
+	return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+};
+
+
+
 var app = angular.module("dsm", [
 	"restangular",
 	"ui.bootstrap",
 	"ngCookies",
 ]);
+
+
 
 // RWKsController
 // Lists rwks and perfor search and order
@@ -10,7 +21,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 	$scope.store = {
 		itemsPerPage: 20, // items per page
 		selectedOrder: { // Ordering Infos
-			field: "name",
+			field: "date",
 			dir: false,
 		},
 		search: "", // Search Property
@@ -108,6 +119,14 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 // Displays an overlay to edit rwk object
 app.controller('RWKEditController', function (Restangular, $scope, $uibModalInstance, rwk) {
 	$scope.rwk = rwk;
+	$scope.date = new Date()
+	if (rwk.date != "0000-00-00"){
+		$scope.date = new Date(rwk.date);
+	}
+
+	$scope.$watch('date', function() {
+		$scope.rwk.date = $scope.date.yyyymmdd();
+	});
 
 	$scope.heim = {
 		id: "",
@@ -142,8 +161,6 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 
 	// save and close overlay
 	$scope.save = function () {
-		console.log($scope.heim, $scope.gast)
-
 		$scope.rwk.manschaftHeim = $scope.heim.id;
 		$scope.rwk.heim = $scope.heim.name;
 
@@ -181,6 +198,10 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 			return manschaft.verein + " " + manschaft.name + " ("+manschaft.saison+")";
 		}
 		return "";
-
 	}
+
+
+
+
+
 });

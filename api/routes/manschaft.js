@@ -33,6 +33,8 @@ module.exports = function(mysql, config){
 		}
 
 		var validOrder = {
+			saison: "saison.name",
+			verein: "verein.name",
 			name: "manschaft.name",
 			id: "manschaft.id",
 		};

@@ -31,15 +31,16 @@ block main
 	div(ng-controller="ManschaftenController")
 		h1 
 			block title
+			| 
 			small ({{totalItems}} {{totalItems == 1 ? "Ergebniss" : "Ergebnisse"}})
-		table(class="table")
+		table(class="table table-hover table-striped")
 			thead
 				tr
 					//- +tableHeader("ID", "id")
 					+tableHeader("Saison", "saison")
 					+tableHeader("Verein", "verein")
 					+tableHeader("Name", "name")
-					th Bearbeiten
+					th(style="width:10%;")
 				tr
 					td(colspan="3")
 						input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
@@ -96,14 +97,15 @@ block main
 					|  {{verein.name}} {{manschaft.name}}
 			div(class="modal-body")
 				form
+					//- div(class="row")
+					//- 	div(class="form-group col-xs-6")
+					//- 		label(class="control-label") ID:
+					//- 		p(class="form-control") {{manschaft.id}}
+					//- .divider
 					div(class="row")
 						div(class="form-group col-xs-6")
-							label(class="control-label") ID:
-							input(class="form-control" id="disabledInput" type="text" placeholder="{{manschaft.id}}" disabled)
-					div(class="form-group")
-						label(class="control-label") Manschafts Name/ Nummer:
-						input(type="text" class="form-control" ng-model="manschaft.name")
-					div(class="row")
+							label(class="control-label") Manschafts Name/ Nummer:
+							input(type="text" class="form-control" ng-model="manschaft.name")
 						div(class="form-group col-xs-6")
 							label(class="control-label") Runde:
 							input(type="text" ng-model="saison" placeholder="" uib-typeahead="saison as saison.name for saison in getSaison($viewValue)" typeahead-loading="loadingSaisons" typeahead-template-url="saisonTypeahead.html" typeahead-no-results="noResults" class="form-control")
@@ -118,11 +120,12 @@ block main
 							div(ng-show="noResults")
 								i(class="glyphicon glyphicon-remove")
 								| Kein Verein gefunden
+					.divider
 					div(class="form-group")
 						label(for="message-text" class="control-label") Notiz:
 						textarea(class="form-control" id="message-text" ng-model="manschaft.note")
 			div(class="modal-footer")
-				button(class="btn btn-danger pull-left" type="button" ng-click="delete()")
+				button(class="btn btn-danger pull-left" type="button" ng-click="delete()" ng-confirm-click="Would you like to say hi?")
 					span(class="glyphicon glyphicon-trash" aria-hidden="true")
 					|  Löschen
 				button(class="btn btn-primary" type="button" ng-click="save()")

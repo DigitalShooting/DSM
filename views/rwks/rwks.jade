@@ -1,11 +1,13 @@
 extends index.jade
 
 block title
-	| RWKs
+	| Wettkämpfe
 
 block head
 	//- Main AngularJS
 	script(src="/libs/angularjs/angular.min.js")
+	// Angular Language German
+	script(src="/js/locale/angular-locale_de-de.js")
 	//- Aangular Cookies
 	script(src="/libs/angular-cookies/angular-cookies.js")
 	//- Angular UI
@@ -31,15 +33,16 @@ block main
 	div(ng-controller="RWKsController")
 		h1 
 			block title
+			| 
 			small ({{totalItems}} {{totalItems == 1 ? "Ergebniss" : "Ergebnisse"}})
-		table(class="table")
+		table(class="table table-hover table-striped")
 			thead
 				tr
 					//- +tableHeader("ID", "id")
+					+tableHeader("Datum", "date")
 					+tableHeader("Heim", "heim")
 					+tableHeader("Gast", "gast")
-					+tableHeader("Name", "name")
-					th Bearbeiten
+					th(style="width:10%;")
 				tr
 					td(colspan="3")
 						input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
@@ -50,9 +53,9 @@ block main
 			tbody
 				tr(ng-repeat="rwk in rwks track by $index")
 					//- td {{rwk.id}}
+					td {{rwk.date}}
 					td {{rwk.heimVerein}} {{rwk.heim}} ({{rwk.heimSaison}})
 					td {{rwk.gastVerein}} {{rwk.gast}} ({{rwk.gastSaison}})
-					td {{rwk.name}}
 					td
 						button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(rwk)")
 							span(class="glyphicon glyphicon-pencil" aria-hidden="true")
@@ -88,31 +91,33 @@ block main
 					span(aria-hidden="true") &times
 				h4(class="modal-title" id="exampleModalLabel")
 					span(class="glyphicon glyphicon-th-list" aria-hidden="true")
-					|  {{rwk.name}}
+					|  {{heim.verein}} {{heim.name}} - {{gast.verein}} {{gast.name}}
 			div(class="modal-body")
 				form
+					//- div(class="row")
+					//- 	div(class="form-group col-xs-6")
+					//- 		label(class="control-label") ID:
+					//- 		p(class="form-control") {{rwk.id}}
+					//- .divider
 					div(class="row")
-						div(class="form-group col-xs-6")
-							label(class="control-label") ID:
-							input(class="form-control" id="disabledInput" type="text" placeholder="{{rwk.id}}" disabled)
-					div(class="form-group")
-						label(class="control-label") Name:
-						input(type="text" class="form-control" ng-model="rwk.name")
-					div(class="row")
-						div(class="form-group col-xs-6")
+						div(class="col-md-6")
+							label(class="control-label") Datum:
+							uib-datepicker(ng-model="date" show-weeks="false" class="well well-sm")
+						div(class="form-group col-md-6")
 							label(class="control-label") Heim Manschaft:
 							input(type="text" ng-model="heim" placeholder="" uib-typeahead="heim as heim for heim in getManschaft($viewValue)" typeahead-loading="loadingHeim" typeahead-template-url="manschaftTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResults" class="form-control")
 							i(ng-show="loadingHeim" class="glyphicon glyphicon-refresh")
 							div(ng-show="noResults")
 								i(class="glyphicon glyphicon-remove")
 								| Keine Manschaft gefunden
-						div(class="form-group col-xs-6")
+						div(class="form-group col-md-6")
 							label(class="control-label") Gast Manschaft:
 							input(type="text" ng-model="gast" placeholder="" uib-typeahead="gast as gast.name for gast in getManschaft($viewValue)" typeahead-loading="loadingGast" typeahead-template-url="manschaftTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResults" class="form-control")
 							i(ng-show="loadingGast" class="glyphicon glyphicon-refresh")
 							div(ng-show="noResults")
 								i(class="glyphicon glyphicon-remove")
 								| Keine Manschaft gefunden
+					.divider
 					div(class="form-group")
 						label(for="message-text" class="control-label") Notiz:
 						textarea(class="form-control" id="message-text" ng-model="rwk.note")
