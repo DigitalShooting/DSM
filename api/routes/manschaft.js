@@ -32,18 +32,18 @@ module.exports = function(mysql, config){
 			query.page = parseInt(req.query.page);
 		}
 
+		if (req.query.orderDir == "DESC" || req.query.orderDir == "ASC"){
+			query.orderDir = req.query.orderDir
+		}
+
 		var validOrder = {
-			saison: "saison.name",
-			verein: "verein.name",
-			name: "manschaft.name",
-			id: "manschaft.id",
+			saison:  "saison.name "    + query.orderDir,
+			verein:  "verein.name "    + query.orderDir,
+			name:    "manschaft.name " + query.orderDir,
+			id:      "manschaft.id "   + query.orderDir,
 		};
 		if (validOrder[req.query.order] != undefined){
 			query.order = validOrder[req.query.order]
-		}
-
-		if (req.query.orderDir == "DESC" || req.query.orderDir == "ASC"){
-			query.orderDir = req.query.orderDir
 		}
 
 		mysql.query(
@@ -53,7 +53,7 @@ module.exports = function(mysql, config){
 			"LEFT JOIN verein ON manschaft.vereinID = verein.id " +
 			"WHERE 1 = 1 " +
 			query.searchSQL +
-			"ORDER BY " + query.order + " " + query.orderDir + " " +
+			"ORDER BY " + query.order + " " +
 			"LIMIT ? OFFSET ? ",
 			[query.limit, query.limit*query.page],
 			function(err, rows, fields) {

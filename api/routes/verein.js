@@ -32,16 +32,16 @@ module.exports = function(mysql, config){
 			query.page = parseInt(req.query.page);
 		}
 
+		if (req.query.orderDir == "DESC" || req.query.orderDir == "ASC"){
+			query.orderDir = req.query.orderDir
+		}
+		
 		var validOrder = {
-			name: "verein.name",
-			id: "verein.id",
+			name:  "verein.name " + query.orderDir,
+			id:    "verein.id "   + query.orderDir,
 		};
 		if (validOrder[req.query.order] != undefined){
 			query.order = validOrder[req.query.order]
-		}
-
-		if (req.query.orderDir == "DESC" || req.query.orderDir == "ASC"){
-			query.orderDir = req.query.orderDir
 		}
 
 		mysql.query(
@@ -49,7 +49,7 @@ module.exports = function(mysql, config){
 			"FROM verein " +
 			"WHERE 1 = 1 " +
 			query.searchSQL +
-			"ORDER BY " + query.order + " " + query.orderDir + " " +
+			"ORDER BY " + query.order + " " +
 			"LIMIT ? OFFSET ? ",
 			[query.limit, query.limit*query.page],
 			function(err, rows, fields) {
