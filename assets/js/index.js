@@ -31,7 +31,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
 		// stammdaten routes
 		when('/rwks/', {
-			redirectTo: '/rwks/saisons/'
+			redirectTo: '/rwks/rwks/'
 		}).
 		when('/rwks/saisons/', {
 			templateUrl: '/rwks/saisons/',
