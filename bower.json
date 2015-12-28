@@ -22,7 +22,6 @@
     "angular-route": "~1.4.7",
     "angular-socket-io": "~0.7.0",
     "angular-ui-select": "~0.12.1",
-    "angularjs": "~1.4.4",
     "bootstrap": "~3.3.5",
     "restangular": "~1.5.1",
     "select2": "4.x.x",
