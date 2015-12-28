@@ -25,6 +25,5 @@
   },
   "_source": "git://github.com/fk/select2-bootstrap-theme.git",
   "_target": "~0.1.0-beta.4",
-  "_originalSource": "select2-bootstrap-theme",
-  "_direct": true
+  "_originalSource": "select2-bootstrap-theme"
 }

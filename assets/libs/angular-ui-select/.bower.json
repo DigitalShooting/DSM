@@ -37,6 +37,5 @@
   },
   "_source": "git://github.com/angular-ui/ui-select.git",
   "_target": "~0.12.1",
-  "_originalSource": "angular-ui-select",
-  "_direct": true
+  "_originalSource": "angular-ui-select"
 }
