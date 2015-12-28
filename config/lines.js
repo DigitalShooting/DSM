@@ -1,5 +1,5 @@
-module.exports = {
-	standTest1 : {
+module.exports = [
+	 {
 		_id: "standTest1",
 		label: "Stand Test 1",
 		labelShort: "T1",
@@ -37,7 +37,7 @@ module.exports = {
 	// },
 
 
-	stand1 : {
+	{
 		_id: "stand1",
 		label: "Stand 1",
 		labelShort: "1",
@@ -46,7 +46,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:6d:13",
 	},
-	stand2 : {
+	{
 		_id: "stand2",
 		label: "Stand 2",
 		labelShort: "2",
@@ -55,7 +55,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:70:22",
 	},
-	stand3 : {
+	{
 		_id: "stand3",
 		label: "Stand 3",
 		labelShort: "3",
@@ -64,7 +64,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:93:e1:70",
 	},
-	stand4 : {
+	{
 		_id: "stand4",
 		label: "Stand 4",
 		labelShort: "4",
@@ -73,7 +73,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:60:cb",
 	},
-	stand5 : {
+	{
 		_id: "stand5",
 		label: "Stand 5",
 		labelShort: "5",
@@ -82,7 +82,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:78:d1",
 	},
-	stand6 : {
+	{
 		_id: "stand6",
 		label: "Stand 6",
 		labelShort: "6",
@@ -91,7 +91,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:7b:ce",
 	},
-	stand7 : {
+	{
 		_id: "stand7",
 		label: "Stand 7",
 		labelShort: "7",
@@ -100,7 +100,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:6d:69",
 	},
-	stand8 : {
+	{
 		_id: "stand8",
 		label: "Stand 8",
 		labelShort: "8",
@@ -109,7 +109,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:11:ce",
 	},
-	stand9 : {
+	{
 		_id: "stand9",
 		label: "Stand 9",
 		labelShort: "9",
@@ -118,7 +118,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:93:86:6c",
 	},
-	stand10 : {
+	{
 		_id: "stand10",
 		label: "Stand 10",
 		labelShort: "10",
@@ -127,7 +127,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:6d:54",
 	},
-	stand11 : {
+	{
 		_id: "stand11",
 		label: "Stand 11",
 		labelShort: "11",
@@ -136,7 +136,7 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:68:de",
 	},
-	stand12 : {
+	{
 		_id: "stand12",
 		label: "Stand 12",
 		labelShort: "12",
@@ -145,4 +145,4 @@ module.exports = {
 		port: "3000",
 		mac: "00:12:3f:94:69:6d",
 	},
-}
+]

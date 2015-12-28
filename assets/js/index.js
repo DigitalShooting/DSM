@@ -3,10 +3,17 @@ var app = angular.module('dsm', [
 	"ngRoute",
 	"dsm.stammdaten.user", "dsm.stammdaten.verein",
 	"dsm.rwks.saisons", "dsm.rwks.manschaften", "dsm.rwks.rwks",
+	"dsm.lines",
 ]);
 
 app.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.
+
+		// lines routes
+		when('/lines/', {
+			templateUrl: '/lines/',
+			controller: 'LinesController',
+		}).
 
 		// stammdaten routes
 		when('/stammdaten/', {
@@ -22,7 +29,7 @@ app.config(['$routeProvider', function($routeProvider) {
 		}).
 
 
-		// stammdaten rwks
+		// stammdaten routes
 		when('/rwks/', {
 			redirectTo: '/rwks/saisons/'
 		}).
@@ -37,6 +44,12 @@ app.config(['$routeProvider', function($routeProvider) {
 		when('/rwks/rwks/', {
 			templateUrl: '/rwks/rwks/',
 			controller: 'RWKsController',
+		}).
+
+
+		// exit route
+		when('/exit/', {
+			templateUrl: '/exit/',
 		}).
 
 

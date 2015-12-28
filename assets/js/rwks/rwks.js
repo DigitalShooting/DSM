@@ -105,7 +105,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 	};
 
 	// initial load
-	reload();
+	// reload();
 	var cookieData = $cookies.getObject('rwk_vars');
 	if (cookieData != undefined){
 		$scope.store = cookieData;

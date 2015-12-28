@@ -45,6 +45,11 @@ server.get('/disziplinen', routes.disziplinen.get);
 
 
 
+// lines
+server.get('/lines', routes.lines.get);
+
+
+
 // saisons
 server.get('/saison', routes.saison.get);
 server.post('/saison', routes.saison.post);

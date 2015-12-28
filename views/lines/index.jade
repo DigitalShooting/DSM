@@ -1,37 +1,15 @@
-extends ../layout.jade
+extends ../base.jade
 
 block title
 	| Stände
 
-block head
-	script(src="/socket.io/socket.io.js")
-	
-	link(href="/libs/angular-ui-select/dist/select.min.css", rel="stylesheet")
-	
-	// AngularJS
-	script(src="/libs/angularjs/angular.min.js")
-	// SocketIO
-	script(src="/libs/angular-socket-io/socket.js")
-	// Angular animate
-	script(src="/libs/angular-animate/angular-animate.min.js")
-	//- script(src="/libs/restangular/dist/restangular.min.js")
-	//- script(src="/libs/lodash/lodash.js")
-	// select2
-	script(src="/libs/angular-ui-select/dist/select.min.js")
-	
-	script(src='/js/services/confirm.js')
-	script(src='/js/services/filter.js')
-	script(src='/js/services/sockets.js')
-	script(src='/js/services/grafik.js')
-	script(src='/js/services/dscAPI.js')
-	
-	script(src="/js/lines.js")
 
 block body
 	div
-		div(ng-controller="lines")
+		div(ng-controller="LinesController")
 			section(class="col-md-3")
-				h2 Stände
+				h2
+					block title
 				ul(class="nav nav-pills nav-stacked")
 					li(ng-repeat="line in lines track by $index" class="col-md-12")
 						div(class="btn-group fullWidth" role="group")

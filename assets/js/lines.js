@@ -1,13 +1,18 @@
-angular.module("dsm", [
+angular.module("dsm.lines", [
 	"dsm.services.sockets",
 	"dsm.services.filter",
 	"ds.services.grafik",
 
 	"ui.select",
 	"ngAnimate",
+	"restangular",
 ])
-.controller("lines", ["$scope", "lines", "dsmSocket", function ($scope, lines, dsmSocket) {
-	$scope.lines = lines
+.controller("LinesController", function ($scope, lines, dsmSocket, Restangular) {
+	$scope.lines = []
+	Restangular.all('/api/lines').getList().then(function(lines) {
+		$scope.lines = lines;
+	});
+
 
 	// Selected lines
 	$scope.state = {}
@@ -242,7 +247,7 @@ angular.module("dsm", [
 	}
 	init()
 
-}])
+})
 
 
 

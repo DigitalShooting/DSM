@@ -1,11 +1,12 @@
-extends layout.jade
+extends base.jade
 
 block title
 	| Verlassen
 
 block body
 	section(class="col-md-offset-4 col-md-4")
-		h2 Verlassen
+		h2
+			block title
 		div(class="alert alert-danger" role="alert")
 			p
 				span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")

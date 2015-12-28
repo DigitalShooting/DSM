@@ -94,7 +94,7 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 	};
 
 	// initial load
-	reload();
+	// reload();
 	var cookieData = $cookies.getObject('user_vars');
 	if (cookieData != undefined){
 		$scope.store = cookieData;

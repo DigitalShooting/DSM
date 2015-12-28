@@ -94,7 +94,7 @@ app.controller("ManschaftenController", function($scope, Restangular, $uibModal,
 	};
 
 	// initial load
-	reload();
+	// reload();
 	var cookieData = $cookies.getObject('manschaft_vars');
 	if (cookieData != undefined){
 		$scope.store = cookieData;

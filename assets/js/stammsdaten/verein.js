@@ -94,7 +94,7 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 	};
 
 	// initial load
-	reload();
+	// reload();
 	var cookieData = $cookies.getObject('verein_vars');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
