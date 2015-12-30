@@ -1,0 +1,104 @@
+extends index.jade
+
+block title
+	| Aktive Wettkämpfe
+
+
+block main
+	h1 
+		block title
+		| 
+		small ({{totalItems}} {{totalItems == 1 ? "Ergebniss" : "Ergebnisse"}})
+	table(class="table table-hover table-striped")
+		thead
+			tr
+				//- +tableHeader("ID", "id")
+				+tableHeader("Datum", "date")
+				+tableHeader("Heim", "heim")
+				+tableHeader("Gast", "gast")
+				th(style="width:10%;")
+			tr
+				td(colspan="3")
+					input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
+				td
+					button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
+						span(class="glyphicon glyphicon-plus" aria-hidden="true")
+						|  Neu
+		tbody
+			tr(ng-repeat="rwk in rwks track by $index")
+				//- td {{rwk.id}}
+				td {{rwk.date}}
+				td {{rwk.heimVerein}} {{rwk.heim}} ({{rwk.heimSaison}})
+				td {{rwk.gastVerein}} {{rwk.gast}} ({{rwk.gastSaison}})
+				td
+					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(rwk)")
+						span(class="glyphicon glyphicon-pencil" aria-hidden="true")
+						|  Bearbeiten
+	div(class="dropup noMargin")
+		div(class="btn-group pull-left" uib-dropdown is-open="status.isopen")
+			button(id="single-button" type="button" class="btn btn-default noMargin" uib-dropdown-toggle ng-disabled="disabled")
+				| Einträge pro Seite: {{store.itemsPerPage}} 
+				span(class="caret")
+			ul(class="uib-dropdown-menu" role="menu" aria-labelledby="single-button")
+				li(role="menuitem")
+					a(ng-click="store.itemsPerPage = 10;") 10
+				li(role="menuitem")
+					a(ng-click="store.itemsPerPage = 20") 20
+				li(role="menuitem")
+					a(ng-click="store.itemsPerPage = 50") 50
+				li(role="menuitem")
+					a(ng-click="store.itemsPerPage = 100") 100
+	div(class="noMargin pull-right")
+		uib-pagination(total-items="totalItems" items-per-page="store.itemsPerPage" ng-model="currentPage" max-size="paginationMaxSize" class="pagination noMargin" boundary-links="true" previous-text="Zurück" next-text="Weiter" first-text="Erste" last-text="Letzte")
+	
+	
+	//- manschaftTypeahead template
+	script(type="text/ng-template" id="manschaftTypeahead.html")
+		a {{match.model.verein}} {{match.model.name}} ({{match.model.saison}})
+	
+	
+	//- modalEditingOverlay template
+	script(type="text/ng-template" id="modalEditingOverlay.html")
+
+		div(class="modal-header")
+			button(type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()")
+				span(aria-hidden="true") &times
+			h4(class="modal-title" id="exampleModalLabel")
+				span(class="glyphicon glyphicon-th-list" aria-hidden="true")
+				|  {{heim.verein}} {{heim.name}} - {{gast.verein}} {{gast.name}}
+		div(class="modal-body")
+			form
+				//- div(class="row")
+				//- 	div(class="form-group col-xs-6")
+				//- 		label(class="control-label") ID:
+				//- 		p(class="form-control") {{rwk.id}}
+				//- .divider
+				div(class="row")
+					div(class="col-md-6")
+						label(class="control-label") Datum:
+						uib-datepicker(ng-model="date" show-weeks="false" class="well well-sm")
+					div(class="form-group col-md-6")
+						label(class="control-label") Heim Manschaft:
+						input(type="text" ng-model="heim" placeholder="" uib-typeahead="heim as heim for heim in getManschaft($viewValue)" typeahead-loading="loadingHeim" typeahead-template-url="manschaftTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResults" class="form-control")
+						i(ng-show="loadingHeim" class="glyphicon glyphicon-refresh")
+						div(ng-show="noResults")
+							i(class="glyphicon glyphicon-remove")
+							| Keine Manschaft gefunden
+					div(class="form-group col-md-6")
+						label(class="control-label") Gast Manschaft:
+						input(type="text" ng-model="gast" placeholder="" uib-typeahead="gast as gast.name for gast in getManschaft($viewValue)" typeahead-loading="loadingGast" typeahead-template-url="manschaftTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResults" class="form-control")
+						i(ng-show="loadingGast" class="glyphicon glyphicon-refresh")
+						div(ng-show="noResults")
+							i(class="glyphicon glyphicon-remove")
+							| Keine Manschaft gefunden
+				.divider
+				div(class="form-group")
+					label(for="message-text" class="control-label") Notiz:
+					textarea(class="form-control" id="message-text" ng-model="rwk.note")
+		div(class="modal-footer")
+			button(class="btn btn-default pull-left" type="button" ng-click="end()")
+				span(class="glyphicon glyphicon-floppy-saved" aria-hidden="true")
+				|  Wettkamp abschließen
+			button(class="btn btn-primary" type="button" ng-click="save()")
+				span(class="glyphicon glyphicon-floppy-disk" aria-hidden="true")
+				|  Speichern

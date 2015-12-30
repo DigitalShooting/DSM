@@ -35,7 +35,7 @@ module.exports = function(mysql, config){
 		if (req.query.orderDir == "DESC" || req.query.orderDir == "ASC"){
 			query.orderDir = req.query.orderDir
 		}
-		
+
 		var validOrder = {
 			name:  "verein.name " + query.orderDir,
 			id:    "verein.id "   + query.orderDir,
@@ -77,8 +77,6 @@ module.exports = function(mysql, config){
 	verein.info.get = function create(req, res, next) {
 		var query = {
 			searchSQL: "", // search
-			limit: 10,
-			page: 0,
 			order: "verein.name",		// [name, id]
 			orderDir: "DESC",
 		}

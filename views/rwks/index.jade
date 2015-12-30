@@ -5,9 +5,10 @@ block body
 		h2
 			| RWKs
 		ul(class="nav nav-pills nav-stacked")
-			+navElement("#/rwks/saisons/", "Runden", "glyphicon glyphicon-calendar")
-			.divider
-			+navElement("#/rwks/manschaften/", "Manschaften", "glyphicon-th-large")
+			+navElement("#/rwks/active/", "Aktive Wettkämpfe", "glyphicon glyphicon-refresh")
 			+navElement("#/rwks/rwks/", "Wettkämpfe", "glyphicon glyphicon-th-list")
+			.divider
+			+navElement("#/rwks/saisons/", "Runden", "glyphicon glyphicon-calendar")
+			+navElement("#/rwks/manschaften/", "Manschaften", "glyphicon-th-large")
 	section(class="col-md-9")
 		block main

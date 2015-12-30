@@ -51,6 +51,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 	function reload(){
 		Restangular.one('/api/rwk/info').get({
 			search: $scope.store.search,
+			done: 1,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
@@ -60,6 +61,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
 			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			done: 1,
 		}).then(function(rwks) {
 			$scope.rwks = rwks;
 		});
@@ -171,6 +173,14 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 		$scope.rwk.post();
 	};
 
+	// open rwk and save
+	// TODO: ALERT
+	$scope.reOpen = function () {
+		$scope.rwk.done = "0";
+		$scope.save();
+	};
+
+
 	// delete rwk and close
 	// TODO: ALERT
 	$scope.delete = function () {
@@ -193,7 +203,6 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 		});
 	};
 	$scope.getManschaftTitle = function(manschaft){
-		console.log(manschaft)
 		if (manschaft.verein != undefined){
 			return manschaft.verein + " " + manschaft.name + " ("+manschaft.saison+")";
 		}

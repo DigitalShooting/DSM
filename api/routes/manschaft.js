@@ -81,8 +81,6 @@ module.exports = function(mysql, config){
 	manschaft.info.get = function create(req, res, next) {
 		var query = {
 			searchSQL: "", // search
-			limit: 10,
-			page: 0,
 			order: "manschaft.name",		// [name, id]
 			orderDir: "DESC",
 		}

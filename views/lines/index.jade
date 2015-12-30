@@ -5,151 +5,149 @@ block title
 
 
 block body
-	div
-		div(ng-controller="LinesController")
-			section(class="col-md-3")
-				h2
-					block title
-				ul(class="nav nav-pills nav-stacked")
-					li(ng-repeat="line in lines track by $index" class="col-md-12")
-						div(class="btn-group fullWidth" role="group")
-							button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-md-10 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
-							button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}")
-								span(class="glyphicon {{state[line._id] ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
+	section(class="col-md-3")
+		h2
+			block title
+		ul(class="nav nav-pills nav-stacked")
+			li(ng-repeat="line in lines track by $index" class="col-md-12")
+				div(class="btn-group fullWidth" role="group")
+					button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-md-10 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
+					button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}")
+						span(class="glyphicon {{state[line._id] ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
+			
+			li(class="col-md-12 btn-group" role="group")
+				button(type="button" ng-click="toggleAll(true)" class="btn col-md-10 btn-default") Alle markieren
+				button(type="button" ng-click="toggleAll(false)" class="btn col-md-2 btn-default")
+					span(class="glyphicon glyphicon-remove" aria-hidden="true")
+		
+		
+	section(class="col-md-9")
+		h1 Verwalten
+		ul(class="nav nav-tabs" role="tablist")
+			li(class="active" role="presentation")
+				a(href="#manage" aria-controls="view" role="tab" data-toggle="tab")
+					span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
+					|  Verwalten
+			
+		
+		.col-md-12
+			div(class="alert alert-info animate" role="alert" ng-hide="selectedLines != 0") Kein Stand ausgewählt.
 					
-					li(class="col-md-12 btn-group" role="group")
-						button(type="button" ng-click="toggleAll(true)" class="btn col-md-10 btn-default") Alle markieren
-						button(type="button" ng-click="toggleAll(false)" class="btn col-md-2 btn-default")
-							span(class="glyphicon glyphicon-remove" aria-hidden="true")
-			
-			
-		section(class="col-md-9")
-			h1 Verwalten
-			ul(class="nav nav-tabs" role="tablist")
-				li(class="active" role="presentation")
-					a(href="#manage" aria-controls="view" role="tab" data-toggle="tab")
-						span(class="glyphicon glyphicon glyphicon-cog" aria-hidden="true")
-						|  Verwalten
+		.tab-content
+			div(role="tabpanel" class="tab-pane active" id="manage")
+				.fullWidth
+					.col-md-6
+						div(class="panel panel-default power animate" ng-hide="selectedLines == 0")
+							div(class="panel-heading") Allgemein
+							div(class="panel-body")
+								div(class="form-horizontal")
+									div(class="form-group")
+										label(for="" class="col-md-2 control-label") Status
+										div(class="btn-group col-md-10" role="group")
+											button(type="submit" class="btn btn-default col-md-6" ng-click="setPower(false)")
+												span(class="glyphicon glyphicon glyphicon-flash" aria-hidden="true")
+												|  Herunterfahren
+											button(type="submit" class="btn btn-primary col-md-6" ng-click="setPower(true)")
+												span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
+												|  Hochfahren
+									div(class="form-group")
+										label(for="" class="col-md-2 control-label") Drucken
+										div(class="btn-group col-md-10" role="group")
+											button(type="submit" class="btn btn-default col-md-6" ng-click="print(false)")
+												span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
+												|  Aktuelle Serien
+											button(type="submit" class="btn btn-default col-md-6" ng-click="print(true)")
+												span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
+												|  Alles
 				
-			
-			.col-md-12
-				div(class="alert alert-info animate" role="alert" ng-hide="selectedLines != 0") Kein Stand ausgewählt.
-						
-			.tab-content
-				div(role="tabpanel" class="tab-pane active" id="manage")
-					.fullWidth
-						.col-md-6
-							div(class="panel panel-default power animate" ng-hide="selectedLines == 0")
-								div(class="panel-heading") Allgemein
-								div(class="panel-body")
-									div(class="form-horizontal")
-										div(class="form-group")
-											label(for="" class="col-md-2 control-label") Status
-											div(class="btn-group col-md-10" role="group")
-												button(type="submit" class="btn btn-default col-md-6" ng-click="setPower(false)")
-													span(class="glyphicon glyphicon glyphicon-flash" aria-hidden="true")
-													|  Herunterfahren
-												button(type="submit" class="btn btn-primary col-md-6" ng-click="setPower(true)")
-													span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
-													|  Hochfahren
-										div(class="form-group")
-											label(for="" class="col-md-2 control-label") Drucken
-											div(class="btn-group col-md-10" role="group")
-												button(type="submit" class="btn btn-default col-md-6" ng-click="print(false)")
-													span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
-													|  Aktuelle Serien
-												button(type="submit" class="btn btn-default col-md-6" ng-click="print(true)")
-													span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
-													|  Alles
-					
-					
-						.col-md-6
-							div(class="panel panel-default animate" ng-hide="selectedLines == 0")
-								div(class="panel-heading") Disziplin
-								div(class="panel-body")
-									div(class="form-horizontal")
-										div(class="form-group")
-											label(class="col-sm-2 control-label") Disziplin
-											div(class="col-sm-10")
-												ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectDisziplin()")
-													ui-select-match {{selected.disziplin.title}}
-													ui-select-choices(group-by="groupByType" repeat="disziplin in disziplinen | propsFilter: {title: $select.search}" )
-														div {{disziplin.title}}
-					
-										div(class="form-group")
-											label(class="col-sm-2 control-label") Mode
-											div(class="col-sm-10")
-												ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectPart()")
-													ui-select-match {{selected.part.title}}
-													ui-select-choices(repeat="part in parts | propsFilter: {title: $select.search}")
-														div {{part.title}}
-					
-					.col-md-12
-						.col-md-6
-							div(class="panel panel-default animate" ng-hide="selectedLines == 0")
-								div(class="panel-heading") Nachricht
-								div(class="panel-body")
-									div(class="form-horizontal")
-										
-										
-										div(class="form-group")
-											label(class="col-sm-2 control-label") Art
-											div(class="col-sm-10")
-													select(name=name class="selectpicker "+name style="width:100%" ng-model="messageType")
-														option(value="danger" selected="selected") Warnung
-														option(value="default") Info
-						
-										div(class="form-group")
-											label(class="col-sm-2 control-label") Text
-											div(class="col-sm-10")
-												input(type="text" class="form-control" id="alertTitle" ng-model="messageTitle" placeholder="Title")
-										
-										div(class="form-group")
-											label(class="col-sm-2 control-label") Vorlagen
-											div(class="btn-group col-md-10" role="group")
-												button(type="submit" class="btn btn-danger col-md-6" ng-click="showMessageType('sicherheit')")
-													|  Sicherheit
-												button(type="submit" class="btn btn-info col-md-6" ng-click="showMessageType('pause')")
-													|  Pause
-										
-										div(class="form-group")
-											label(class="col-sm-2 control-label") 
-											div(class="btn-group col-md-10" role="group")
-												button(type="submit" class="btn btn-default col-md-6" ng-click="showMessage(true)")
-													span(class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true")
-													|  Zeigen
-												button(type="submit" class="btn btn-default col-md-6" ng-click="showMessage(false)")
-													span(class="glyphicon glyphicon glyphicon-eye-close" aria-hidden="true")
-													|  Verstecken
-					
-						.col-md-6
-							div(class="panel panel-default animate" ng-hide="selectedConnectedLines.length != 1 || selectedLines != 1")
-								div(class="panel-heading") Schütze
-								div(class="panel-body")
-									div(class="form-horizontal")
-										div(class="form-group")
-											label(class="col-sm-2 control-label") Verein
-											div(class="col-sm-10")
-												ui-select(ng-model="selected.verein" theme="bootstrap" ng-disabled="false" reset-search-input="true" on-select="selectVerein()")
-													ui-select-match {{selected.verein.name}}
-													ui-select-choices(repeat="verein in vereine | propsFilter: {name: $select.search}")
-														div {{verein.name}}
-										
-										div(class="form-group")
-											label(class="col-sm-2 control-label") Schütze
-											div(class="col-sm-10")
-												ui-select(ng-model="selected.schuetze" theme="bootstrap" ng-disabled="selected.verein == undefined" reset-search-input="false" on-select="selectSchuetze()")
-													ui-select-match {{selected.schuetze.firstName}} {{selected.schuetze.lastName}}
-													ui-select-choices(repeat="schuetze in schuetzen | propsFilter: {firstName: $select.search, lastName: $select.search}")
-														div {{schuetze.firstName}} {{schuetze.lastName}}
-												
 				
+					.col-md-6
+						div(class="panel panel-default animate" ng-hide="selectedLines == 0")
+							div(class="panel-heading") Disziplin
+							div(class="panel-body")
+								div(class="form-horizontal")
+									div(class="form-group")
+										label(class="col-sm-2 control-label") Disziplin
+										div(class="col-sm-10")
+											ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectDisziplin()")
+												ui-select-match {{selected.disziplin.title}}
+												ui-select-choices(group-by="groupByType" repeat="disziplin in disziplinen | propsFilter: {title: $select.search}" )
+													div {{disziplin.title}}
+				
+									div(class="form-group")
+										label(class="col-sm-2 control-label") Mode
+										div(class="col-sm-10")
+											ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectPart()")
+												ui-select-match {{selected.part.title}}
+												ui-select-choices(repeat="part in parts | propsFilter: {title: $select.search}")
+													div {{part.title}}
+				
+				.col-md-12
+					.col-md-6
+						div(class="panel panel-default animate" ng-hide="selectedLines == 0")
+							div(class="panel-heading") Nachricht
+							div(class="panel-body")
+								div(class="form-horizontal")
+									
+									
+									div(class="form-group")
+										label(class="col-sm-2 control-label") Art
+										div(class="col-sm-10")
+												select(name=name class="selectpicker "+name style="width:100%" ng-model="messageType")
+													option(value="danger" selected="selected") Warnung
+													option(value="default") Info
+					
+									div(class="form-group")
+										label(class="col-sm-2 control-label") Text
+										div(class="col-sm-10")
+											input(type="text" class="form-control" id="alertTitle" ng-model="messageTitle" placeholder="Title")
+									
+									div(class="form-group")
+										label(class="col-sm-2 control-label") Vorlagen
+										div(class="btn-group col-md-10" role="group")
+											button(type="submit" class="btn btn-danger col-md-6" ng-click="showMessageType('sicherheit')")
+												|  Sicherheit
+											button(type="submit" class="btn btn-info col-md-6" ng-click="showMessageType('pause')")
+												|  Pause
+									
+									div(class="form-group")
+										label(class="col-sm-2 control-label") 
+										div(class="btn-group col-md-10" role="group")
+											button(type="submit" class="btn btn-default col-md-6" ng-click="showMessage(true)")
+												span(class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true")
+												|  Zeigen
+											button(type="submit" class="btn btn-default col-md-6" ng-click="showMessage(false)")
+												span(class="glyphicon glyphicon glyphicon-eye-close" aria-hidden="true")
+												|  Verstecken
+				
+					.col-md-6
+						div(class="panel panel-default animate" ng-hide="selectedConnectedLines.length != 1 || selectedLines != 1")
+							div(class="panel-heading") Schütze
+							div(class="panel-body")
+								div(class="form-horizontal")
+									div(class="form-group")
+										label(class="col-sm-2 control-label") Verein
+										div(class="col-sm-10")
+											ui-select(ng-model="selected.verein" theme="bootstrap" ng-disabled="false" reset-search-input="true" on-select="selectVerein()")
+												ui-select-match {{selected.verein.name}}
+												ui-select-choices(repeat="verein in vereine | propsFilter: {name: $select.search}")
+													div {{verein.name}}
+									
+									div(class="form-group")
+										label(class="col-sm-2 control-label") Schütze
+										div(class="col-sm-10")
+											ui-select(ng-model="selected.schuetze" theme="bootstrap" ng-disabled="selected.verein == undefined" reset-search-input="false" on-select="selectSchuetze()")
+												ui-select-match {{selected.schuetze.firstName}} {{selected.schuetze.lastName}}
+												ui-select-choices(repeat="schuetze in schuetzen | propsFilter: {firstName: $select.search, lastName: $select.search}")
+													div {{schuetze.firstName}} {{schuetze.lastName}}
+											
+			
 
-	
-	script.
+
+	scrpt.
 		var dsmSocket = io()
 		var event = new Event('build')
-		
+	
 		var config = !{JSON.stringify(config)}
 		var vereine = !{JSON.stringify(vereine)}
 		var schuetzen = []

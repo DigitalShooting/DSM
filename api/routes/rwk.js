@@ -13,6 +13,7 @@ module.exports = function(mysql, config){
 			page: 0,
 			order: "rwk.date",		// [date, id]
 			orderDir: "DESC",
+			done: 0,
 		}
 
 		if (req.query.search != undefined){
@@ -46,8 +47,12 @@ module.exports = function(mysql, config){
 			query.order = validOrder[req.query.order]
 		}
 
+		if (req.query.done != undefined){
+			query.done = parseInt(req.query.done);
+		}
+
 		mysql.query(
-			"SELECT rwk.id, rwk.date, rwk.saisonID, rwk.note, " +
+			"SELECT rwk.id, rwk.date, rwk.saisonID, rwk.note, rwk.done, " +
 				// manschaftID      manschaft name       saison name                      verein name
 				"rwk.manschaftHeim, heim.name as 'heim', heimSaison.name as 'heimSaison', heimVerein.name as 'heimVerein', " +
 				"rwk.manschaftGast, gast.name as 'gast', gastSaison.name as 'gastSaison', gastVerein.name as 'gastVerein' " +
@@ -58,11 +63,11 @@ module.exports = function(mysql, config){
 			"LEFT JOIN manschaft gast ON rwk.manschaftGast = gast.id " +
 				"LEFT JOIN saison gastSaison ON gast.saisonID = gastSaison.id " +
 				"LEFT JOIN verein gastVerein ON gast.vereinID = gastVerein.id " +
-			"WHERE 1 = 1 " +
+			"WHERE rwk.done = ? " +
 			query.searchSQL +
 			"ORDER BY " + query.order + " " +
 			"LIMIT ? OFFSET ? ",
-			[query.limit, query.limit*query.page],
+			[query.done, query.limit, query.limit*query.page],
 			function(err, rows, fields) {
 				return res.send(201, rows);
 			}
@@ -88,8 +93,7 @@ module.exports = function(mysql, config){
 	rwk.info.get = function create(req, res, next) {
 		var query = {
 			searchSQL: "", // search
-			limit: 10,
-			page: 0,
+			done: 0,
 		}
 
 		if (req.query.search != undefined){
@@ -101,6 +105,10 @@ module.exports = function(mysql, config){
 			query.searchSQL = sql;
 		}
 
+		if (req.query.done != undefined){
+			query.done = parseInt(req.query.done);
+		}
+
 		mysql.query(
 			"SELECT COUNT(*) as count " +
 			"FROM rwk " +
@@ -110,9 +118,9 @@ module.exports = function(mysql, config){
 			"LEFT JOIN manschaft gast ON rwk.manschaftGast = gast.id " +
 				"LEFT JOIN saison gastSaison ON gast.saisonID = gastSaison.id " +
 				"LEFT JOIN verein gastVerein ON gast.vereinID = gastVerein.id " +
-			"WHERE 1 = 1 " +
+			"WHERE rwk.done = ? " +
 			query.searchSQL,
-			[query.search],
+			[query.done, query.search],
 			function(err, rows, fields) {
 				return res.send(201, rows[0]);
 			}
@@ -133,9 +141,9 @@ module.exports = function(mysql, config){
 	rwk.id.post = function create(req, res, next) {
 		mysql.query(
 			"UPDATE rwk " +
-			"SET rwk.date = ?, rwk.note = ?, rwk.manschaftHeim = ?, rwk.manschaftGast = ? " +
+			"SET rwk.date = ?, rwk.note = ?, rwk.manschaftHeim = ?, rwk.manschaftGast = ?, rwk.done = ? " +
 			"WHERE rwk.id = ?; ",
-			[req.body.date, req.body.note, req.body.manschaftHeim, req.body.manschaftGast, req.params.id],
+			[req.body.date, req.body.note, req.body.manschaftHeim, req.body.manschaftGast, parseInt(req.body.done), req.params.id],
 			function(err, rows, fields) {
 				return res.send(201, rows);
 			}
@@ -161,7 +169,7 @@ module.exports = function(mysql, config){
 	// Helper
 	function getRWK(id, callback){
 		mysql.query(
-			"SELECT rwk.id, rwk.date, rwk.saisonID, rwk.note, " +
+			"SELECT rwk.id, rwk.date, rwk.saisonID, rwk.note, rwk.done, " +
 				// manschaftID      manschaft name       saison name                      verein name
 				"rwk.manschaftHeim, heim.name as 'heim', heimSaison.name as 'heimSaison', heimVerein.name as 'heimVerein', " +
 				"rwk.manschaftGast, gast.name as 'gast', gastSaison.name as 'gastSaison', gastVerein.name as 'gastVerein' " +

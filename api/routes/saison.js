@@ -77,8 +77,6 @@ module.exports = function(mysql, config){
 	saison.info.get = function create(req, res, next) {
 		var query = {
 			searchSQL: "", // search
-			limit: 10,
-			page: 0,
 			order: "saison.name",		// [name, id]
 			orderDir: "DESC",
 		}
