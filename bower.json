@@ -16,7 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular-animate": "~1.4.5",
     "angular-bootstrap": "~0.14.3",
     "angular-cookies": "~1.4.8",
     "angular-dragdrop": "~1.0.12",

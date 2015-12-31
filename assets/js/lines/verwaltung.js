@@ -1,13 +1,11 @@
-angular.module("dsm.lines", [
+angular.module("dsm.lines.verwaltung", [
 	"dsm.services.sockets",
 	"dsm.services.filter",
-	"ds.services.grafik",
 
 	"ui.select",
-	"ngAnimate",
 	"restangular",
 ])
-.controller("LinesController", function ($scope, lines, dsmSocket, Restangular) {
+.controller("VerwaltungController", function ($scope, lines, dsmSocket, Restangular) {
 	$scope.lines = []
 	Restangular.all('/api/lines').getList().then(function(lines) {
 		$scope.lines = lines;
@@ -20,9 +18,9 @@ angular.module("dsm.lines", [
 	// Selected values
 	$scope.selected = {}
 
-	$scope.schuetzen = schuetzen
-	$scope.vereine = vereine
-	$scope.selected.verein = vereine[0]
+	$scope.schuetzen = []//schuetzen
+	$scope.vereine = []//vereine
+	$scope.selected.verein = {}//vereine[0]
 
 
 	// Update ui values

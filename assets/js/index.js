@@ -3,7 +3,7 @@ var app = angular.module('dsm', [
 	"ngRoute", "angular-intro",
 	"dsm.stammdaten.user", "dsm.stammdaten.verein",
 	"dsm.rwks.saisons", "dsm.rwks.manschaften", "dsm.rwks.rwks", "dsm.rwks.activeRWKs",
-	"dsm.lines",
+	"dsm.lines", "dsm.lines.verwaltung", "dsm.lines.log",
 ]);
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -11,7 +11,14 @@ app.config(['$routeProvider', function($routeProvider) {
 
 		// lines routes
 		when('/lines/', {
-			templateUrl: '/lines/',
+			redirectTo: '/lines/verwaltung/'
+		}).
+		when('/lines/verwaltung', {
+			templateUrl: '/lines/verwaltung',
+			controller: 'LinesController',
+		}).
+		when('/lines/log', {
+			templateUrl: '/lines/log',
 			controller: 'LinesController',
 		}).
 

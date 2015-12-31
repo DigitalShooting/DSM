@@ -2,9 +2,21 @@
 // nav item, with active clsss if current url is matching
 mixin navElement(url, text, icon)
 	- var urlPath = url
-	- if (urlPath.substring(0, 1) == "#") urlPath = urlPath.substring(1, urlPath.length) 
+	- if (urlPath.substring(0, 1) == "#") urlPath = urlPath.substring(1, urlPath.length)
 	li(class="{{path.indexOf('#{urlPath}') > -1 ? 'active' : ''}}")
 		a(href=url)
+			- if (icon != undefined){
+				span(class="glyphicon #{icon}" aria-hidden="true")
+				|  #{text}
+			- } else {
+				| #{text}
+			- }
+
+mixin tabElement(url, text, icon)
+	- var urlPath = url
+	- if (urlPath.substring(0, 1) == "#") urlPath = urlPath.substring(1, urlPath.length)
+	li(class="{{path.indexOf('#{urlPath}') > -1 ? 'active' : ''}}" role="presentation")
+		a(href="#{url}")
 			- if (icon != undefined){
 				span(class="glyphicon #{icon}" aria-hidden="true")
 				|  #{text}
