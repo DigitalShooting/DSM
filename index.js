@@ -11,7 +11,6 @@ var child_process = require('child_process')
 var mysql = require("./lib/mysql.js")
 var proxy = require('express-http-proxy');
 
-
 var app = express({ strict: true })
 
 app.use(function(req, res, next){
@@ -34,11 +33,6 @@ app.use("/favicon.ico", express.static("./assets/img/favicon.ico"))
 app.use("/css/", lessMiddleware(__dirname + "/stylesheets"))
 app.use("/css/", express.static(__dirname + "/stylesheets"))
 
-// enable forms
-app.use(bodyParser.urlencoded({
-	extended: true
-}))
-
 // enable compression
 app.use(compression())
 
@@ -60,10 +54,12 @@ app.get("/", function(req, res){
 
 
 
-app.use('/api/', proxy('127.0.0.1:3000', {
-  forwardPath: function(req, res) {
-    return require('url').parse(req.url).path;
-  }
+// start api and map to /api
+var api = require("./lib/api/index.js");
+app.use('/api/', proxy("127.0.0.1:" + config.network.api.port, {
+	forwardPath: function(req, res) {
+		return require('url').parse(req.url).path;
+	}
 }));
 
 
@@ -73,7 +69,7 @@ app.use('/api/', proxy('127.0.0.1:3000', {
 // Set up express & socket.io
 var server = http.Server(app)
 var io = require('socket.io')(server)
-server.listen(config.network.port, config.network.address)
+server.listen(config.network.webinterface.port, config.network.webinterface.address)
 server.on('listening', function() {
 	console.log('Express server started on at %s:%s', server.address().address, server.address().port)
 })
@@ -81,9 +77,11 @@ server.on('listening', function() {
 
 
 
+
 // socket.io
 io.on('connection', function(socket){
 
+	// TODO: Move to DSC Gateway
 	// set power performs wakeonlan or ssh shutdown on target machine
 	socket.on('setPower', function(data){
 		var line = config.lines[data.line]
@@ -95,20 +93,6 @@ io.on('connection', function(socket){
 			// Power Off
 			child_process.exec(["ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
 		}
-	})
-
-
-	socket.on("getUsersForVerein", function(data){
-		mysql.query(
-			"SELECT * " +
-			"FROM user " +
-			"WHERE vereinID = ? " +
-			"ORDER BY user.lastName, user.firstName DESC ",
-			[data.vereinID],
-			function(err, rows, fields) {
-				socket.emit("setUsersForVerein", rows)
-			}
-		);
 	})
 
 

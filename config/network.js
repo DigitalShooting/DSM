@@ -5,14 +5,17 @@ module.exports = {
 	*/
 
 
-	/**
-		port
-	*/
-	port		:	3002,
+	// Webiterface port/ address
+	webinterface: {
+		port		:	3002,
 
-	/**
-		address
-		IPv4/ IPv6 address to bin on. (BSP: "::1")
-	*/
-	address		: 	"0.0.0.0"
+		// IPv4/ IPv6 address to bin on. (BSP: "::1")
+		address		: 	"0.0.0.0",
+	},
+
+	// API port/ addres (mapped to webinterface /api)
+	api: {
+		port		:	63432,
+		address		: 	"127.0.0.1",
+	},
 }

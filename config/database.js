@@ -1,16 +1,7 @@
 module.exports = {
-	/**
-		mongodb
-	*/
-	host		:	"",
-	port		:	"",
-	collection	:	"",
-
-	mysql : {
-		host     : "",
-		user     : "",
-		password : "",
-		database : "",
-		dateStrings: 'date',
-	}
+	host     : "127.0.0.1",
+	user     : "",
+	password : "",
+	database : "",
+	dateStrings: "date",  // Required to get correct date
 }
