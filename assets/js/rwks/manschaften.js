@@ -132,6 +132,8 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $uibMod
 	}
 
 
+
+
 	// save and close overlay
 	$scope.save = function () {
 		$scope.manschaft.saisonID = $scope.saison.id;
@@ -176,5 +178,55 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $uibMod
 			return saisons;
 		});
 	};
+
+
+
+
+
+
+	$scope.getUsers = function(serachString) {
+		return Restangular.one('/api/user').get({
+			search: serachString,
+			limit: 1000,
+			equals_vereinID: $scope.manschaft.vereinID,
+		}).then(function(users) {
+			return users;
+		});
+	};
+	$scope.getUserTitle = function(user){
+		if (user != undefined){
+			return user.firstName + " " + user.lastName;
+		}
+		return "";
+	}
+	$scope.addMember = function(){
+		if ($scope.newUser != undefined){
+			var userID = $scope.newUser.id;
+			Restangular.one('/api/memberIn').post().then(function(member) {
+				member.userID = userID;
+				member.manschaftID = $scope.manschaft.id;
+				member.post();
+
+				$scope.newUser = undefined;
+
+				loadUsers();
+			});
+		}
+	}
+
+	function loadUsers(){
+		Restangular.all('/api/memberIn').getList({
+			equals_manschaftID: $scope.manschaft.id,
+		}).then(function(members) {
+			$scope.members = members;
+		});
+	}
+	loadUsers();
+
+	$scope.deleteMember = function(member){
+		member.remove();
+		loadUsers();
+	}
+
 
 });

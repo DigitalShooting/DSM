@@ -16,6 +16,20 @@ button {
 	margin: 0;
 }
 
+
+// Extend bootstrap classes
+.btn-danger-link {
+	// @extend .box;
+	&:extend(.btn-link);
+	color: @brand-danger;
+}
+.btn-danger-link:hover {
+	color: @brand-danger;
+	text-decoration: underline;
+}
+
+
+// divider (used in modals, etc.)
 .divider {
 	height: 1px;
 	width:100%;
