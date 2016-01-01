@@ -12,7 +12,6 @@ block main
 	table(class="table table-hover table-striped")
 		thead
 			tr
-				//- +tableHeader("ID", "id")
 				+tableHeader("Saison", "saison")
 				+tableHeader("Verein", "verein")
 				+tableHeader("Name", "name")
@@ -26,7 +25,6 @@ block main
 						|  Neu
 		tbody
 			tr(ng-repeat="manschaft in manschaften track by $index")
-				//- td {{manschaft.id}}
 				td {{manschaft.saison}}
 				td {{manschaft.verein}}
 				td {{manschaft.name}}
@@ -78,11 +76,6 @@ block main
 				|  {{verein.name}} {{manschaft.name}}
 		div(class="modal-body")
 			form
-				//- div(class="row")
-				//- 	div(class="form-group col-xs-6")
-				//- 		label(class="control-label") ID:
-				//- 		p(class="form-control") {{manschaft.id}}
-				//- .divider
 				div(class="row")
 					div(class="form-group col-xs-6")
 						label(class="control-label") Manschafts Name/ Nummer:
@@ -102,35 +95,34 @@ block main
 							i(class="glyphicon glyphicon-remove")
 							| Kein Verein gefunden
 				.divider
+				label(class="control-label") Schützen:
 				table(class="table table-hover table-striped")
 					thead
 						tr
-							//- +tableHeader("ID", "id")
 							+tableHeader("Vorname", "firstName")
 							+tableHeader("Name", "lastName")
 							th(style="width:10%;")
 					tbody
 						tr(ng-repeat="member in members track by $index")
-							//- td {{manschaft.id}}
 							td {{member.firstName}}
 							td {{member.lastName}}
 							td
 								button(type="button" class="btn btn-danger-link btn-sm noMargin col-xs-12" ng-click="deleteMember(member)")
 									span(class="glyphicon glyphicon-trash" aria-hidden="true")
 									|  Löschen
-					tfoother
 						tr
-							td(colspan="2")
-								//- input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
-								input(type="text" ng-model="newUser" placeholder="" uib-typeahead="user for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-template-url="userTypeahead.html" typeahead-no-results="noResultsUser" class="form-control")
-								i(ng-show="loadingUser" class="glyphicon glyphicon-refresh")
-								div(ng-show="noResultsUser")
-									i(class="glyphicon glyphicon-remove")
-									| Kein Schütze gefunden
-							td
-								button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="addMember()")
-									span(class="glyphicon glyphicon-plus" aria-hidden="true")
-									|  Hinzufügen
+							td(colspan="3")
+								div(class="input-group col-md-12")
+									input(type="text" ng-model="newUser" placeholder="Schütze hinzufügen" uib-typeahead="user for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-template-url="userTypeahead.html" typeahead-no-results="noResultsUser" class="form-control")
+									i(ng-show="loadingUser" class="glyphicon glyphicon-refresh")
+									div(ng-show="noResultsUser")
+										i(class="glyphicon glyphicon-remove")
+										| Kein Schütze gefunden
+									span(class="input-group-btn")
+										button(type="button" class="btn btn-default btn noMargin" ng-click="addMember()")
+											span(class="glyphicon glyphicon-plus" aria-hidden="true")
+											|  Hinzufügen
+
 				.divider
 				div(class="form-group")
 					label(for="message-text" class="control-label") Notiz:

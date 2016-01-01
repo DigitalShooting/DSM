@@ -94,7 +94,6 @@ app.controller("ManschaftenController", function($scope, Restangular, $uibModal,
 	};
 
 	// initial load
-	// reload();
 	var cookieData = $cookies.getObject('manschaft_vars');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
@@ -106,7 +105,14 @@ app.controller("ManschaftenController", function($scope, Restangular, $uibModal,
 
 // ManschaftEditController
 // Displays an overlay to edit manschaft object
-app.controller('ManschaftEditController', function (Restangular, $scope, $uibModalInstance, manschaft) {
+app.controller('ManschaftEditController', function (Restangular, $scope, $cookies, $uibModalInstance, manschaft) {
+	$scope.store = {
+		selectedOrder: { // Ordering Infos
+			field: "lastName",
+			dir: false,
+		},
+	}
+
 	$scope.manschaft = manschaft;
 
 	$scope.saison = {
@@ -184,6 +190,7 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $uibMod
 
 
 
+
 	$scope.getUsers = function(serachString) {
 		return Restangular.one('/api/user').get({
 			search: serachString,
@@ -217,6 +224,8 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $uibMod
 	function loadUsers(){
 		Restangular.all('/api/memberIn').getList({
 			equals_manschaftID: $scope.manschaft.id,
+			order: $scope.store.selectedOrder.field,
+			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
 		}).then(function(members) {
 			$scope.members = members;
 		});
@@ -228,5 +237,27 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $uibMod
 		loadUsers();
 	}
 
+	// trigged on each order change
+	$scope.changeOrder = function(field){
+		if ($scope.store.selectedOrder.field == field){
+			$scope.store.selectedOrder.dir = !$scope.store.selectedOrder.dir;
+		}
+		else {
+			$scope.store.selectedOrder.field = field;
+		}
+		loadUsers();
+
+		writeToCookie();
+	};
+
+
+
+	var cookieData = $cookies.getObject('manschaft_members_vars');
+	if (cookieData != undefined){
+		$scope.store = cookieData;
+	}
+	function writeToCookie(){
+		$cookies.putObject('manschaft_members_vars', $scope.store, {});
+	}
 
 });
