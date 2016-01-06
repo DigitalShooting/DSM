@@ -25,5 +25,14 @@ TODO
 
 
 
+## Resources
+- [restangular](https://github.com/mgonto/restangular)
+- [node-mysql](https://github.com/felixge/node-mysql)
+- [bootstrap](http://getbootstrap.com/)
+- [angular-ui](http://angular-ui.github.io/bootstrap/)
+
+- [angular-dragdrop](http://codef0rmer.github.io/angular-dragdrop/#/list)
+
+
 ## Licence
 GNU GENERAL PUBLIC LICENSE Version 3

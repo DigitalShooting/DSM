@@ -5,121 +5,115 @@ angular.module("dsm.lines", [
 	"ui.select",
 	"restangular",
 ])
-.controller("LinesController", function ($scope, lines, dsmSocket, Restangular) {
-	$scope.lines = []
-	Restangular.all('/api/lines').getList().then(function(lines) {
-		$scope.lines = lines;
-	});
+.controller("LinesController", function ($scope, lines, dsmSocket, $cookies, gatewaySocket, Restangular) {
+	$scope.store = {
+		linesSelected: {},
+	};
+
+	// store lines recived from DSC-Gateway
+	$scope.lines = [];
+
+	// listen to DSC-Gateway updates
+	gatewaySocket.on("disconnect", function(data){
+		console.log(data)
+		$scope.lines = data.lines
+	})
+	gatewaySocket.on("onlineLines", function(data){
+		console.log(data)
+
+		$scope.lines = data.lines
+	})
 
 
-	// Selected lines
-	$scope.state = {}
 
-	// Selected values
-	$scope.selected = {}
-
-	$scope.schuetzen = []//schuetzen
-	$scope.vereine = []//vereine
-	$scope.selected.verein = {}//vereine[0]
-
-
-	// Update ui values
-	var updateUI = function(forceNameUpdate) {
-		$scope.selectedLines = 0
-		for (var i in $scope.state){
-			if ($scope.state[i] == true){
-				$scope.selectedLines++
-			}
-		}
-
-		$scope.selectedConnectedLines = []
-		performOnSelected(function(line){
-			if (line.isConnected){
-				$scope.selectedConnectedLines.push(line)
-			}
-
-
-			if (line.session){
-				if (forceNameUpdate == true && line.isConnected){
-					$scope.selected.schuetze = line.session.user
-
-					$scope.selected.verein = {}
-					$scope.selected.verein.name = line.session.user.verein
-					$scope.selected.verein.id = line.session.user.vereinID
-
-					$scope.selectVerein()
-				}
-
-				// Format Parts for select
-				$scope.parts = []
-				for (var id in line.session.disziplin.parts){
-					var part = line.session.disziplin.parts[id]
-					part.id = id
-					$scope.parts.push(part)
-				}
-
-				// Set current disziplin
-				if (line.config){
-					$scope.selected.disziplin = line.config.disziplinen.all[line.session.disziplin._id]
-				}
-
-				// Set current part
-				$scope.selected.part = line.session.disziplin.parts[line.session.type]
-
-			}
-
-
-			if (line.config){
-
-				// Set disziplinen for select
-				$scope.disziplinen = []
-				for (var i in line.config.disziplinen.groups){
-					var group = line.config.disziplinen.groups[i]
-					for (var key in group.disziplinen){
-						var disziplin = line.config.disziplinen.all[group.disziplinen[key]]
-						disziplin.type = group.title
-						$scope.disziplinen.push(disziplin)
-					}
-
-				}
-
-			}
-		})
-	}
 
 
 	// toggle selected for line
-	$scope.toggle = function(key){
-		$scope.state[key] = !$scope.state[key]
-		updateUI(true)
+	$scope.toggle = function(id, forceSet){
+		if (forceSet != undefined){
+			$scope.store.linesSelected[id] = forceSet;
+		}
+		else {
+			$scope.store.linesSelected[id] = !$scope.store.linesSelected[id];
+		}
+		writeToCookie();
 	}
 	// toggel selection for all
 	$scope.toggleAll = function(value){
-		$scope.lines.forEach(function(line){
-			$scope.state[line._id] = value
-		})
-		updateUI(true)
+		for(id in $scope.lines){
+			$scope.toggle(id, value)
+		}
+		console.log(value)
 	}
-	// toggel default all (on)
-	$scope.toggleAll(true)
 
 
 
-	for (i in lines){
-		var line = lines[i]
-		setUpSocket(line)
-	}
-	function setUpSocket(line){
-		line.socket.on("setSession", function(session){
-			line.session = session
-			$scope.selectedPart = session.type
-			updateUI()
-		})
-		line.socket.on("setConfig", function(config){
-			line.config = config
-			updateUI()
-		})
-	}
+
+
+
+	// Update ui values
+	// var updateUI = function(forceNameUpdate) {
+	// 	$scope.selectedLines = 0
+	// 	for (var i in $scope.state){
+	// 		if ($scope.state[i] == true){
+	// 			$scope.selectedLines++
+	// 		}
+	// 	}
+	//
+	// 	$scope.selectedConnectedLines = []
+	// 	performOnSelected(function(line){
+	// 		if (line.isConnected){
+	// 			$scope.selectedConnectedLines.push(line)
+	// 		}
+	//
+	//
+	// 		if (line.session){
+	// 			if (forceNameUpdate == true && line.isConnected){
+	// 				$scope.selected.schuetze = line.session.user
+	//
+	// 				$scope.selected.verein = {}
+	// 				$scope.selected.verein.name = line.session.user.verein
+	// 				$scope.selected.verein.id = line.session.user.vereinID
+	//
+	// 				$scope.selectVerein()
+	// 			}
+	//
+	// 			// Format Parts for select
+	// 			$scope.parts = []
+	// 			for (var id in line.session.disziplin.parts){
+	// 				var part = line.session.disziplin.parts[id]
+	// 				part.id = id
+	// 				$scope.parts.push(part)
+	// 			}
+	//
+	// 			// Set current disziplin
+	// 			if (line.config){
+	// 				$scope.selected.disziplin = line.config.disziplinen.all[line.session.disziplin._id]
+	// 			}
+	//
+	// 			// Set current part
+	// 			$scope.selected.part = line.session.disziplin.parts[line.session.type]
+	//
+	// 		}
+	//
+	//
+	// 		if (line.config){
+	//
+	// 			// Set disziplinen for select
+	// 			$scope.disziplinen = []
+	// 			for (var i in line.config.disziplinen.groups){
+	// 				var group = line.config.disziplinen.groups[i]
+	// 				for (var key in group.disziplinen){
+	// 					var disziplin = line.config.disziplinen.all[group.disziplinen[key]]
+	// 					disziplin.type = group.title
+	// 					$scope.disziplinen.push(disziplin)
+	// 				}
+	//
+	// 			}
+	//
+	// 		}
+	// 	})
+	// }
 
 
 
@@ -245,6 +239,20 @@ angular.module("dsm.lines", [
 	}
 	init()
 
+
+
+
+
+
+
+	// Cookie stuff
+	var cookieData = $cookies.getObject('ActiveRwk_member_vars');
+	if (cookieData != undefined){
+		$scope.store = cookieData;
+	}
+	function writeToCookie(){
+		$cookies.putObject('ActiveRwk_member_vars', $scope.store, {});
+	}
 })
 
 
@@ -252,66 +260,66 @@ angular.module("dsm.lines", [
 
 
 
-.controller('stand', function ($scope, lines, $timeout) {
-	$scope.empty = true
-	$scope.stand
-
-	$timeout(function(){
-		$scope.$watch('stand', function(value, old){
-			$scope.stand = value
-			updateUI()
-		})
-	})
-
-
-	$('a[data-toggle="tab"]').on('shown.bs.tab', updateUI)
-	function updateUI(){
-		var socket = $scope.stand.socket
-
-		socket.emit('getSession', {})
-		socket.on("setSession", function(session){
-			$scope.zoomlevel = session.disziplin.scheibe.defaultZoom
-
-			$scope.scheibe = session.disziplin.scheibe
-			$scope.probeecke = session.disziplin.parts[session.type].probeEcke
-
-			$scope.session = session
-
-			if (session.serien.length > 0){
-				$scope.activeSerie = session.serien[session.selection.serie].shots
-
-				$scope.serie = session.serien[session.selection.serie].shots
-				$scope.selectedshotindex = session.selection.shot
-				$scope.activeShot = session.serien[session.selection.serie].shots[session.selection.shot]
-				$scope.empty = false
-
-				if ($scope.serie != undefined && $scope.serie.length != 0) {
-					var ringInt = $scope.serie[session.selection.shot].ring.int
-					var ring = $scope.scheibe.ringe[$scope.scheibe.ringe.length - ringInt]
-
-					if (ring){
-						$scope.zoomlevel = ring.zoom
-					}
-					else if (ringInt == 0){
-						$scope.zoomlevel = scheibe.minZoom
-					}
-				}
-			}
-			else {
-				$scope.activeShot = undefined
-				$scope.serie = []
-				$scope.selectedshotindex = -1
-				$scope.empty = true
-			}
-		})
-	}
-	$scope.updateUI = updateUI
-
-	return {
-		scope: {
-			stand: '=',
-		},
-	}
-
-
-})
+// .controller('stand', function ($scope, lines, $timeout) {
+// 	$scope.empty = true
+// 	$scope.stand
+//
+// 	$timeout(function(){
+// 		$scope.$watch('stand', function(value, old){
+// 			$scope.stand = value
+// 			updateUI()
+// 		})
+// 	})
+//
+//
+// 	$('a[data-toggle="tab"]').on('shown.bs.tab', updateUI)
+// 	function updateUI(){
+// 		var socket = $scope.stand.socket
+//
+// 		socket.emit('getSession', {})
+// 		socket.on("setSession", function(session){
+// 			$scope.zoomlevel = session.disziplin.scheibe.defaultZoom
+//
+// 			$scope.scheibe = session.disziplin.scheibe
+// 			$scope.probeecke = session.disziplin.parts[session.type].probeEcke
+//
+// 			$scope.session = session
+//
+// 			if (session.serien.length > 0){
+// 				$scope.activeSerie = session.serien[session.selection.serie].shots
+//
+// 				$scope.serie = session.serien[session.selection.serie].shots
+// 				$scope.selectedshotindex = session.selection.shot
+// 				$scope.activeShot = session.serien[session.selection.serie].shots[session.selection.shot]
+// 				$scope.empty = false
+//
+// 				if ($scope.serie != undefined && $scope.serie.length != 0) {
+// 					var ringInt = $scope.serie[session.selection.shot].ring.int
+// 					var ring = $scope.scheibe.ringe[$scope.scheibe.ringe.length - ringInt]
+//
+// 					if (ring){
+// 						$scope.zoomlevel = ring.zoom
+// 					}
+// 					else if (ringInt == 0){
+// 						$scope.zoomlevel = scheibe.minZoom
+// 					}
+// 				}
+// 			}
+// 			else {
+// 				$scope.activeShot = undefined
+// 				$scope.serie = []
+// 				$scope.selectedshotindex = -1
+// 				$scope.empty = true
+// 			}
+// 		})
+// 	}
+// 	$scope.updateUI = updateUI
+//
+// 	return {
+// 		scope: {
+// 			stand: '=',
+// 		},
+// 	}
+//
+//
+// })

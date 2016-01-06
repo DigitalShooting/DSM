@@ -60,6 +60,8 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 			animation: true,
 			templateUrl: 'modalEditingOverlay.html',
 			controller: 'UserEditController',
+			backdrop: 'static',
+			keyboard: false,
 			size: "lg",
 			resolve: {
 				user: function () {

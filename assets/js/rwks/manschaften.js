@@ -60,6 +60,8 @@ app.controller("ManschaftenController", function($scope, Restangular, $uibModal,
 			animation: true,
 			templateUrl: 'modalEditingOverlay.html',
 			controller: 'ManschaftEditController',
+			backdrop: 'static',
+			keyboard: false,
 			size: "lg",
 			resolve: {
 				manschaft: function () {
@@ -195,7 +197,7 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 		return Restangular.one('/api/user').get({
 			search: serachString,
 			limit: 1000,
-			equals_vereinID: $scope.manschaft.vereinID,
+			equals_vereinID: $scope.verein.id,
 		}).then(function(users) {
 			return users;
 		});
@@ -210,6 +212,8 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 		if ($scope.newUser != undefined){
 			var userID = $scope.newUser.id;
 			Restangular.one('/api/memberIn').post().then(function(member) {
+				console.log(member)
+
 				member.userID = userID;
 				member.manschaftID = $scope.manschaft.id;
 				member.post();

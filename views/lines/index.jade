@@ -4,11 +4,11 @@ block body
 	section(class="col-md-3")
 		h2 Stände
 		ul(class="nav nav-pills nav-stacked")
-			li(ng-repeat="line in lines track by $index" class="col-md-12")
+			li(ng-repeat="line in lines" class="col-md-12")
 				div(class="btn-group fullWidth" role="group")
-					button(type="button" ng-click="toggleAll(false); toggle(line._id);" class="btn col-md-10 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}") {{line.label}}
-					button(type="button" ng-click="toggle(line._id)" class="btn col-md-2 {{line.isConnected ? 'btn-primary' : 'btn-default' }} {{state[line._id] ? 'selected' : 'deselected'}}")
-						span(class="glyphicon {{state[line._id] ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
+					button(type="button" ng-click="toggleAll(false); toggle(line.id);" class="btn col-md-10 {{line.online ? 'btn-primary' : 'btn-default' }} {{store.linesSelected[line.id] == true ? 'selected' : 'deselected'}}") {{line.label}}
+					button(type="button" ng-click="toggle(line.id)" class="btn col-md-2 {{line.online ? 'btn-primary' : 'btn-default' }} {{store.linesSelected[line.id] == true ? 'selected' : 'deselected'}}")
+						span(class="glyphicon {{store.linesSelected[line.id] == true ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
 			li(class="col-md-12 btn-group" role="group")
 				button(type="button" ng-click="toggleAll(true)" class="btn col-md-10 btn-default") Alle markieren
 				button(type="button" ng-click="toggleAll(false)" class="btn col-md-2 btn-default")

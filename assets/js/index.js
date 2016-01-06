@@ -66,7 +66,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
 		// start page
 		otherwise({
-			redirectTo: '/stammdaten/',
+			redirectTo: '/lines/',
 		});
 }]);
 app.run(['$rootScope','$location', '$routeParams', function($rootScope, $location, $routeParams) {

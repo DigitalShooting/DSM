@@ -60,6 +60,8 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 			animation: true,
 			templateUrl: 'modalEditingOverlay.html',
 			controller: 'VereinEditController',
+			backdrop: 'static',
+			keyboard: false,
 			size: "lg",
 			resolve: {
 				verein: function () {

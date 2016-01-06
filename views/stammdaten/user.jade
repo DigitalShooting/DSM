@@ -12,7 +12,6 @@ block main
 	table(class="table table-hover table-striped")
 		thead
 			tr
-				//- +tableHeader("ID", "id")
 				+tableHeader("Passnummer", "passnummer")
 				+tableHeader("Verein", "verein")
 				+tableHeader("Vorname", "firstName")
@@ -27,7 +26,6 @@ block main
 						|  Neu
 		tbody
 			tr(ng-repeat="user in users track by $index")
-				//- td {{user.id}}
 				td {{user.passnummer}}
 				td {{user.verein}}
 				td {{user.firstName}}
@@ -71,23 +69,20 @@ block main
 		div(class="modal-body")
 			form
 				div(class="row")
-					//- div(class="form-group col-xs-6")
-					//- 	label(class="control-label") ID:
-					//- 	p(class="form-control") {{user.id}}
-					div(class="form-group col-xs-6")
+					div(class="form-group col-md-6")
 						label(class="control-label") Passnummer:
 						input(type="text" class="form-control" ng-model="user.passnummer")
 				.divider
 				div(class="row")
-					div(class="form-group col-xs-6")
+					div(class="form-group col-md-6")
 						label(class="control-label") Vorname:
 						input(type="text" class="form-control" ng-model="user.firstName")
-					div(class="form-group col-xs-6")
+					div(class="form-group col-md-6")
 						label(class="control-label") Nachname:
 						input(type="text" class="form-control" ng-model="user.lastName")
-					div(class="form-group col-xs-6")
+					div(class="form-group col-md-6")
 						label(class="control-label") Verein:
-						input(type="text" ng-model="verein" placeholder="" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-template-url="vereinTypeahead.html" typeahead-no-results="noResults" class="form-control")
+						input(onClick="this.select();" type="text" ng-model="verein" placeholder="" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-template-url="vereinTypeahead.html" typeahead-no-results="noResults" class="form-control")
 						i(ng-show="loadingVereine" class="glyphicon glyphicon-refresh")
 						div(ng-show="noResults")
 							i(class="glyphicon glyphicon-remove")

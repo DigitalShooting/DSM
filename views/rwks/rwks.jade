@@ -12,7 +12,6 @@ block main
 	table(class="table table-hover table-striped")
 		thead
 			tr
-				//- +tableHeader("ID", "id")
 				+tableHeader("Datum", "date")
 				+tableHeader("Heim", "heim")
 				+tableHeader("Gast", "gast")
@@ -22,7 +21,6 @@ block main
 					input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
 		tbody
 			tr(ng-repeat="rwk in rwks track by $index")
-				//- td {{rwk.id}}
 				td {{rwk.date}}
 				td {{rwk.heimVerein}} {{rwk.heim}} ({{rwk.heimSaison}})
 				td {{rwk.gastVerein}} {{rwk.gast}} ({{rwk.gastSaison}})
@@ -64,11 +62,6 @@ block main
 				|  {{heim.verein}} {{heim.name}} - {{gast.verein}} {{gast.name}}
 		div(class="modal-body")
 			form
-				//- div(class="row")
-				//- 	div(class="form-group col-xs-6")
-				//- 		label(class="control-label") ID:
-				//- 		p(class="form-control") {{rwk.id}}
-				//- .divider
 				div(class="row")
 					div(class="col-md-4")
 						label(class="control-label") Datum:

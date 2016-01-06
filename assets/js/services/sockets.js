@@ -38,3 +38,14 @@ angular.module("dsm.services.sockets", [
 
 	return lines;
 })
+
+
+
+
+.factory('gatewaySocket', ["socketFactory", function (socketFactory) {
+	var gatewaySocket = socketFactory({
+		ioSocket: io.connect(dscGatewayUrl)
+	})
+
+	return gatewaySocket
+}])

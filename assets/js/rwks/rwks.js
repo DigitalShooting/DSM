@@ -73,6 +73,8 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 			animation: true,
 			templateUrl: 'modalEditingOverlay.html',
 			controller: 'RWKEditController',
+			backdrop: 'static',
+			keyboard: false,
 			size: "lg",
 			resolve: {
 				rwk: function () {

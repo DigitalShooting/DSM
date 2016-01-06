@@ -12,7 +12,6 @@ block main
 	table(class="table table-hover table-striped")
 		thead
 			tr
-				//- +tableHeader("ID", "id")
 				+tableHeader("Name", "name")
 				th(style="width:10%;")
 			tr
@@ -24,7 +23,6 @@ block main
 						|  Neu
 		tbody
 			tr(ng-repeat="saison in saisons track by $index")
-				//- td {{saison.id}}
 				td {{saison.name}}
 				td
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(saison)")
@@ -59,13 +57,8 @@ block main
 				|  {{saison.name}}
 		div(class="modal-body")
 			form
-				//- div(class="row")
-				//- 	div(class="form-group col-xs-6")
-				//- 		label(class="control-label") ID:
-				//- 		p(class="form-control") {{saison.id}}
-				//- .divider
 				div(class="row")
-					div(class="form-group col-xs-6")
+					div(class="form-group col-md-6")
 						label(class="control-label") Name:
 						input(type="text" class="form-control" ng-model="saison.name")
 				.divider

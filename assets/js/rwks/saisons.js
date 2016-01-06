@@ -60,6 +60,8 @@ app.controller("SaisonController", function($scope, Restangular, $uibModal, $coo
 			animation: true,
 			templateUrl: 'modalEditingOverlay.html',
 			controller: 'SaisonEditController',
+			backdrop: 'static',
+			keyboard: false,
 			size: "lg",
 			resolve: {
 				saison: function () {

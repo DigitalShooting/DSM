@@ -73,6 +73,8 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 			animation: true,
 			templateUrl: 'modalEditingOverlay.html',
 			controller: 'ActiveRWKEditController',
+			backdrop: 'static',
+			keyboard: false,
 			size: "lg",
 			resolve: {
 				rwk: function () {
@@ -108,18 +110,26 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 
 	// initial load
 	// reload();
-	var cookieData = $cookies.getObject('rwk_vars');
+	var cookieData = $cookies.getObject('ActiveRwk_vars');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('rwk_vars', $scope.store, {});
+		$cookies.putObject('ActiveRwk_vars', $scope.store, {});
 	}
 });
 
 // ActiveRWKEditController
 // Displays an overlay to edit rwk object
-app.controller('ActiveRWKEditController', function (Restangular, $scope, $uibModalInstance, rwk) {
+app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookies, $uibModalInstance, rwk) {
+	$scope.store = {
+		selectedOrder: { // Ordering Infos
+			field: "lastName",
+			dir: false,
+		},
+	}
+
+
 	$scope.rwk = rwk;
 	$scope.date = new Date()
 	if (rwk.date != "0000-00-00"){
@@ -130,6 +140,9 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $uibMod
 		$scope.rwk.date = $scope.date.yyyymmdd();
 	});
 
+	$scope.$watch('heim', function() {
+		loadHeimMembers();
+	});
 	$scope.heim = {
 		id: "",
 		name: "",
@@ -145,6 +158,9 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $uibMod
 		}
 	}
 
+	$scope.$watch('gast', function() {
+		loadGastMembers();
+	});
 	$scope.gast = {
 		id: "",
 		name: "",
@@ -202,6 +218,67 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $uibMod
 	}
 
 
+
+
+
+	function loadHeimMembers(){
+		if ($scope.heim.id != undefined && $scope.heim.id != ""){
+			Restangular.all("/api/memberIn/rwk/" + $scope.rwk.id).getList({
+				equals_manschaftID: $scope.heim.id,
+				order: $scope.store.selectedOrder.field,
+				orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			}).then(function(members) {
+				console.log(members, $scope.rwk.id)
+				$scope.heimMembers = members;
+			});
+		}
+		else {
+			$scope.heimMembers = [];
+		}
+	}
+	function loadGastMembers(){
+		if ($scope.gast.id != undefined && $scope.gast.id != ""){
+			Restangular.all("/api/memberIn/rwk/" + $scope.rwk.id).getList({
+				equals_manschaftID: $scope.gast.id,
+				order: $scope.store.selectedOrder.field,
+				orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			}).then(function(members) {
+				console.log(members, $scope.rwk.id)
+				$scope.gastMembers = members;
+			});
+		}
+		else {
+			$scope.gastMembers = [];
+		}
+	}
+	loadHeimMembers();
+	loadGastMembers();
+
+
+
+
+	// trigged on each order change
+	$scope.changeOrder = function(field){
+		if ($scope.store.selectedOrder.field == field){
+			$scope.store.selectedOrder.dir = !$scope.store.selectedOrder.dir;
+		}
+		else {
+			$scope.store.selectedOrder.field = field;
+		}
+		loadUsers();
+
+		writeToCookie();
+	};
+
+
+
+	var cookieData = $cookies.getObject('ActiveRwk_member_vars');
+	if (cookieData != undefined){
+		$scope.store = cookieData;
+	}
+	function writeToCookie(){
+		$cookies.putObject('ActiveRwk_member_vars', $scope.store, {});
+	}
 
 
 
