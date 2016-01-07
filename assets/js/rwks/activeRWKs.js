@@ -131,12 +131,12 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 
 	// initial load
 	// reload();
-	var cookieData = $cookies.getObject('ActiveRwk_vars');
+	var cookieData = $cookies.getObject('ActiveRWKsController');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('ActiveRwk_vars', $scope.store, {});
+		$cookies.putObject('ActiveRWKsController', $scope.store, {});
 	}
 });
 
@@ -366,12 +366,12 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 
 
 
-	var cookieData = $cookies.getObject('ActiveRwk_member_vars');
+	var cookieData = $cookies.getObject('ActiveRWKUsersController');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('ActiveRwk_member_vars', $scope.store, {});
+		$cookies.putObject('ActiveRWKUsersController', $scope.store, {});
 	}
 
 

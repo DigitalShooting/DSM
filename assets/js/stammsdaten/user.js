@@ -97,12 +97,12 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 
 	// initial load
 	// reload();
-	var cookieData = $cookies.getObject('user_vars');
+	var cookieData = $cookies.getObject('UserController');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('user_vars', $scope.store, {});
+		$cookies.putObject('UserController', $scope.store, {});
 	}
 });
 

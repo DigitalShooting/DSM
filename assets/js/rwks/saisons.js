@@ -97,12 +97,12 @@ app.controller("SaisonController", function($scope, Restangular, $uibModal, $coo
 
 	// initial load
 	// reload();
-	var cookieData = $cookies.getObject('saison_vars');
+	var cookieData = $cookies.getObject('SaisonController');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('saison_vars', $scope.store, {});
+		$cookies.putObject('SaisonController', $scope.store, {});
 	}
 });
 

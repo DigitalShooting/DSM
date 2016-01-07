@@ -96,12 +96,12 @@ app.controller("ManschaftenController", function($scope, Restangular, $uibModal,
 	};
 
 	// initial load
-	var cookieData = $cookies.getObject('manschaft_vars');
+	var cookieData = $cookies.getObject('ManschaftenController');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('manschaft_vars', $scope.store, {});
+		$cookies.putObject('ManschaftenController', $scope.store, {});
 	}
 });
 
@@ -212,7 +212,6 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 		if ($scope.newUser != undefined){
 			var userID = $scope.newUser.id;
 			$scope.manschaft.one('/member').post().then(function(member) {
-				console.log(member)
 				member.userID = userID;
 				member.post();
 
@@ -254,12 +253,12 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 
 
 
-	var cookieData = $cookies.getObject('manschaft_members_vars');
+	var cookieData = $cookies.getObject('ManschaftEditController');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('manschaft_members_vars', $scope.store, {});
+		$cookies.putObject('ManschaftEditController', $scope.store, {});
 	}
 
 });

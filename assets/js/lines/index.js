@@ -246,12 +246,12 @@ angular.module("dsm.lines", [
 
 
 	// Cookie stuff
-	var cookieData = $cookies.getObject('ActiveRwk_member_vars');
+	var cookieData = $cookies.getObject('LinesController');
 	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
-		$cookies.putObject('ActiveRwk_member_vars', $scope.store, {});
+		$cookies.putObject('LinesController', $scope.store, {});
 	}
 })
 
