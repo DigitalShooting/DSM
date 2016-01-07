@@ -89,6 +89,27 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 			$log.info('Modal dismissed at: ' + new Date());
 		});
 	}
+	$scope.editUsers = function(rwk){
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'modalUsersOverlay.html',
+			controller: 'ActiveRWKUsersController',
+			backdrop: 'static',
+			keyboard: false,
+			size: "lg",
+			resolve: {
+				rwk: function () {
+					return rwk;
+				}
+			}
+		});
+
+		modalInstance.result.then(function (rwk) {
+			reload()
+		}, function () {
+			$log.info('Modal dismissed at: ' + new Date());
+		});
+	}
 	$scope.newEntry = function(){
 		Restangular.one('/api/rwk').post().then(function(rwk) {
 			$scope.editEntry(rwk);
@@ -119,6 +140,10 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 	}
 });
 
+
+
+
+
 // ActiveRWKEditController
 // Displays an overlay to edit rwk object
 app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookies, $uibModalInstance, rwk) {
@@ -140,9 +165,6 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookie
 		$scope.rwk.date = $scope.date.yyyymmdd();
 	});
 
-	$scope.$watch('heim', function() {
-		loadHeimMembers();
-	});
 	$scope.heim = {
 		id: "",
 		name: "",
@@ -158,9 +180,6 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookie
 		}
 	}
 
-	$scope.$watch('gast', function() {
-		loadGastMembers();
-	});
 	$scope.gast = {
 		id: "",
 		name: "",
@@ -216,40 +235,106 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookie
 		}
 		return "";
 	}
+});
+
+
+
+
+
+// ActiveRWKUsersController
+// Displays an overlay to edit rwk object
+app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cookies, $uibModalInstance, rwk) {
+	$scope.store = {
+		selectedOrder: { // Ordering Infos
+			field: "lastName",
+			dir: false,
+		},
+	}
+
+
+	$scope.rwk = rwk;
+
+
+	Restangular.all("/api/manschaft/" + $scope.rwk.manschaftHeim + "/member").getList({
+		order: $scope.store.selectedOrder.field,
+		orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+	}).then(function(members) {
+		$scope.heimManschaft = members;
+	});
+
+	Restangular.all("/api/manschaft/" + $scope.rwk.manschaftGast + "/member").getList({
+		order: $scope.store.selectedOrder.field,
+		orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+	}).then(function(members) {
+		$scope.gastManschaft = members;
+	});
+
+
+
+	// delete rwk and close
+	// TODO: ALERT
+	$scope.end = function () {
+		$scope.rwk.done = "1";
+		$scope.save();
+	};
+
+	// close
+	$scope.cancel = function () {
+		$uibModalInstance.close($scope.rwk);
+	};
+
+
+	$scope.getManschaft = function(serachString) {
+		return Restangular.one('/api/manschaft').get({
+			search: serachString,
+			limit: 1000,
+		}).then(function(manschaften) {
+			return manschaften;
+		});
+	};
+	$scope.getManschaftTitle = function(manschaft){
+		if (manschaft.verein != undefined){
+			return manschaft.verein + " " + manschaft.name + " ("+manschaft.saison+")";
+		}
+		return "";
+	}
+
+
+
+
+
+	$scope.addGastUser = function(manschaft){
+		$scope.rwk.one('/member').post().then(function(member) {
+			member.userID = userID;
+			member.post();
+
+			$scope.newUser = undefined;
+
+			loadUsers();
+		});
+	}
+
 
 
 
 
 
 	function loadHeimMembers(){
-		if ($scope.heim.id != undefined && $scope.heim.id != ""){
-			$scope.rwk.all("/heim").getList({
-				equals_manschaftID: $scope.heim.id,
-				order: $scope.store.selectedOrder.field,
-				orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
-			}).then(function(members) {
-				console.log(members, $scope.rwk.id)
-				$scope.heimMembers = members;
-			});
-		}
-		else {
-			$scope.heimMembers = [];
-		}
+		$scope.rwk.all("/heim").getList({
+			order: $scope.store.selectedOrder.field,
+			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+		}).then(function(members) {
+			$scope.heimMembers = members;
+		});
 	}
 	function loadGastMembers(){
-		if ($scope.gast.id != undefined && $scope.gast.id != ""){
-			$scope.rwk.all("/gast").getList({
-				equals_manschaftID: $scope.gast.id,
-				order: $scope.store.selectedOrder.field,
-				orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
-			}).then(function(members) {
-				console.log(members, $scope.rwk.id)
-				$scope.gastMembers = members;
-			});
-		}
-		else {
-			$scope.gastMembers = [];
-		}
+		$scope.rwk.all("/gast").getList({
+			order: $scope.store.selectedOrder.field,
+			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+		}).then(function(members) {
+			console.log(members, $scope.rwk.id)
+			$scope.gastMembers = members;
+		});
 	}
 	loadHeimMembers();
 	loadGastMembers();

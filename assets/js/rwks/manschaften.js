@@ -211,11 +211,8 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 	$scope.addMember = function(){
 		if ($scope.newUser != undefined){
 			var userID = $scope.newUser.id;
-			Restangular.one('/api/memberIn').post().then(function(member) {
-				console.log(member)
-
+			$scope.manschaft.one('/member').post().then(function(member) {
 				member.userID = userID;
-				member.manschaftID = $scope.manschaft.id;
 				member.post();
 
 				$scope.newUser = undefined;
@@ -226,7 +223,7 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 	}
 
 	function loadUsers(){
-		Restangular.all('/api/memberIn').getList({
+		$scope.manschaft.all('/member').getList({
 			equals_manschaftID: $scope.manschaft.id,
 			order: $scope.store.selectedOrder.field,
 			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",

@@ -32,6 +32,9 @@ block main
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(rwk)")
 						span(class="glyphicon glyphicon-pencil" aria-hidden="true")
 						|  Bearbeiten
+					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editUsers(rwk)")
+						span(class="glyphicon glyphicon-user" aria-hidden="true")
+						|  Aufstellung
 	div(class="dropup noMargin")
 		div(class="btn-group pull-left" uib-dropdown is-open="status.isopen")
 			button(id="single-button" type="button" class="btn btn-default noMargin" uib-dropdown-toggle ng-disabled="disabled")
@@ -50,9 +53,13 @@ block main
 		uib-pagination(total-items="totalItems" items-per-page="store.itemsPerPage" ng-model="currentPage" max-size="paginationMaxSize" class="pagination noMargin" boundary-links="true" previous-text="Zurück" next-text="Weiter" first-text="Erste" last-text="Letzte")
 	
 	
+	
+	
 	//- manschaftTypeahead template
 	script(type="text/ng-template" id="manschaftTypeahead.html")
 		a {{match.model.verein}} {{match.model.name}} ({{match.model.saison}})
+	
+	
 	
 	
 	//- modalEditingOverlay template
@@ -85,6 +92,36 @@ block main
 							i(class="glyphicon glyphicon-remove")
 							| Keine Manschaft gefunden
 				.divider
+				p TODO Druck
+				.divider
+				div(class="form-group")
+					label(for="message-text" class="control-label") Notiz:
+					textarea(class="form-control" id="message-text" ng-model="rwk.note")
+		div(class="modal-footer")
+			button(class="btn btn-default pull-left" type="button" ng-click="end()")
+				span(class="glyphicon glyphicon-floppy-saved" aria-hidden="true")
+				|  Wettkamp abschließen
+			button(class="btn btn-primary" type="button" ng-click="save()")
+				span(class="glyphicon glyphicon-floppy-disk" aria-hidden="true")
+				|  Speichern
+
+
+
+
+
+
+	
+	//- modalUsersOverlay template
+	script(type="text/ng-template" id="modalUsersOverlay.html")
+
+		div(class="modal-header")
+			button(type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()")
+				span(aria-hidden="true") &times
+			h4(class="modal-title" id="exampleModalLabel")
+				span(class="glyphicon glyphicon-refresh" aria-hidden="true")
+				|  {{heim.verein}} {{heim.name}} - {{gast.verein}} {{gast.name}}
+		div(class="modal-body")
+			form
 				div(class="row")
 					div(class="form-group col-md-6" ng-hide="members.length == 0")
 						label(class="control-label") Schützen Heim:
@@ -93,17 +130,28 @@ block main
 								tr
 									+tableHeader("Vorname", "firstName")
 									+tableHeader("Name", "lastName")
-									//- th
 							tbody
 								tr(ng-repeat="member in heimMembers")
 									td {{member.firstName}}
 									td {{member.lastName}}
-									//- td
-									//- 	div(class="btn-group pull-right")
-									//- 		label(class="btn btn-default btn-sm" ng-model="member.part" uib-btn-radio="''")
-									//- 			span(class="glyphicon glyphicon-remove" aria-hidden="true")
-									//- 		label(class="btn btn-default btn-sm" ng-model="member.part" uib-btn-radio="'member'") Schütze
-									//- 		label(class="btn btn-default btn-sm" ng-model="member.part" uib-btn-radio="'ersatz'") Ersatz
+					div(class="form-group col-md-6" ng-hide="members.length == 0")
+						label(class="control-label") Manschaft:
+						table(class="table table-hover table-striped")
+							thead
+								tr
+									+tableHeader("Vorname", "firstName")
+									+tableHeader("Name", "lastName")
+									th(style="width:10%;")
+							tbody
+								tr(ng-repeat="member in heimManschaft")
+									td {{member.firstName}}
+									td {{member.lastName}}
+									td
+										button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="addHeimUser(member)")
+											span(class="glyphicon glyphicon-plus" aria-hidden="true")
+											|  Hinzufügen
+				.divider
+				div(class="row")
 					div(class="form-group col-md-6" ng-hide="members.length == 0")
 						label(class="control-label") Schützen Gast:
 						table(class="table table-hover table-striped")
@@ -116,18 +164,22 @@ block main
 								tr(ng-repeat="member in gastMembers")
 									td {{member.firstName}}
 									td {{member.lastName}}
-									//- td
-									//- 	div(class="btn-group pull-right")
-									//- 		label(class="btn btn-default btn-sm" ng-model="member.part" uib-btn-radio="''")
-									//- 			span(class="glyphicon glyphicon-remove" aria-hidden="true")
-									//- 		label(class="btn btn-default btn-sm" ng-model="member.part" uib-btn-radio="'member'") Schütze
-									//- 		label(class="btn btn-default btn-sm" ng-model="member.part" uib-btn-radio="'ersatz'") Ersatz
-				.divider
-				p TODO Druck
-				.divider
-				div(class="form-group")
-					label(for="message-text" class="control-label") Notiz:
-					textarea(class="form-control" id="message-text" ng-model="rwk.note")
+					div(class="form-group col-md-6" ng-hide="members.length == 0")
+						label(class="control-label") Manschaft:
+						table(class="table table-hover table-striped")
+							thead
+								tr
+									+tableHeader("Vorname", "firstName")
+									+tableHeader("Name", "lastName")
+									td(style="width:10%;")
+							tbody
+								tr(ng-repeat="member in gastManschaft")
+									td {{member.firstName}}
+									td {{member.lastName}}
+									td
+										button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="addGastUser(member)")
+											span(class="glyphicon glyphicon-plus" aria-hidden="true")
+											|  Hinzufügen
 		div(class="modal-footer")
 			button(class="btn btn-default pull-left" type="button" ng-click="end()")
 				span(class="glyphicon glyphicon-floppy-saved" aria-hidden="true")
