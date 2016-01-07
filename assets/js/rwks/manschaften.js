@@ -212,6 +212,7 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 		if ($scope.newUser != undefined){
 			var userID = $scope.newUser.id;
 			$scope.manschaft.one('/member').post().then(function(member) {
+				console.log(member)
 				member.userID = userID;
 				member.post();
 

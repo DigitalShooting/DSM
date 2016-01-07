@@ -119,23 +119,31 @@ block main
 				span(aria-hidden="true") &times
 			h4(class="modal-title" id="exampleModalLabel")
 				span(class="glyphicon glyphicon-refresh" aria-hidden="true")
-				|  {{heim.verein}} {{heim.name}} - {{gast.verein}} {{gast.name}}
+				|  {{rwk.heimVerein}} {{rwk.heim}} - {{rwk.gastVerein}} {{rwk.gast}}
 		div(class="modal-body")
 			form
 				div(class="row")
 					div(class="form-group col-md-6" ng-hide="members.length == 0")
-						label(class="control-label") Schützen Heim:
+						label(class="control-label") Aufstellung Heim:
 						table(class="table table-hover table-striped")
 							thead
 								tr
+									+tableHeader("Ersatz", "ersatz")
 									+tableHeader("Vorname", "firstName")
 									+tableHeader("Name", "lastName")
+									th(style="width:10%;")
 							tbody
 								tr(ng-repeat="member in heimMembers")
+									td
+										input(type="checkbox" ng-model="member.ersatz" ng-true-value="1" ng-false-value="0" ng-change="member.post();")
 									td {{member.firstName}}
 									td {{member.lastName}}
+									td
+										button(type="button" class="btn btn-danger-link btn-sm noMargin col-xs-12" ng-click="delHeimUser(member)")
+											span(class="glyphicon glyphicon-trash" aria-hidden="true")
+											|  Löschen
 					div(class="form-group col-md-6" ng-hide="members.length == 0")
-						label(class="control-label") Manschaft:
+						label(class="control-label") {{rwk.heimVerein}} {{rwk.heim}}:
 						table(class="table table-hover table-striped")
 							thead
 								tr
@@ -153,19 +161,26 @@ block main
 				.divider
 				div(class="row")
 					div(class="form-group col-md-6" ng-hide="members.length == 0")
-						label(class="control-label") Schützen Gast:
+						label(class="control-label") Aufstellung Gast:
 						table(class="table table-hover table-striped")
 							thead
 								tr
+									+tableHeader("Ersatz", "ersatz")
 									+tableHeader("Vorname", "firstName")
 									+tableHeader("Name", "lastName")
-									//- th
+									th(style="width:10%;")
 							tbody
 								tr(ng-repeat="member in gastMembers")
+									td
+										input(type="checkbox" ng-model="member.ersatz" ng-true-value="1" ng-false-value="0" ng-change="member.post();")
 									td {{member.firstName}}
 									td {{member.lastName}}
+									td
+										button(type="button" class="btn btn-danger-link btn-sm noMargin col-xs-12" ng-click="delGastUser(member)")
+											span(class="glyphicon glyphicon-trash" aria-hidden="true")
+											|  Löschen
 					div(class="form-group col-md-6" ng-hide="members.length == 0")
-						label(class="control-label") Manschaft:
+						label(class="control-label") {{rwk.gastVerein}} {{rwk.gast}}:
 						table(class="table table-hover table-striped")
 							thead
 								tr
@@ -181,9 +196,6 @@ block main
 											span(class="glyphicon glyphicon-plus" aria-hidden="true")
 											|  Hinzufügen
 		div(class="modal-footer")
-			button(class="btn btn-default pull-left" type="button" ng-click="end()")
-				span(class="glyphicon glyphicon-floppy-saved" aria-hidden="true")
-				|  Wettkamp abschließen
-			button(class="btn btn-primary" type="button" ng-click="save()")
+			button(class="btn btn-default" type="button" ng-click="cancel()")
 				span(class="glyphicon glyphicon-floppy-disk" aria-hidden="true")
-				|  Speichern
+				|  Fertig
