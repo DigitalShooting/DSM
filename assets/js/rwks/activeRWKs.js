@@ -223,7 +223,7 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookie
 
 	function loadHeimMembers(){
 		if ($scope.heim.id != undefined && $scope.heim.id != ""){
-			Restangular.all("/api/memberIn/rwk/" + $scope.rwk.id).getList({
+			$scope.rwk.all("/heim").getList({
 				equals_manschaftID: $scope.heim.id,
 				order: $scope.store.selectedOrder.field,
 				orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
@@ -238,7 +238,7 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookie
 	}
 	function loadGastMembers(){
 		if ($scope.gast.id != undefined && $scope.gast.id != ""){
-			Restangular.all("/api/memberIn/rwk/" + $scope.rwk.id).getList({
+			$scope.rwk.all("/gast").getList({
 				equals_manschaftID: $scope.gast.id,
 				order: $scope.store.selectedOrder.field,
 				orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
