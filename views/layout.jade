@@ -61,9 +61,7 @@ html
 		
 		
 		// lines controller
-		script(src="/js/lines/index.js")
-		script(src="/js/lines/verwaltung.js")
-		script(src="/js/lines/log.js")
+		script(src="/js/lines.js")
 		
 		// stammsdaten controller
 		script(src="/js/stammsdaten/user.js")
@@ -74,6 +72,9 @@ html
 		script(src="/js/rwks/manschaften.js")
 		script(src="/js/rwks/rwks.js")
 		script(src="/js/rwks/activeRWKs.js")
+		
+		// stats controller
+		script(src="/js/stats/group.js")
 		
 		script(src="/js/index.js")
 		
@@ -92,7 +93,7 @@ html
 						+navElement("#/lines/", "Stände", "glyphicon-list")
 						+navElement("#/stammdaten/", "Stammdaten", "glyphicon-user")
 						+navElement("#/rwks/", "RWKs", "glyphicon-list-alt")
-						//- +navElement("#/stats/", "Statistiken", "glyphicon-stats")
+						+navElement("#/stats/", "Statistiken", "glyphicon-stats")
 					ul(class="nav navbar-nav navbar-right")
 						button(type="submit" class="btn btn-link" ng-click="CallMe();")
 							span(class="glyphicon glyphicon-file" aria-hidden="true")

@@ -19,7 +19,7 @@ block main
 			tr
 				td(colspan="3")
 					input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
-				td
+				td(colspan="2")
 					button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
 						span(class="glyphicon glyphicon-plus" aria-hidden="true")
 						|  Neu
@@ -35,6 +35,10 @@ block main
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editUsers(rwk)")
 						span(class="glyphicon glyphicon-user" aria-hidden="true")
 						|  Aufstellung
+				td
+					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editScores(rwk)")
+						span(class="glyphicon glyphicon-stats" aria-hidden="true")
+						|  Ergebnisse
 	div(class="dropup noMargin")
 		div(class="btn-group pull-left" uib-dropdown is-open="status.isopen")
 			button(id="single-button" type="button" class="btn btn-default noMargin" uib-dropdown-toggle ng-disabled="disabled")
@@ -193,6 +197,34 @@ block main
 										button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="addGastUser(member)")
 											span(class="glyphicon glyphicon-plus" aria-hidden="true")
 											|  Hinzufügen
+		div(class="modal-footer")
+			button(class="btn btn-default" type="button" ng-click="cancel()")
+				| Fertig
+
+
+	//- modalScoresOverlay template
+	script(type="text/ng-template" id="modalScoresOverlay.html")
+
+		div(class="modal-header")
+			button(type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()")
+				span(aria-hidden="true") &times
+			h4(class="modal-title" id="exampleModalLabel")
+				span(class="glyphicon glyphicon-refresh" aria-hidden="true")
+				|  {{heim.verein}} {{heim.name}} - {{gast.verein}} {{gast.name}}
+		div(class="modal-body")
+			form
+				div(class="row")
+					div(class="form-group col-md-6")
+						label(class="control-label") Gast Manschaft:
+						input(onClick="this.select();" type="text" ng-model="gast" placeholder="" uib-typeahead="gast as gast.name for gast in getManschaft($viewValue)" typeahead-loading="loadingGast" typeahead-template-url="manschaftTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResultsGast" class="form-control")
+						i(ng-show="loadingGast" class="glyphicon glyphicon-refresh")
+						div(ng-show="noResultsGast")
+							i(class="glyphicon glyphicon-remove")
+							| Keine Manschaft gefunden
+				.divider
+				div(class="form-group")
+					label(for="message-text" class="control-label") Notiz:
+					textarea(class="form-control" id="message-text" ng-model="rwk.note")
 		div(class="modal-footer")
 			button(class="btn btn-default" type="button" ng-click="cancel()")
 				| Fertig

@@ -1,26 +1,21 @@
 //Define an angular module for our app
 var app = angular.module('dsm', [
 	"ngRoute", "angular-intro",
+	"dsm.lines",
 	"dsm.stammdaten.user", "dsm.stammdaten.verein",
 	"dsm.rwks.saisons", "dsm.rwks.manschaften", "dsm.rwks.rwks", "dsm.rwks.activeRWKs",
-	"dsm.lines", "dsm.lines.verwaltung", "dsm.lines.log",
+	"dsm.stats.group",
 ]);
 
 app.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.
 
 		// lines routes
-		when('/lines/', {
-			redirectTo: '/lines/verwaltung/'
-		}).
-		when('/lines/verwaltung', {
-			templateUrl: '/lines/verwaltung',
+		when('/lines', {
+			templateUrl: '/lines',
 			controller: 'LinesController',
 		}).
-		when('/lines/log', {
-			templateUrl: '/lines/log',
-			controller: 'LinesController',
-		}).
+
 
 		// stammdaten routes
 		when('/stammdaten/', {
@@ -58,6 +53,17 @@ app.config(['$routeProvider', function($routeProvider) {
 		}).
 
 
+
+		// stats routes
+		when('/stats/', {
+			redirectTo: '/stats/group/'
+		}).
+		when('/stats/group/', {
+			templateUrl: '/stats/group/',
+			controller: 'StatsGroupController',
+		}).
+
+
 		// exit route
 		when('/exit/', {
 			templateUrl: '/exit/',
@@ -66,7 +72,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
 		// start page
 		otherwise({
-			redirectTo: '/lines/',
+			redirectTo: '/lines',
 		});
 }]);
 app.run(['$rootScope','$location', '$routeParams', function($rootScope, $location, $routeParams) {

@@ -17,7 +17,7 @@ var app = angular.module("dsm.rwks.activeRWKs", [
 
 // RWKsController
 // Lists rwks and perfor search and order
-app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, $cookies, $log) {
+app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, $cookies) {
 	$scope.store = {
 		itemsPerPage: 20, // items per page
 		selectedOrder: { // Ordering Infos
@@ -85,9 +85,7 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 
 		modalInstance.result.then(function (rwk) {
 			reload()
-		}, function () {
-			$log.info('Modal dismissed at: ' + new Date());
-		});
+		}, function (){});
 	}
 	$scope.editUsers = function(rwk){
 		var modalInstance = $uibModal.open({
@@ -106,14 +104,32 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 
 		modalInstance.result.then(function (rwk) {
 			reload()
-		}, function () {
-			$log.info('Modal dismissed at: ' + new Date());
-		});
+		}, function (){});
 	}
 	$scope.newEntry = function(){
 		Restangular.one('/api/rwk').post().then(function(rwk) {
 			$scope.editEntry(rwk);
 		});
+	};
+
+	$scope.editScores = function(rwk){
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'modalScoresOverlay.html',
+			controller: 'ActiveRWKScoresController',
+			backdrop: 'static',
+			keyboard: false,
+			size: "lg",
+			resolve: {
+				rwk: function () {
+					return rwk;
+				}
+			}
+		});
+
+		modalInstance.result.then(function (rwk) {
+			reload()
+		}, function () {});
 	};
 
 	// trigged on each order change
@@ -344,10 +360,6 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 
 
 
-
-
-
-
 	// trigged on each order change
 	$scope.changeOrder = function(field){
 		if ($scope.store.selectedOrder.field == field){
@@ -373,7 +385,17 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 	function writeToCookie(){
 		$cookies.putObject('ActiveRWKUsersController', $scope.store, {});
 	}
+});
 
 
 
+// ActiveRWKScoresController
+// Displays an overlay to edit rwk scores
+app.controller('ActiveRWKScoresController', function (Restangular, $scope, $cookies, $uibModalInstance, rwk) {
+
+	// close
+	$scope.cancel = function () {
+		$uibModalInstance.close($scope.rwk);
+	};
+	
 });

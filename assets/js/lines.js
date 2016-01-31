@@ -8,10 +8,25 @@ angular.module("dsm.lines", [
 .controller("LinesController", function ($scope, lines, dsmSocket, $cookies, gatewaySocket, Restangular) {
 	$scope.store = {
 		linesSelected: {},
+		linesSelectedCount: 0,
 	};
+
+
+
+	Restangular.all("/api/disziplinen").getList({
+	}).then(function(disziplinen) {
+		$scope.disziplinen = disziplinen;
+		console.log(disziplinen)
+	});
+
+
+
+
+
 
 	// store lines recived from DSC-Gateway
 	$scope.lines = [];
+	gatewaySocket.emit("getLines", {});
 
 	// listen to DSC-Gateway updates
 	gatewaySocket.on("disconnect", function(data){
@@ -36,6 +51,15 @@ angular.module("dsm.lines", [
 		else {
 			$scope.store.linesSelected[id] = !$scope.store.linesSelected[id];
 		}
+
+		$scope.store.linesSelectedCount = 0;
+		for (id in $scope.store.linesSelected) {
+			if ($scope.store.linesSelected[id] == true) {
+				$scope.store.linesSelectedCount++;
+			}
+
+		}
+
 		writeToCookie();
 	}
 	// toggel selection for all

@@ -41,6 +41,7 @@ app.use(compression())
 app.use("/stammdaten/", routes.stammdaten)
 app.use("/rwks/", routes.rwks)
 app.use("/lines", routes.lines)
+app.use("/stats", routes.stats)
 app.use("/dashboard", function(req, res){
 	res.render("dashboard")
 })
