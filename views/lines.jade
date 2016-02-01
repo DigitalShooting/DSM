@@ -28,6 +28,16 @@ block body
 			a {{match.model.verein}} {{match.model.name}} ({{match.model.saison}})
 		
 		
+		//- vereinTypeahead template
+		script(type="text/ng-template" id="vereinTypeahead.html")
+			a {{match.model.name}}
+			
+			
+		//- userTypeahead template
+		script(type="text/ng-template" id="userTypeahead.html")
+			a {{match.model.firstName}} {{match.model.lastName}} ({{match.model.verein}})
+				
+		
 		.row
 		
 			//- Alert no selection
@@ -36,31 +46,31 @@ block body
 					h4 Info
 					p Kein Stand ausgewählt.
 				//- div(class="alert alert-info" role="alert" ng-hide="store.linesSelectedCount != 0") Kein Stand ausgewählt.
-		
-		
-			//- Main controls (power on/of, print)
+
+
+
 			.col-md-6
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount == 0")
+				//- Main controls
+				div(class="bs-callout bs-callout-danger" ng-hide="store.linesSelectedCount == 0")
 					h4 Status
-					div(class="btn-group fullWidth" role="group")
-						button(type="submit" class="btn btn-default col-md-6" ng-click="setPower(false)")
-							span(class="glyphicon glyphicon glyphicon-flash" aria-hidden="true")
-							|  Herunterfahren
-						button(type="submit" class="btn btn-primary col-md-6" ng-click="setPower(true)")
-							span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
-							|  Hochfahren
-		
-		
-			//- Disziplinen selection
-			.col-md-6
-				div(class="bs-callout bs-callout-info" ng-hide="store.linesSelectedCount == 0")
-					div(class="row header")
-						div(class="col-sm-6")
-							h4 Disziplin
-						div(class="col-sm-6")
-							button(type="submit" class="btn btn-default noMargin pull-right" ng-click="actions.resetLine()")
-								span(class="glyphicon glyphicon glyphicon-remove" aria-hidden="true")
-								|  Zurücksetzen
+					div(class="form-group")
+						div(class="btn-group fullWidth" role="group")
+							button(type="submit" class="btn btn-danger col-md-6" ng-click="actions.shutdown()")
+								span(class="glyphicon glyphicon glyphicon-flash" aria-hidden="true")
+								|  Herunterfahren
+							button(type="submit" class="btn btn-default col-md-6" ng-click="actions.wakeonlan()")
+								span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
+								|  Hochfahren
+					div(class="form-group")
+						div(class="btn-group fullWidth" role="group")
+							button(type="submit" class="btn btn-default col-md-12" ng-click="actions.openLine()")
+								span(class="glyphicon glyphicon glyphicon-record" aria-hidden="true")
+								|  Stand öffnen
+
+
+				//- Disziplinen selection
+				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0")
+					h4 Disziplin & Scheibe
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Disziplin
@@ -77,72 +87,79 @@ block body
 									ui-select-choices(repeat="part in parts | propsFilter: {title: $select.search}")
 										div {{part.title}}
 						div(class="form-group")
-							label(for="" class="col-md-2 control-label") Drucken
-							div(class="btn-group col-md-10" role="group")
-								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.print(true)")
-									span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
-									|  Ausdruck erstellen
-						div(class="form-group")
-							label(for="" class="col-md-2 control-label") Scheibe
-							div(class="btn-group col-md-10" role="group")
-								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.newTarget()")
-									span(class="glyphicon glyphicon glyphicon-plus" aria-hidden="true")
-									|  Neue Scheibe
-		
-		
-			//- Message
+							div(class="btn-group col-md-12")
+								div(class="btn-group fullWidth" role="group")
+									button(type="submit" class="btn btn-default col-md-6" ng-click="actions.newTarget()")
+										span(class="glyphicon glyphicon glyphicon-plus" aria-hidden="true")
+										|  Neue Scheibe
+									button(type="submit" class="btn btn-danger col-md-6" ng-click="actions.resetLine()")
+										span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
+										|  Zurücksetzen
+
+
+				//- Main controls
+				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0")
+					h4 Druck & Log
+					div(class="btn-group fullWidth" role="group")
+						button(type="submit" class="btn btn-default col-md-6" ng-click="actions.print(true)")
+							span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
+							|  Ausdruck erstellen
+						button(type="submit" class="btn btn-default col-md-6" ng-click="actions.openLog()")
+							span(class="glyphicon glyphicon glyphicon-list" aria-hidden="true")
+							|  Log öffnen
+
+
+
 			.col-md-6
+				//- User
+				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1")
+					h4 Schütze
+					div(class="form-horizontal")
+						div(class="form-group")
+							label(class="col-sm-2 control-label") Verein:
+							div(class="col-md-10")
+								.input-group
+									input(onClick="this.select();" type="text" ng-model="selected.verein" placeholder="Verein" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-template-url="vereinTypeahead.html" typeahead-no-results="noResultsVerein" class="form-control")
+									span(class="input-group-btn")
+										button(type="button" class="btn btn-default btn noMargin" ng-click="selected.verein = null;")
+											span(class="glyphicon glyphicon-remove" aria-hidden="true")
+								i(ng-show="loadingVereine" class="glyphicon glyphicon-refresh")
+								div(ng-show="noResultsVerein")
+									i(class="glyphicon glyphicon-remove")
+									| Kein Verein gefunden
+						div(class="form-group")
+							label(class="col-sm-2 control-label") Schütze:
+							div(class="col-md-10")
+								.input-group
+									input(onClick="this.select();" type="text" ng-model="selected.user" placeholder="Schütze" uib-typeahead="user for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-template-url="userTypeahead.html" typeahead-no-results="noResultsUser" class="form-control")
+									span(class="input-group-btn")
+										button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser()")
+											span(class="glyphicon glyphicon-remove" aria-hidden="true")
+								i(ng-show="loadingUser" class="glyphicon glyphicon-refresh")
+								div(ng-show="noResultsUser")
+									i(class="glyphicon glyphicon-remove")
+									| Kein Schütze gefunden
+
+
+				//- Message
 				div(class="bs-callout bs-callout-info" ng-hide="store.linesSelectedCount == 0")
 					h4 Nachricht
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Art
-							div(class="col-sm-10")
-									select(name=name class="selectpicker "+name style="width:100%" ng-model="messageType")
-										option(value="danger" selected="selected") Warnung
-										option(value="default") Info
-						div(class="form-group")
-							label(class="col-sm-2 control-label") Text
-							div(class="col-sm-10")
-								input(type="text" class="form-control" id="alertTitle" ng-model="messageTitle" placeholder="Title")
-						div(class="form-group")
-							label(class="col-sm-2 control-label") Vorlagen
 							div(class="btn-group col-md-10" role="group")
-								button(type="submit" class="btn btn-danger col-md-6" ng-click="showMessageType('sicherheit')")
+								button(type="submit" class="btn btn-danger col-md-6 noMargin" ng-click="actions.showMessage('danger', 'Sicherheit')")
+									span(class="glyphicon glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 									|  Sicherheit
-								button(type="submit" class="btn btn-info col-md-6" ng-click="showMessageType('pause')")
+								button(type="submit" class="btn btn-warning col-md-6 noMargin" ng-click="actions.showMessage('default', 'Pause')")
+									span(class="glyphicon glyphicon glyphicon-pause" aria-hidden="true")
 									|  Pause
 						div(class="form-group")
 							label(class="col-sm-2 control-label") 
 							div(class="btn-group col-md-10" role="group")
-								button(type="submit" class="btn btn-default col-md-6" ng-click="showMessage(true)")
-									span(class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true")
-									|  Zeigen
-								button(type="submit" class="btn btn-default col-md-6" ng-click="showMessage(false)")
+								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.hideMessage()")
 									span(class="glyphicon glyphicon glyphicon-eye-close" aria-hidden="true")
 									|  Verstecken
-		
-		
-			//- User
-			.col-md-6
-				div(class="bs-callout bs-callout-info" ng-hide="store.linesSelectedCount != 1")
-					h4 Schütze
-					div(class="form-horizontal")
-						div(class="form-group")
-							label(class="col-sm-2 control-label") Verein
-							div(class="col-sm-10")
-								ui-select(ng-model="selected.verein" theme="bootstrap" ng-disabled="false" reset-search-input="true" on-select="selectVerein()")
-									ui-select-match {{selected.verein.name}}
-									ui-select-choices(repeat="verein in vereine | propsFilter: {name: $select.search}")
-										div {{verein.name}}
-						div(class="form-group")
-							label(class="col-sm-2 control-label") Schütze
-							div(class="col-sm-10")
-								ui-select(ng-model="selected.schuetze" theme="bootstrap" ng-disabled="selected.verein == undefined" reset-search-input="false" on-select="selectSchuetze()")
-									ui-select-match {{selected.schuetze.firstName}} {{selected.schuetze.lastName}}
-									ui-select-choices(repeat="schuetze in schuetzen | propsFilter: {firstName: $select.search, lastName: $select.search}")
-										div {{schuetze.firstName}} {{schuetze.lastName}}
-
 
 
 		//- scrpt.

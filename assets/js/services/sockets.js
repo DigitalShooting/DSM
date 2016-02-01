@@ -1,19 +1,6 @@
 angular.module("dsm.services.sockets", [
 	"btford.socket-io",
-	"dsc.services.dscAPI",
 ])
-
-
-.factory("dsmSocket", function (socketFactory) {
-	var myIoSocket = io.connect();
-	mySocket = socketFactory({
-		ioSocket: myIoSocket
-	});
-
-	return mySocket;
-})
-
-
 
 
 
@@ -22,25 +9,27 @@ angular.module("dsm.services.sockets", [
 		ioSocket: io.connect(dscGatewayUrl)
 	})
 
+	var auth = {key: "123"};
+
 	gatewaySocket.api = {
 		setNewTarget: function(line){
 			gatewaySocket.emit("setLine", {
 				method: "newTarget",
 				line: line,
 				data: {
-					auth: {key: "123"},
+					auth: auth,
 				},
-			})
+			});
 		},
 		setPart: function(line, partId){
 			gatewaySocket.emit("setLine", {
 				method: "setPart",
 				line: line,
 				data: {
-					auth: {key: "123"},
+					auth: auth,
 					partId: partId,
 				},
-			})
+			});
 		},
 		// setSelectedSerie: function(line, index){
 		// 	socket.emit("setSelectedSerie", {
@@ -54,50 +43,73 @@ angular.module("dsm.services.sockets", [
 		// 		index: index,
 		// 	})
 		// },
-		// setUser: function(line, user){
-		// 	socket.emit("setUser", {
-		// 		auth: auth,
-		// 		user: user,
-		// 	})
-		// },
+		setUser: function(line, user){
+			gatewaySocket.emit("setLine", {
+				method: "setUser",
+				line: line,
+				data: {
+					auth: auth,
+					user: user,
+				},
+			});
+		},
 		setDisziplin: function(line, disziplin){
 			gatewaySocket.emit("setLine", {
 				method: "setDisziplin",
 				line: line,
 				data: {
-					auth: {key: "123"},
+					auth: auth,
 					disziplin: disziplin,
 				},
-			})
+			});
 		},
 		print: function(line){
 			gatewaySocket.emit("setLine", {
 				method: "print",
 				line: line,
 				data: {
-					auth: {key: "123"},
+					auth: auth,
 				},
-			})
+			});
 		},
-		// getTempToken: function(line){
-		// 	socket.emit("getTempToken", {
-		// 		auth: auth,
-		// 	})
-		// },
-
-
-		// showMessage: function(line, type, title){
-		// 	socket.emit("showMessage", {
-		// 		auth: auth,
-		// 		type: type,
-		// 		title: title,
-		// 	})
-		// },
-		// hideMessage: function(line){
-		// 	socket.emit("hideMessage", {
-		// 		auth: auth,
-		// 	})
-		// },
+		getTempToken: function(line){
+			gatewaySocket.emit("setLine", {
+				method: "getTempToken",
+				line: line,
+				data: {
+					auth: auth,
+				},
+			});
+		},
+		showMessage: function(line, type, title){
+			gatewaySocket.emit("setLine", {
+				method: "showMessage",
+				line: line,
+				data: {
+					auth: auth,
+					type: type,
+					title: title,
+				}
+			});
+		},
+		hideMessage: function(line){
+			gatewaySocket.emit("setLine", {
+				method: "hideMessage",
+				line: line,
+				data: {
+					auth: auth,
+				}
+			});
+		},
+		shutdown: function(line){
+			gatewaySocket.emit("setLine", {
+				method: "shutdown",
+				line: line,
+				data: {
+					auth: auth,
+				}
+			});
+		}
 	};
 
 	return gatewaySocket

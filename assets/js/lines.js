@@ -5,7 +5,7 @@ angular.module("dsm.lines", [
 	"ui.select",
 	"restangular",
 ])
-.controller("LinesController", function ($scope, dsmSocket, $cookies, gatewaySocket, Restangular, dscAPI) {
+.controller("LinesController", function ($scope, $cookies, gatewaySocket, Restangular) {
 	$scope.store = {
 		linesSelected: {},
 		linesSelectedCount: 0,
@@ -26,7 +26,7 @@ angular.module("dsm.lines", [
 
 
 
-	// store lines recived from DSC-Gateway
+	// -- store lines recived from DSC-Gateway --
 	$scope.lines = [];
 	gatewaySocket.emit("getLines", {});
 
@@ -40,12 +40,13 @@ angular.module("dsm.lines", [
 
 		$scope.lines = data.lines
 	})
+	// --------------------------------------------
 
 
 
 
 
-	// toggle selected for line
+	// ----- toggle selected for line -------
 	$scope.toggle = function(id, forceSet){
 		if (forceSet != undefined){
 			$scope.store.linesSelected[id] = forceSet;
@@ -68,8 +69,8 @@ angular.module("dsm.lines", [
 		for(id in $scope.lines){
 			$scope.toggle(id, value)
 		}
-		console.log(value)
 	}
+	// ----------------------------------------
 
 
 
@@ -193,105 +194,169 @@ angular.module("dsm.lines", [
 				gatewaySocket.api.setNewTarget(id)
 			})
 		},
+		showMessage: function(type, title){
+			performOnSelected(function(id){
+				gatewaySocket.api.showMessage(id, type, title)
+			})
+		},
+		hideMessage: function(){
+			performOnSelected(function(id){
+				gatewaySocket.api.hideMessage(id)
+			})
+		},
+		shutdown: function(){
+			performOnSelected(function(id){
+				gatewaySocket.api.shutdown(id)
+			})
+		},
+		wakeonlan: function(){
+			performOnSelected(function(id){
+				gatewaySocket.api.wakeonlan(id)
+			})
+		},
+		resetUser: function(){
+			performOnSelected(function(id){
+				gatewaySocket.api.setUser(id, {
+					firstName: "Gast",
+					lastName: "",
+					verein: "",
+					manschaft: "",
+				})
+			})
+		},
+		setUser: function(){
+			if ($scope.selected.user != undefined && $scope.selected.user.firstName != undefined){
+				performOnSelected(function(id){
+					gatewaySocket.api.setUser(id, {
+						firstName: $scope.selected.user.firstName,
+						lastName: $scope.selected.user.lastName,
+						verein: $scope.selected.user.verein,
+						manschaft: "",
+					})
+				})
+			}
+		},
+		openLine: function(){
+			performOnSelected(function(id){
+				var line = $scope.lines[id];
+				var url = "http://" + line.ip + ":" + line.port;
+				window.open(url, '_blank');
+				// TODO add auth
+			});
+		},
+		openLog: function(){
+			performOnSelected(function(id){
+				var line = $scope.lines[id];
+				var url = "http://" + line.ip + ":" + line.port + "/log";
+				window.open(url, '_blank');
+			});
+		}
 	};
 
 
-	// Set power for line
-	// $scope.setPower = function(value){
-	// 	performOnSelected(function(line){
-	// 		console.log("Set Power " + value + " " + line._id)
+
+
+
+
+
+	$scope.$watch("selected.user", function() {
+		if ($scope.selected.user != undefined && $scope.selected.user.vereinID != undefined){
+			$scope.selected.verein = {
+				id: $scope.selected.user.vereinID,
+				name: $scope.selected.user.verein,
+			};
+		}
+		$scope.actions.setUser();
+	});
+
+	$scope.getUsers = function(serachString) {
+		var query = {
+			search: serachString,
+			limit: 100,
+		}
+
+		if ($scope.selected.verein != undefined){
+			query.equals_vereinID = $scope.selected.verein.id;
+		}
+		return Restangular.one('/api/user').get(query).then(function(users) {
+			return users;
+		});
+	};
+	$scope.getUserTitle = function(user){
+		if (user != undefined){
+			return user.firstName + " " + user.lastName;
+		}
+		return "";
+	}
+
+
+
+	$scope.$watch("selected.verein", function() {
+		if ($scope.selected.verein != undefined && $scope.selected.user != undefined && $scope.selected.verein.id != $scope.selected.user.vereinID){
+			$scope.selected.user = null;
+		}
+	});
+
+	$scope.getVereine = function(serachString) {
+		return Restangular.one('/api/verein').get({
+			search: serachString,
+			limit: 1000,
+		}).then(function(vereine) {
+			return vereine;
+		});
+	};
+
+
+
+
+	// $scope.selectVerein = function(){
+	// 	// dsmSocket.emit("getUsersForVerein", {
+	// 	// 	vereinID: $scope.selected.verein.id,
+	// 	// })
+	// 	// if ($scope.selected.schuetze != undefined){
+	// 	// 	console.log($scope.selected.schuetze)
+	// 	// 	if ($scope.selected.schuetze.vereinID != $scope.selected.verein.id){
+	// 	// 		$scope.selected.schuetze = {}
+	// 	// 	}
+	// 	// }
+	// }
+	// dsmSocket.on("setUsersForVerein", function(users){
+	// 	$scope.schuetzen = users
+	// })
 	//
-	// 		dsmSocket.emit("setPower", {
-	// 			state: value,
-	// 			line: line._id,
-	// 		})
+	// $scope.selectSchuetze = function(){
+	// 	var user = {
+	// 		firstName: $scope.selected.schuetze.firstName,
+	// 		lastName: $scope.selected.schuetze.lastName,
+	// 		verein: $scope.selected.verein.name,
+	// 		vereinID: $scope.selected.verein.id,
+	// 		manschaft: "",
+	// 	}
+	//
+	// 	performOnSelected(function(line){
+	// 		if (line.isConnected == true){
+	// 			// line.socket.emit("setUser", user)
+	// 			console.log(user)
+	// 			line.dscAPI.setUser(user)
+	// 		}
 	// 	})
 	// }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-	$scope.selectVerein = function(){
-		// dsmSocket.emit("getUsersForVerein", {
-		// 	vereinID: $scope.selected.verein.id,
-		// })
-		// if ($scope.selected.schuetze != undefined){
-		// 	console.log($scope.selected.schuetze)
-		// 	if ($scope.selected.schuetze.vereinID != $scope.selected.verein.id){
-		// 		$scope.selected.schuetze = {}
-		// 	}
-		// }
-	}
-	dsmSocket.on("setUsersForVerein", function(users){
-		$scope.schuetzen = users
-	})
-
-	$scope.selectSchuetze = function(){
-		var user = {
-			firstName: $scope.selected.schuetze.firstName,
-			lastName: $scope.selected.schuetze.lastName,
-			verein: $scope.selected.verein.name,
-			vereinID: $scope.selected.verein.id,
-			manschaft: "",
-		}
-
-		performOnSelected(function(line){
-			if (line.isConnected == true){
-				// line.socket.emit("setUser", user)
-				console.log(user)
-				line.dscAPI.setUser(user)
-			}
-		})
-	}
-
-
-	$scope.messageType = "danger"
-	$scope.showMessage = function(show){
-		performOnSelected(function(line){
-			if (show == true){
-				line.dscAPI.showMessage($scope.messageType, $scope.messageTitle)
-			}
-			else {
-				line.dscAPI.hideMessage()
-			}
-		})
-	}
-	$scope.showMessageType = function(type){
-		if (type == "sicherheit"){
-			performOnSelected(function(line){
-				line.dscAPI.showMessage("danger", "Sicherheit")
-			})
-		}
-		else if (type == "pause"){
-			performOnSelected(function(line){
-				line.dscAPI.showMessage("default", "Pause")
-			})
-		}
-	}
-
-
 	// Select Helper
-	$scope.groupByType = function (item){
-		return item.type;
-	};
-	$scope.groupSetup = {
-		theme: "bootstrap"
-	};
-
-	function init(){
-		$scope.selectVerein()
-	}
-	init()
+	// $scope.groupByType = function (item){
+	// 	return item.type;
+	// };
+	// $scope.groupSetup = {
+	// 	theme: "bootstrap"
+	// };
+	//
+	// function init(){
+	// 	$scope.selectVerein()
+	// }
+	// init()
 
 
 

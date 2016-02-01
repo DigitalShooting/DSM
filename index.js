@@ -8,7 +8,6 @@ var config = require("./config/")
 var routes = require("./routes")
 var exec = require("exec")
 var child_process = require('child_process')
-var mysql = require("./lib/mysql.js")
 var proxy = require('express-http-proxy');
 
 var app = express({ strict: true })
@@ -69,40 +68,8 @@ app.use('/api/', proxy("127.0.0.1:" + config.network.api.port, {
 
 // Set up express & socket.io
 var server = http.Server(app)
-var io = require('socket.io')(server)
+var io = require('socket.io')(server) // Only for client script TODO -> bower and remove
 server.listen(config.network.webinterface.port, config.network.webinterface.address)
 server.on('listening', function() {
 	console.log('Express server started on at %s:%s', server.address().address, server.address().port)
-})
-
-
-
-
-
-// socket.io
-io.on('connection', function(socket){
-
-	// TODO: Move to DSC Gateway
-	// set power performs wakeonlan or ssh shutdown on target machine
-	socket.on('setPower', function(data){
-		var line = config.lines[data.line]
-		if (data.state == true){
-			// Power On
-			exec(["wakeonlan", line.mac], function(err, out, code) { })
-		}
-		else {
-			// Power Off
-			child_process.exec(["ssh -t "+line.user+"@"+line.ip+" 'sudo shutdown -h now'"], function(err, out, code) { })
-		}
-	})
-
-
-
-
-	// DSC Gateway
-	socket.on("setLine", function(data){
-		var line = data.line
-		var method = data.method
-		var object = data.data
-	})
 })
