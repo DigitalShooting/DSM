@@ -1,7 +1,7 @@
 var zoom = require("./zoom.js")
 
 module.exports = {
-	title: "LG 10m (Blank)",
+	title: "LG 10m Blank",
 	ringe: [
 		{ value: 10, width:  0.5, color: "black", text: false, textColor: "transparent", zoom: zoom.z1, hitColor: "#00bffF" },
 		{ value:  9, width:  5.5, color: "black", text: false, textColor: "transparent", zoom: zoom.z1, hitColor: "#00bffF" },

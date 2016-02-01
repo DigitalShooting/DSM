@@ -9,12 +9,12 @@ block body
 		ul(class="nav nav-pills nav-stacked")
 			li(ng-repeat="line in lines" class="col-md-12")
 				div(class="btn-group fullWidth" role="group")
-					button(type="button" ng-click="toggleAll(false); toggle(line.id);" class="btn col-md-10 {{line.online ? 'btn-primary btn-full-primary' : 'btn-default' }} {{store.linesSelected[line.id] == true ? 'selected' : 'deselected'}}") {{line.label}}
-					button(type="button" ng-click="toggle(line.id)" class="btn col-md-2 {{line.online ? 'btn-primary' : 'btn-default' }} {{store.linesSelected[line.id] == true ? 'selected' : 'deselected'}}")
+					button(type="button" ng-click="toggleAll(false); toggle(line.id); didToggle();" class="btn col-md-10 {{line.online ? 'btn-primary btn-full-primary' : 'btn-default' }} {{store.linesSelected[line.id] == true ? 'selected' : 'deselected'}}") {{line.label}}
+					button(type="button" ng-click="toggle(line.id); didToggle();" class="btn col-md-2 {{line.online ? 'btn-primary' : 'btn-default' }} {{store.linesSelected[line.id] == true ? 'selected' : 'deselected'}}")
 						span(class="glyphicon {{store.linesSelected[line.id] == true ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
 			li(class="col-md-12 btn-group" role="group")
-				button(type="button" ng-click="toggleAll(true)" class="btn col-md-10 btn-default") Alle markieren
-				button(type="button" ng-click="toggleAll(false)" class="btn col-md-2 btn-default")
+				button(type="button" ng-click="toggleAll(true); didToggle();" class="btn col-md-10 btn-default") Alle markieren
+				button(type="button" ng-click="toggleAll(false); didToggle();" class="btn col-md-2 btn-default")
 					span(class="glyphicon glyphicon-remove" aria-hidden="true")
 		
 		
@@ -45,7 +45,6 @@ block body
 				div(class="bs-callout bs-callout-info" ng-hide="store.linesSelectedCount != 0")
 					h4 Info
 					p Kein Stand ausgewählt.
-				//- div(class="alert alert-info" role="alert" ng-hide="store.linesSelectedCount != 0") Kein Stand ausgewählt.
 
 
 
@@ -69,16 +68,16 @@ block body
 
 
 				//- Disziplinen selection
-				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0")
+				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount == 0")
 					h4 Disziplin & Scheibe
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Disziplin
 							div(class="col-sm-10")
 								ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="actions.selectDisziplin()")
-									ui-select-match {{selected.disziplin.title}}
+									ui-select-match {{selected.disziplin.title}} ({{selected.disziplin.scheibe.title}})
 									ui-select-choices(group-by="groupByType" repeat="disziplin in disziplinen | propsFilter: {title: $select.search}" )
-										div {{disziplin.title}}
+										div {{disziplin.title}} ({{disziplin.scheibe.title}})
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Mode
 							div(class="col-sm-10")
@@ -97,7 +96,9 @@ block body
 										|  Zurücksetzen
 
 
-				//- Main controls
+
+			.col-md-6
+				//- Druck & Log
 				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0")
 					h4 Druck & Log
 					div(class="btn-group fullWidth" role="group")
@@ -109,8 +110,6 @@ block body
 							|  Log öffnen
 
 
-
-			.col-md-6
 				//- User
 				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1")
 					h4 Schütze
@@ -121,7 +120,7 @@ block body
 								.input-group
 									input(onClick="this.select();" type="text" ng-model="selected.verein" placeholder="Verein" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-template-url="vereinTypeahead.html" typeahead-no-results="noResultsVerein" class="form-control")
 									span(class="input-group-btn")
-										button(type="button" class="btn btn-default btn noMargin" ng-click="selected.verein = null;")
+										button(type="button" class="btn btn-default btn noMargin" ng-click="selected.verein = '';")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
 								i(ng-show="loadingVereine" class="glyphicon glyphicon-refresh")
 								div(ng-show="noResultsVerein")
@@ -131,7 +130,7 @@ block body
 							label(class="col-sm-2 control-label") Schütze:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.user" placeholder="Schütze" uib-typeahead="user for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-template-url="userTypeahead.html" typeahead-no-results="noResultsUser" class="form-control")
+									input(onClick="this.select();" type="text" ng-model="selected.user" placeholder="Schütze" uib-typeahead="user for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-template-url="userTypeahead.html" typeahead-no-results="noResultsUser" typeahead-on-select="selectUser()" class="form-control")
 									span(class="input-group-btn")
 										button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser()")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
@@ -142,7 +141,7 @@ block body
 
 
 				//- Message
-				div(class="bs-callout bs-callout-info" ng-hide="store.linesSelectedCount == 0")
+				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0")
 					h4 Nachricht
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -155,8 +154,7 @@ block body
 									span(class="glyphicon glyphicon glyphicon-pause" aria-hidden="true")
 									|  Pause
 						div(class="form-group")
-							label(class="col-sm-2 control-label") 
-							div(class="btn-group col-md-10" role="group")
+							div(class="btn-group col-md-12" role="group")
 								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.hideMessage()")
 									span(class="glyphicon glyphicon glyphicon-eye-close" aria-hidden="true")
 									|  Verstecken

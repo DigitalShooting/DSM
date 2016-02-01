@@ -13,6 +13,8 @@ angular.module("dsm.lines", [
 
 	$scope.selected = {}
 
+	$scope.sessionCache = {}
+
 
 
 	Restangular.all("/api/disziplinen").getList({
@@ -32,15 +34,78 @@ angular.module("dsm.lines", [
 
 	// listen to DSC-Gateway updates
 	gatewaySocket.on("disconnect", function(data){
-		console.log(data)
 		$scope.lines = data.lines
-	})
+	});
 	gatewaySocket.on("onlineLines", function(data){
-		console.log(data)
+		$scope.lines = data.lines;
 
-		$scope.lines = data.lines
-	})
+		$scope.didToggle();
+	});
+	gatewaySocket.on("setSession", function(data){
+		$scope.sessionCache[data.line] = data.data
+		// updateLine(data.line);
+		updateUI(); // TODO optimize
+	});
 	// --------------------------------------------
+
+
+
+
+	function updateUI(){
+		var lineID;
+		for (var id in $scope.store.linesSelected){
+			if ($scope.store.linesSelected[id] == true){
+				var line = $scope.lines[id];
+				if (line != undefined && line.online == true){
+					lineID = id;
+					break;
+				}
+			}
+		}
+
+		if (lineID != undefined){
+			var session = $scope.sessionCache[lineID]
+			if (session == undefined){
+				return;
+			}
+
+			if (typeof $scope.selected.user !== "string"){
+				$scope.selected.user = {
+					firstName: session.user.firstName,
+					lastName: session.user.lastName,
+					vereinID: session.user.vereinID,
+				}
+			}
+			if (typeof $scope.selected.verein !== "string"){
+				$scope.selected.verein = {
+					name: session.user.verein,
+					id: session.user.vereinID,
+				}
+			}
+			if (typeof $scope.selected.disziplin !== "string"){
+				$scope.selected.disziplin = session.disziplin;
+
+				loadParts();
+
+				if (typeof $scope.selected.part !== "string"){
+					console.log(session.type, $scope.parts)
+					for (var i in $scope.parts){
+						var part = $scope.parts[i]
+						if (part.id == session.type){
+							$scope.selected.part = part;
+							break;
+						}
+					}
+				}
+			}
+		}
+		else {
+			$scope.selected.user = null;
+			$scope.selected.verein = null;
+			$scope.selected.disziplin = null;
+			$scope.selected.part = null;
+		}
+	}
 
 
 
@@ -70,76 +135,18 @@ angular.module("dsm.lines", [
 			$scope.toggle(id, value)
 		}
 	}
+	$scope.didToggle = function(){
+		updateUI();
+
+		performOnSelected(function(id){
+			gatewaySocket.api.getSession(id);
+		})
+	}
 	// ----------------------------------------
 
 
 
 
-
-
-	// Update ui values
-	// var updateUI = function(forceNameUpdate) {
-	// 	$scope.selectedLines = 0
-	// 	for (var i in $scope.state){
-	// 		if ($scope.state[i] == true){
-	// 			$scope.selectedLines++
-	// 		}
-	// 	}
-	//
-	// 	$scope.selectedConnectedLines = []
-	// 	performOnSelected(function(line){
-	// 		if (line.isConnected){
-	// 			$scope.selectedConnectedLines.push(line)
-	// 		}
-	//
-	//
-	// 		if (line.session){
-	// 			if (forceNameUpdate == true && line.isConnected){
-	// 				$scope.selected.schuetze = line.session.user
-	//
-	// 				$scope.selected.verein = {}
-	// 				$scope.selected.verein.name = line.session.user.verein
-	// 				$scope.selected.verein.id = line.session.user.vereinID
-	//
-	// 				$scope.selectVerein()
-	// 			}
-	//
-	// 			// Format Parts for select
-	// 			$scope.parts = []
-	// 			for (var id in line.session.disziplin.parts){
-	// 				var part = line.session.disziplin.parts[id]
-	// 				part.id = id
-	// 				$scope.parts.push(part)
-	// 			}
-	//
-	// 			// Set current disziplin
-	// 			if (line.config){
-	// 				$scope.selected.disziplin = line.config.disziplinen.all[line.session.disziplin._id]
-	// 			}
-	//
-	// 			// Set current part
-	// 			$scope.selected.part = line.session.disziplin.parts[line.session.type]
-	//
-	// 		}
-	//
-	//
-	// 		if (line.config){
-	//
-	// 			// Set disziplinen for select
-	// 			$scope.disziplinen = []
-	// 			for (var i in line.config.disziplinen.groups){
-	// 				var group = line.config.disziplinen.groups[i]
-	// 				for (var key in group.disziplinen){
-	// 					var disziplin = line.config.disziplinen.all[group.disziplinen[key]]
-	// 					disziplin.type = group.title
-	// 					$scope.disziplinen.push(disziplin)
-	// 				}
-	//
-	// 			}
-	//
-	// 		}
-	// 	})
-	// }
 
 
 
@@ -148,7 +155,7 @@ angular.module("dsm.lines", [
 		for (var id in $scope.store.linesSelected){
 			if ($scope.store.linesSelected[id] == true){
 				var line = $scope.lines[id];
-				if (line.online == true){
+				if (line != undefined && line.online == true){
 					callback(id);
 				}
 			}
@@ -162,57 +169,49 @@ angular.module("dsm.lines", [
 		resetLine: function(){
 			performOnSelected(function(id){
 				gatewaySocket.api.setDisziplin(id, $scope.selected.disziplin._id)
-			})
+			});
 			// TODO reset name
 		},
 		selectDisziplin: function(){
-
-			// Update Parts (TODO move to function)
-			$scope.parts = [];
-			for (id in $scope.selected.disziplin.parts){
-				var part = $scope.selected.disziplin.parts[id];
-				part.id = id;
-				$scope.parts.push(part);
-			}
-
+			loadParts();
 			performOnSelected(function(id){
 				gatewaySocket.api.setDisziplin(id, $scope.selected.disziplin._id)
-			})
+			});
 		},
 		selectPart: function(){
 			performOnSelected(function(id){
 				gatewaySocket.api.setPart(id, $scope.selected.part.id)
-			})
+			});
 		},
 		print: function(all){
 			performOnSelected(function(id){
 				gatewaySocket.api.print(id)
-			})
+			});
 		},
 		newTarget: function(all){
 			performOnSelected(function(id){
 				gatewaySocket.api.setNewTarget(id)
-			})
+			});
 		},
 		showMessage: function(type, title){
 			performOnSelected(function(id){
 				gatewaySocket.api.showMessage(id, type, title)
-			})
+			});
 		},
 		hideMessage: function(){
 			performOnSelected(function(id){
 				gatewaySocket.api.hideMessage(id)
-			})
+			});
 		},
 		shutdown: function(){
 			performOnSelected(function(id){
 				gatewaySocket.api.shutdown(id)
-			})
+			});
 		},
 		wakeonlan: function(){
 			performOnSelected(function(id){
 				gatewaySocket.api.wakeonlan(id)
-			})
+			});
 		},
 		resetUser: function(){
 			performOnSelected(function(id){
@@ -222,7 +221,7 @@ angular.module("dsm.lines", [
 					verein: "",
 					manschaft: "",
 				})
-			})
+			});
 			$scope.selected.user = null;
 			$scope.selected.verein = null;
 		},
@@ -257,11 +256,23 @@ angular.module("dsm.lines", [
 
 
 
+	// Load available parts for disziplin
+	function loadParts(){
+		// Update Parts (TODO move to function)
+		$scope.parts = [];
+		for (id in $scope.selected.disziplin.parts){
+			var part = $scope.selected.disziplin.parts[id];
+			part.id = id;
+			$scope.parts.push(part);
+		}
+	}
 
 
 
 
-	$scope.$watch("selected.user", function() {
+
+
+	$scope.selectUser = function(){
 		if ($scope.selected.user != undefined && $scope.selected.user.vereinID != undefined){
 			$scope.selected.verein = {
 				id: $scope.selected.user.vereinID,
@@ -269,9 +280,9 @@ angular.module("dsm.lines", [
 			};
 		}
 		$scope.actions.setUser();
-	});
+	}
 
-	$scope.getUsers = function(serachString) {
+	$scope.getUsers = function(serachString){
 		var query = {
 			search: serachString,
 			limit: 100,
@@ -311,57 +322,10 @@ angular.module("dsm.lines", [
 
 
 
-	// $scope.selectVerein = function(){
-	// 	// dsmSocket.emit("getUsersForVerein", {
-	// 	// 	vereinID: $scope.selected.verein.id,
-	// 	// })
-	// 	// if ($scope.selected.schuetze != undefined){
-	// 	// 	console.log($scope.selected.schuetze)
-	// 	// 	if ($scope.selected.schuetze.vereinID != $scope.selected.verein.id){
-	// 	// 		$scope.selected.schuetze = {}
-	// 	// 	}
-	// 	// }
-	// }
-	// dsmSocket.on("setUsersForVerein", function(users){
-	// 	$scope.schuetzen = users
-	// })
-	//
-	// $scope.selectSchuetze = function(){
-	// 	var user = {
-	// 		firstName: $scope.selected.schuetze.firstName,
-	// 		lastName: $scope.selected.schuetze.lastName,
-	// 		verein: $scope.selected.verein.name,
-	// 		vereinID: $scope.selected.verein.id,
-	// 		manschaft: "",
-	// 	}
-	//
-	// 	performOnSelected(function(line){
-	// 		if (line.isConnected == true){
-	// 			// line.socket.emit("setUser", user)
-	// 			console.log(user)
-	// 			line.dscAPI.setUser(user)
-	// 		}
-	// 	})
-	// }
 
-
-
-
-	// Select Helper
-	// $scope.groupByType = function (item){
-	// 	return item.type;
-	// };
-	// $scope.groupSetup = {
-	// 	theme: "bootstrap"
-	// };
-	//
-	// function init(){
-	// 	$scope.selectVerein()
-	// }
-	// init()
-
-
-
+	$scope.groupByType = function (item){
+		return item.type;
+	};
 
 
 
@@ -375,72 +339,3 @@ angular.module("dsm.lines", [
 		$cookies.putObject('LinesController', $scope.store, {});
 	}
 })
-
-
-
-
-
-
-// .controller('stand', function ($scope, lines, $timeout) {
-// 	$scope.empty = true
-// 	$scope.stand
-//
-// 	$timeout(function(){
-// 		$scope.$watch('stand', function(value, old){
-// 			$scope.stand = value
-// 			updateUI()
-// 		})
-// 	})
-//
-//
-// 	$('a[data-toggle="tab"]').on('shown.bs.tab', updateUI)
-// 	function updateUI(){
-// 		var socket = $scope.stand.socket
-//
-// 		socket.emit('getSession', {})
-// 		socket.on("setSession", function(session){
-// 			$scope.zoomlevel = session.disziplin.scheibe.defaultZoom
-//
-// 			$scope.scheibe = session.disziplin.scheibe
-// 			$scope.probeecke = session.disziplin.parts[session.type].probeEcke
-//
-// 			$scope.session = session
-//
-// 			if (session.serien.length > 0){
-// 				$scope.activeSerie = session.serien[session.selection.serie].shots
-//
-// 				$scope.serie = session.serien[session.selection.serie].shots
-// 				$scope.selectedshotindex = session.selection.shot
-// 				$scope.activeShot = session.serien[session.selection.serie].shots[session.selection.shot]
-// 				$scope.empty = false
-//
-// 				if ($scope.serie != undefined && $scope.serie.length != 0) {
-// 					var ringInt = $scope.serie[session.selection.shot].ring.int
-// 					var ring = $scope.scheibe.ringe[$scope.scheibe.ringe.length - ringInt]
-//
-// 					if (ring){
-// 						$scope.zoomlevel = ring.zoom
-// 					}
-// 					else if (ringInt == 0){
-// 						$scope.zoomlevel = scheibe.minZoom
-// 					}
-// 				}
-// 			}
-// 			else {
-// 				$scope.activeShot = undefined
-// 				$scope.serie = []
-// 				$scope.selectedshotindex = -1
-// 				$scope.empty = true
-// 			}
-// 		})
-// 	}
-// 	$scope.updateUI = updateUI
-//
-// 	return {
-// 		scope: {
-// 			stand: '=',
-// 		},
-// 	}
-//
-//
-// })

@@ -109,7 +109,16 @@ angular.module("dsm.services.sockets", [
 					auth: auth,
 				}
 			});
-		}
+		},
+		getSession: function(line){
+			gatewaySocket.emit("setLine", {
+				method: "getSession",
+				line: line,
+				data: {
+					auth: auth,
+				}
+			});
+		},
 	};
 
 	return gatewaySocket
