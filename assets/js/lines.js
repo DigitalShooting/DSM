@@ -5,11 +5,13 @@ angular.module("dsm.lines", [
 	"ui.select",
 	"restangular",
 ])
-.controller("LinesController", function ($scope, lines, dsmSocket, $cookies, gatewaySocket, Restangular) {
+.controller("LinesController", function ($scope, dsmSocket, $cookies, gatewaySocket, Restangular, dscAPI) {
 	$scope.store = {
 		linesSelected: {},
 		linesSelectedCount: 0,
 	};
+
+	$scope.selected = {}
 
 
 
@@ -57,7 +59,6 @@ angular.module("dsm.lines", [
 			if ($scope.store.linesSelected[id] == true) {
 				$scope.store.linesSelectedCount++;
 			}
-
 		}
 
 		writeToCookie();
@@ -143,53 +144,82 @@ angular.module("dsm.lines", [
 
 	// Performs method on all selected clients
 	function performOnSelected(callback){
-		$scope.lines.forEach(function(line){
-			if($scope.state[line._id] == true){
-				callback(line)
+		for (var id in $scope.store.linesSelected){
+			if ($scope.store.linesSelected[id] == true){
+				var line = $scope.lines[id];
+				if (line.online == true){
+					callback(id);
+				}
 			}
-		})
+		}
 	}
 
 
 
+	// All funcs, to update dscs
+	$scope.actions = {
+		resetLine: function(){
+			performOnSelected(function(id){
+				gatewaySocket.api.setDisziplin(id, $scope.selected.disziplin._id)
+			})
+			// TODO reset name
+		},
+		selectDisziplin: function(){
 
-	// Send selected disziplin
-	$scope.selectDisziplin = function(){
-		performOnSelected(function(line){
-			if (line.isConnected == true){
-				line.dscAPI.setDisziplin($scope.selected.disziplin._id)
+			// Update Parts (TODO move to function)
+			$scope.parts = [];
+			for (id in $scope.selected.disziplin.parts){
+				var part = $scope.selected.disziplin.parts[id];
+				part.id = id;
+				$scope.parts.push(part);
 			}
-		})
-	}
 
-	// Send selected part
-	$scope.selectPart = function(){
-		performOnSelected(function(line){
-			if (line.isConnected == true){
-				line.dscAPI.setPart($scope.selected.part.id)
-			}
-		})
-	}
+			performOnSelected(function(id){
+				gatewaySocket.api.setDisziplin(id, $scope.selected.disziplin._id)
+			})
+		},
+		selectPart: function(){
+			performOnSelected(function(id){
+				gatewaySocket.api.setPart(id, $scope.selected.part.id)
+			})
+		},
+		print: function(all){
+			performOnSelected(function(id){
+				gatewaySocket.api.print(id)
+			})
+		},
+		newTarget: function(all){
+			performOnSelected(function(id){
+				gatewaySocket.api.setNewTarget(id)
+			})
+		},
+	};
+
 
 	// Set power for line
-	$scope.setPower = function(value){
-		performOnSelected(function(line){
-			console.log("Set Power " + value + " " + line._id)
+	// $scope.setPower = function(value){
+	// 	performOnSelected(function(line){
+	// 		console.log("Set Power " + value + " " + line._id)
+	//
+	// 		dsmSocket.emit("setPower", {
+	// 			state: value,
+	// 			line: line._id,
+	// 		})
+	// 	})
+	// }
 
-			dsmSocket.emit("setPower", {
-				state: value,
-				line: line._id,
-			})
-		})
-	}
 
-	// Print
-	$scope.print = function(all){
-		performOnSelected(function(line){
-			console.log(line, all)
-			line.dscAPI.print(all)
-		})
-	}
+
+
+
+
+
+
+
+
+
+
+
 
 	$scope.selectVerein = function(){
 		// dsmSocket.emit("getUsersForVerein", {

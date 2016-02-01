@@ -1,8 +1,8 @@
 angular.module('dsc.services.dscAPI', [])
 
 
-.factory('dscAPI', function(){
-	return function(socket, auth){
+.factory('dscAPI', function(gatewaySocket){
+	return function(id, auth){
 		return {
 			setNewTarget: function(){
 				socket.emit("newTarget", {
@@ -34,7 +34,7 @@ angular.module('dsc.services.dscAPI', [])
 				})
 			},
 			setDisziplin: function(disziplin){
-				socket.emit("setDisziplin", {
+				gatewaySocket.emit("setDisziplin", {
 					auth: auth,
 					disziplin: disziplin,
 				})

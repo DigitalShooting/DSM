@@ -58,35 +58,36 @@ block body
 						div(class="col-sm-6")
 							h4 Disziplin
 						div(class="col-sm-6")
-							button(type="submit" class="btn btn-default noMargin pull-right" ng-click="resetLine()")
+							button(type="submit" class="btn btn-default noMargin pull-right" ng-click="actions.resetLine()")
 								span(class="glyphicon glyphicon glyphicon-remove" aria-hidden="true")
 								|  Zurücksetzen
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Disziplin
 							div(class="col-sm-10")
-								ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectDisziplin()")
+								ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="actions.selectDisziplin()")
 									ui-select-match {{selected.disziplin.title}}
 									ui-select-choices(group-by="groupByType" repeat="disziplin in disziplinen | propsFilter: {title: $select.search}" )
 										div {{disziplin.title}}
-								//- input(onClick="this.select();" type="text" ng-model="heim" placeholder="" uib-typeahead="heim as heim for heim in getManschaft($viewValue)" typeahead-loading="loadingHeim" typeahead-template-url="disziplinTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResultsDisziplin" class="form-control")
-								//- i(ng-show="loadingHeim" class="glyphicon glyphicon-refresh")
-								//- div(ng-show="noResultsDisziplin")
-								//- 	i(class="glyphicon glyphicon-remove")
-								//- 	| Keine Disziplin gefunden
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Mode
 							div(class="col-sm-10")
-								ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="selectPart()")
+								ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="actions.selectPart()")
 									ui-select-match {{selected.part.title}}
 									ui-select-choices(repeat="part in parts | propsFilter: {title: $select.search}")
 										div {{part.title}}
 						div(class="form-group")
 							label(for="" class="col-md-2 control-label") Drucken
 							div(class="btn-group col-md-10" role="group")
-								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="print(true)")
+								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.print(true)")
 									span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
 									|  Ausdruck erstellen
+						div(class="form-group")
+							label(for="" class="col-md-2 control-label") Scheibe
+							div(class="btn-group col-md-10" role="group")
+								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.newTarget()")
+									span(class="glyphicon glyphicon glyphicon-plus" aria-hidden="true")
+									|  Neue Scheibe
 		
 		
 			//- Message
