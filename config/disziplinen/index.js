@@ -59,6 +59,7 @@ module.exports = {
 				lg.training_5._id,
 				lg.auflage._id,
 				lg.blank._id,
+				lg.dreiStellung._id,
 			]
 		},
 		{
@@ -74,9 +75,8 @@ module.exports = {
 			]
 		},
 		{
-			title: "Sonstige",
+			title: "Zimmerstutzen",
 			disziplinen: [
-				lg.dreiStellung._id,
 				gewehr15.zimmerstutzen._id,
 			]
 		},

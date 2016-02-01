@@ -43,7 +43,6 @@ angular.module("dsm.lines", [
 	});
 	gatewaySocket.on("setSession", function(data){
 		$scope.sessionCache[data.line] = data.data
-		// updateLine(data.line);
 		updateUI(); // TODO optimize
 	});
 	// --------------------------------------------
@@ -88,7 +87,6 @@ angular.module("dsm.lines", [
 				loadParts();
 
 				if (typeof $scope.selected.part !== "string"){
-					console.log(session.type, $scope.parts)
 					for (var i in $scope.parts){
 						var part = $scope.parts[i]
 						if (part.id == session.type){
