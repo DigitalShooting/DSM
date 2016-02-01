@@ -223,6 +223,8 @@ angular.module("dsm.lines", [
 					manschaft: "",
 				})
 			})
+			$scope.selected.user = null;
+			$scope.selected.verein = null;
 		},
 		setUser: function(){
 			if ($scope.selected.user != undefined && $scope.selected.user.firstName != undefined){
