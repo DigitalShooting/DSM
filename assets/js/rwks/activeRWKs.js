@@ -235,22 +235,6 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookie
 	$scope.cancel = function () {
 		$uibModalInstance.close($scope.rwk);
 	};
-
-
-	$scope.getManschaft = function(serachString) {
-		return Restangular.one('/api/manschaft').get({
-			search: serachString,
-			limit: 1000,
-		}).then(function(manschaften) {
-			return manschaften;
-		});
-	};
-	$scope.getManschaftTitle = function(manschaft){
-		if (manschaft.verein != undefined){
-			return manschaft.verein + " " + manschaft.name + " ("+manschaft.saison+")";
-		}
-		return "";
-	}
 });
 
 
@@ -397,5 +381,5 @@ app.controller('ActiveRWKScoresController', function (Restangular, $scope, $cook
 	$scope.cancel = function () {
 		$uibModalInstance.close($scope.rwk);
 	};
-	
+
 });

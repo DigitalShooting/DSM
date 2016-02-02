@@ -28,23 +28,8 @@ block main
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(saison)")
 						span(class="glyphicon glyphicon-pencil" aria-hidden="true")
 						|  Bearbeiten
-	div(class="dropup noMargin")
-		div(class="btn-group pull-left" uib-dropdown is-open="status.isopen")
-			button(id="single-button" type="button" class="btn btn-default noMargin" uib-dropdown-toggle ng-disabled="disabled")
-				| Einträge pro Seite: {{store.itemsPerPage}} 
-				span(class="caret")
-			ul(class="uib-dropdown-menu" role="menu" aria-labelledby="single-button")
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 10;") 10
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 20") 20
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 50") 50
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 100") 100
-	div(class="noMargin pull-right")
-		uib-pagination(total-items="totalItems" items-per-page="store.itemsPerPage" ng-model="currentPage" max-size="paginationMaxSize" class="pagination noMargin" boundary-links="true" previous-text="Zurück" next-text="Weiter" first-text="Erste" last-text="Letzte")
-	
+	+itemsPerPage()
+	+pagination()
 	
 	//- modalEditingOverlay template
 	script(type="text/ng-template" id="modalEditingOverlay.html")

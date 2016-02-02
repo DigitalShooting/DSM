@@ -39,29 +39,8 @@ block main
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editScores(rwk)")
 						span(class="glyphicon glyphicon-stats" aria-hidden="true")
 						|  Ergebnisse
-	div(class="dropup noMargin")
-		div(class="btn-group pull-left" uib-dropdown is-open="status.isopen")
-			button(id="single-button" type="button" class="btn btn-default noMargin" uib-dropdown-toggle ng-disabled="disabled")
-				| Einträge pro Seite: {{store.itemsPerPage}} 
-				span(class="caret")
-			ul(class="uib-dropdown-menu" role="menu" aria-labelledby="single-button")
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 10;") 10
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 20") 20
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 50") 50
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 100") 100
-	div(class="noMargin pull-right")
-		uib-pagination(total-items="totalItems" items-per-page="store.itemsPerPage" ng-model="currentPage" max-size="paginationMaxSize" class="pagination noMargin" boundary-links="true" previous-text="Zurück" next-text="Weiter" first-text="Erste" last-text="Letzte")
-	
-	
-	
-	
-	//- manschaftTypeahead template
-	script(type="text/ng-template" id="manschaftTypeahead.html")
-		a {{match.model.verein}} {{match.model.name}} ({{match.model.saison}})
+	+itemsPerPage()
+	+pagination()
 	
 	
 	
@@ -83,18 +62,10 @@ block main
 						uib-datepicker(ng-model="date" show-weeks="false" class="well well-sm")
 					div(class="form-group col-md-6")
 						label(class="control-label") Heim Manschaft:
-						input(onClick="this.select();" type="text" ng-model="heim" placeholder="" uib-typeahead="heim as heim for heim in getManschaft($viewValue)" typeahead-loading="loadingHeim" typeahead-template-url="manschaftTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResultsHeim" class="form-control")
-						i(ng-show="loadingHeim" class="glyphicon glyphicon-refresh")
-						div(ng-show="noResultsHeim")
-							i(class="glyphicon glyphicon-remove")
-							| Keine Manschaft gefunden
+						manschaft-typeahead(user="user" verein="verein" manschaft="heim")
 					div(class="form-group col-md-6")
 						label(class="control-label") Gast Manschaft:
-						input(onClick="this.select();" type="text" ng-model="gast" placeholder="" uib-typeahead="gast as gast.name for gast in getManschaft($viewValue)" typeahead-loading="loadingGast" typeahead-template-url="manschaftTypeahead.html" typeahead-input-formatter="getManschaftTitle($model)" typeahead-no-results="noResultsGast" class="form-control")
-						i(ng-show="loadingGast" class="glyphicon glyphicon-refresh")
-						div(ng-show="noResultsGast")
-							i(class="glyphicon glyphicon-remove")
-							| Keine Manschaft gefunden
+						manschaft-typeahead(user="user" verein="verein" manschaft="gast")
 				.divider
 				div(class="form-group")
 					label(for="message-text" class="control-label") Notiz:

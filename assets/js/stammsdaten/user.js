@@ -142,15 +142,4 @@ app.controller('UserEditController', function (Restangular, $scope, $uibModalIns
 	$scope.cancel = function () {
 		$uibModalInstance.close($scope.user);
 	};
-
-
-
-	$scope.getVereine = function(serachString) {
-		return Restangular.one('/api/verein').get({
-			search: serachString,
-			limit: 1000,
-		}).then(function(vereine) {
-			return vereine;
-		});
-	};
 });

@@ -100,6 +100,7 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 		writeToCookie();
 	};
 
+	// TODO move to main
 	$scope.formateDate = function(unixtime){
 		return moment(unixtime*1000).format("DD.MM.YYYY, HH:mm");
 	}
@@ -119,11 +120,23 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 // Displays an overlay to edit group object
 app.controller('StatsGroupEditController', function (Restangular, $scope, $uibModalInstance, group) {
 	$scope.group = group;
+	$scope.user = {
+		firstName: group.firstName,
+		lastName: group.lastName,
+	}
+	$scope.verein = {
+		name: group.verein,
+		id: group.vereinID,
+	}
+
 
 	$scope.sessions = group.getList("sessions").then(function(sessions) {
 		$scope.sessions = sessions;
 		console.log($scope.sessions)
 	});
+
+	$scope.selected = {}
+
 
 
 	// Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList({
@@ -132,6 +145,12 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 	// }).then(function(sessions) {
 	// 	$scope.sessions = sessions;
 	// });
+
+
+
+
+
+
 
 
 
@@ -157,6 +176,11 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 		$uibModalInstance.close($scope.group);
 	};
 
+
+	// TODO move to main
+	$scope.formateDate = function(unixtime){
+		return moment(unixtime*1000).format("DD.MM.YYYY, HH:mm");
+	}
 
 
 	// $scope.getVereine = function(serachString) {

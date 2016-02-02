@@ -32,23 +32,8 @@ block main
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(manschaft)")
 						span(class="glyphicon glyphicon-pencil" aria-hidden="true")
 						|  Bearbeiten
-	div(class="dropup noMargin")
-		div(class="btn-group pull-left" uib-dropdown is-open="status.isopen")
-			button(id="single-button" type="button" class="btn btn-default noMargin" uib-dropdown-toggle ng-disabled="disabled")
-				| Einträge pro Seite: {{store.itemsPerPage}} 
-				span(class="caret")
-			ul(class="uib-dropdown-menu" role="menu" aria-labelledby="single-button")
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 10;") 10
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 20") 20
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 50") 50
-				li(role="menuitem")
-					a(ng-click="store.itemsPerPage = 100") 100
-	div(class="noMargin pull-right")
-		uib-pagination(total-items="totalItems" items-per-page="store.itemsPerPage" ng-model="currentPage" max-size="paginationMaxSize" class="pagination noMargin" boundary-links="true" previous-text="Zurück" next-text="Weiter" first-text="Erste" last-text="Letzte")
-	
+	+itemsPerPage()
+	+pagination()
 	
 	//- saisonTypeahead template
 	script(type="text/ng-template" id="saisonTypeahead.html")
@@ -82,18 +67,10 @@ block main
 						input(type="text" class="form-control" ng-model="manschaft.name")
 					div(class="form-group col-md-6")
 						label(class="control-label") Runde:
-						input(onClick="this.select();" type="text" ng-model="saison" placeholder="" uib-typeahead="saison as saison.name for saison in getSaison($viewValue)" typeahead-loading="loadingSaisons" typeahead-template-url="saisonTypeahead.html" typeahead-no-results="noResultsSaisons" class="form-control")
-						i(ng-show="loadingSaisons" class="glyphicon glyphicon-refresh")
-						div(ng-show="noResultsSaisons")
-							i(class="glyphicon glyphicon-remove")
-							| Keine Runde gefunden
+						saison-typeahead(saison="saison")
 					div(class="form-group col-md-6")
 						label(class="control-label") Verein:
-						input(onClick="this.select();" type="text" ng-model="verein" placeholder="" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-template-url="vereinTypeahead.html" typeahead-no-results="noResultsVerein" class="form-control")
-						i(ng-show="loadingVereine" class="glyphicon glyphicon-refresh")
-						div(ng-show="noResultsVerein")
-							i(class="glyphicon glyphicon-remove")
-							| Kein Verein gefunden
+						verein-typeahead(verein="verein" manschaft="verein")
 				.divider
 				div(class="row")
 					div(class="form-group col-md-6" ng-hide="members.length == 0")

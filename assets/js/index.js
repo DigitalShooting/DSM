@@ -5,6 +5,7 @@ var app = angular.module('dsm', [
 	"dsm.stammdaten.user", "dsm.stammdaten.verein",
 	"dsm.rwks.saisons", "dsm.rwks.manschaften", "dsm.rwks.rwks", "dsm.rwks.activeRWKs",
 	"dsm.stats.group",
+	"dsm.services.typeahead.user",
 ]);
 
 app.config(['$routeProvider', function($routeProvider) {

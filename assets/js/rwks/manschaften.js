@@ -168,26 +168,6 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 
 
 
-	$scope.getVereine = function(serachString) {
-		return Restangular.one('/api/verein').get({
-			search: serachString,
-			limit: 1000,
-		}).then(function(vereine) {
-			return vereine;
-		});
-	};
-
-
-	$scope.getSaison = function(serachString) {
-		return Restangular.one('/api/saison').get({
-			search: serachString,
-			limit: 1000,
-		}).then(function(saisons) {
-			return saisons;
-		});
-	};
-
-
 
 
 
