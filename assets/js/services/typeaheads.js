@@ -6,10 +6,17 @@ angular.module('dsm.services.typeahead.user', [
 .directive('userTypeahead', ['$timeout', '$window', 'Restangular', function($timeout, $window, Restangular){
 	return {
 		template: "\
-		<input onClick='this.select();' type='text' ng-model='user' placeholder='Schütze' uib-typeahead='user as getSearchTitle(user) for user in getUsers($viewValue)' typeahead-loading='loadingUser' typeahead-input-formatter='getUserTitle($model)' typeahead-no-results='noResultsUser' typeahead-on-select='selectUser()' class='form-control'/>\
-		<i ng-show='loadingUser' class='glyphicon glyphicon-refresh'>\
+		<div class='input-group'>\
+			<input onClick='this.select();' type='text' ng-model='user' placeholder='Schütze' uib-typeahead='user as getSearchTitle(user) for user in getUsers($viewValue)' typeahead-loading='loadingUser' typeahead-input-formatter='getUserTitle($model)' typeahead-no-results='noResultsUser' typeahead-on-select='selectUser()' class='form-control'/>\
+			<span class='input-group-btn'>\
+				<button type='button' class='btn btn-default btn noMargin' ng-click='user = \"\";'>\
+					<span class='glyphicon glyphicon-remove' aria-hidden='true'/>\
+				</button>\
+			</span>\
+		</div>\
+		<i ng-show='loadingUser' class='glyphicon glyphicon-refresh'/>\
 		<div ng-show='noResultsUser'>\
-			<i class='glyphicon glyphicon-remove')\
+			<i class='glyphicon glyphicon-remove'/>\
 			Kein Schütze gefunden\
 		</div>",
 		scope: {
@@ -52,15 +59,6 @@ angular.module('dsm.services.typeahead.user', [
 				}
 				return string;
 			}
-			$timeout(function(){
-				$scope.$watch('user', function(value, old){
-					// render(canvas)
-				})
-				$scope.$watch('verein', function(value, old){
-					// render(canvas)
-				})
-
-			});
 		}
 	};
 }])
@@ -77,9 +75,9 @@ angular.module('dsm.services.typeahead.user', [
 				</button>\
 			</span>\
 		</div>\
-		<i ng-show='loadingVerein' class='glyphicon glyphicon-refresh'>\
+		<i ng-show='loadingVerein' class='glyphicon glyphicon-refresh'/>\
 		<div ng-show='noResultsVerein'>\
-			<i class='glyphicon glyphicon-remove')\
+			<i class='glyphicon glyphicon-remove'/>\
 			Kein Verein gefunden\
 		</div>",
 		scope: {
@@ -109,7 +107,6 @@ angular.module('dsm.services.typeahead.user', [
 						$scope.user = null;
 					}
 				})
-
 			});
 		}
 	};
@@ -127,9 +124,9 @@ angular.module('dsm.services.typeahead.user', [
 				</button>\
 			</span>\
 		</div>\
-		<i ng-show='loadingManschaft' class='glyphicon glyphicon-refresh'>\
+		<i ng-show='loadingManschaft' class='glyphicon glyphicon-refresh'/>\
 		<div ng-show='noResultsManschaft'>\
-			<i class='glyphicon glyphicon-remove')\
+			<i class='glyphicon glyphicon-remove'/>\
 			Keine Manschaft gefunden\
 		</div>",
 		scope: {
@@ -154,7 +151,6 @@ angular.module('dsm.services.typeahead.user', [
 				$scope.$watch('manschaft', function(value, old){
 					// render(canvas)
 				})
-
 			});
 		}
 	};
@@ -172,10 +168,10 @@ angular.module('dsm.services.typeahead.user', [
 				</button>\
 			</span>\
 		</div>\
-		<i ng-show='loadingSaison' class='glyphicon glyphicon-refresh'>\
+		<i ng-show='loadingSaison' class='glyphicon glyphicon-refresh'/>\
 		<div ng-show='noResultsSaison'>\
-			<i class='glyphicon glyphicon-remove')\
-			Keine Manschaft gefunden\
+			<i class='glyphicon glyphicon-remove'/>\
+			Keine Saison gefunden\
 		</div>",
 		scope: {
 			saison: '=',

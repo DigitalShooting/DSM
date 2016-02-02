@@ -123,7 +123,10 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 	$scope.user = {
 		firstName: group.firstName,
 		lastName: group.lastName,
+		verein: group.verein,
+		vereinID: group.vereinID,
 	}
+	console.log(group, $scope.user)
 	$scope.verein = {
 		name: group.verein,
 		id: group.vereinID,
