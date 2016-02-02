@@ -8,9 +8,6 @@ Verwaltungsoberfläche für DSCs, basierend auf der Socket.io API.
 
 ## Funktionen
 
-### Stammdaten
-Verwaltung der Schützen
-
 ### Stände
 Verwaltung der Stände:
 - Ein/ Ausschalten
@@ -19,8 +16,15 @@ Verwaltung der Stände:
 - Schütze
 - Drucken
 
-Ansicht der Stände:
-TODO
+### Stammdaten
+Verwaltung der Schützen
+
+### RWKs
+Durchführung von RWKs
+
+### Statistiken
+Historie aller Daten.
+
 
 
 
