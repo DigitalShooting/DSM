@@ -12,12 +12,15 @@ block main
 	table(class="table table-hover table-striped")
 		thead
 			tr
-				+tableHeader("Datum", "unixtime")
+				+tableHeader("Vorname", "firstName")
+				+tableHeader("Nachname", "lastName")
+				+tableHeader("Verein", "verein")
 				+tableHeader("Linie", "line")
 				+tableHeader("Disziplin", "disziplin")
+				+tableHeader("Datum", "unixtime")
 				th(style="width:10%;")
 			tr
-				td(colspan="3")
+				td(colspan="6")
 					input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
 				td
 					button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
@@ -25,9 +28,12 @@ block main
 						|  Neu
 		tbody
 			tr(ng-repeat="sessionGroup in sessionGroups track by $index")
-				td {{sessionGroup.unixtime}}
+				td {{sessionGroup.firstName}}
+				td {{sessionGroup.lastName}}
+				td {{sessionGroup.verein}}
 				td {{sessionGroup.line}}
 				td {{sessionGroup.disziplin}}
+				td {{formateDate(sessionGroup.unixtime)}}
 				td
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(sessionGroup)")
 						span(class="glyphicon glyphicon-pencil" aria-hidden="true")

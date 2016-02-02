@@ -26,6 +26,7 @@
     "bootstrap": "~3.3.5",
     "restangular": "~1.5.1",
     "select2": "4.x.x",
-    "select2-bootstrap-theme": "~0.1.0-beta.4"
+    "select2-bootstrap-theme": "~0.1.0-beta.4",
+    "moment": "momentjs#~2.11.1"
   }
 }

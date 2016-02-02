@@ -75,7 +75,7 @@ angular.module("dsm.lines", [
 					vereinID: session.user.vereinID,
 				}
 			}
-			if (typeof $scope.selected.verein !== "string"){
+			if (typeof $scope.selected.verein !== "string" && session.user.verein != undefined && session.user.vereinID != undefined){
 				$scope.selected.verein = {
 					name: session.user.verein,
 					id: session.user.vereinID,
@@ -216,10 +216,7 @@ angular.module("dsm.lines", [
 				gatewaySocket.api.setUser(id, {
 					firstName: "Gast",
 					lastName: "",
-					verein: "",
 					manschaft: "",
-					id: "0",
-					vereinID: "0",
 				})
 			});
 			$scope.selected.user = null;
@@ -290,8 +287,7 @@ angular.module("dsm.lines", [
 			limit: 100,
 		}
 
-		console.log($scope.selected.verein)
-		if ($scope.selected.verein != undefined){
+		if ($scope.selected.verein != undefined && typeof $scope.selected.verein !== "string"){
 			query.equals_vereinID = $scope.selected.verein.id;
 		}
 		return Restangular.one('/api/user').get(query).then(function(users) {
@@ -309,7 +305,7 @@ angular.module("dsm.lines", [
 		if (user != undefined){
 			string = user.firstName + " " + user.lastName;
 		}
-		if ($scope.selected.verein == undefined){
+		if ($scope.selected.verein == undefined || typeof $scope.selected.verein === "string"){
 			string += " (" + user.verein + ")";
 		}
 		return string;
@@ -318,7 +314,7 @@ angular.module("dsm.lines", [
 
 
 	$scope.$watch("selected.verein", function() {
-		if ($scope.selected.verein != undefined && $scope.selected.user != undefined && $scope.selected.verein.id != $scope.selected.user.vereinID){
+		if ($scope.selected.verein != undefined && typeof $scope.selected.verein !== "string" && $scope.selected.user != undefined && $scope.selected.verein.id != $scope.selected.user.vereinID){
 			$scope.selected.user = null;
 		}
 	});

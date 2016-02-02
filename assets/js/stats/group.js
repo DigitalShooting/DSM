@@ -100,6 +100,10 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 		writeToCookie();
 	};
 
+	$scope.formateDate = function(unixtime){
+		return moment(unixtime*1000).format("DD.MM.YYYY, HH:mm");
+	}
+
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('StatsGroupController');
