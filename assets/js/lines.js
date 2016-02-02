@@ -218,6 +218,8 @@ angular.module("dsm.lines", [
 					lastName: "",
 					verein: "",
 					manschaft: "",
+					id: "0",
+					vereinID: "0",
 				})
 			});
 			$scope.selected.user = null;
@@ -227,9 +229,11 @@ angular.module("dsm.lines", [
 			if ($scope.selected.user != undefined && $scope.selected.user.firstName != undefined){
 				performOnSelected(function(id){
 					gatewaySocket.api.setUser(id, {
+						id: $scope.selected.user.id,
 						firstName: $scope.selected.user.firstName,
 						lastName: $scope.selected.user.lastName,
 						verein: $scope.selected.user.verein,
+						vereinID: $scope.selected.user.vereinID,
 						manschaft: "",
 					})
 				})
@@ -286,6 +290,7 @@ angular.module("dsm.lines", [
 			limit: 100,
 		}
 
+		console.log($scope.selected.verein)
 		if ($scope.selected.verein != undefined){
 			query.equals_vereinID = $scope.selected.verein.id;
 		}
@@ -298,6 +303,16 @@ angular.module("dsm.lines", [
 			return user.firstName + " " + user.lastName;
 		}
 		return "";
+	}
+	$scope.getUserSearchTitle = function(user){
+		var string = "";
+		if (user != undefined){
+			string = user.firstName + " " + user.lastName;
+		}
+		if ($scope.selected.verein == undefined){
+			string += " (" + user.verein + ")";
+		}
+		return string;
 	}
 
 

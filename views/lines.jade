@@ -22,22 +22,6 @@ block body
 		h1
 			block title
 		
-		
-		//- disziplinTypeahead template
-		script(type="text/ng-template" id="disziplinTypeahead.html")
-			a {{match.model.verein}} {{match.model.name}} ({{match.model.saison}})
-		
-		
-		//- vereinTypeahead template
-		script(type="text/ng-template" id="vereinTypeahead.html")
-			a {{match.model.name}}
-			
-			
-		//- userTypeahead template
-		script(type="text/ng-template" id="userTypeahead.html")
-			a {{match.model.firstName}} {{match.model.lastName}} ({{match.model.verein}})
-				
-		
 		.row
 		
 			//- Alert no selection
@@ -118,7 +102,7 @@ block body
 							label(class="col-sm-2 control-label") Verein:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.verein" placeholder="Verein" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-template-url="vereinTypeahead.html" typeahead-no-results="noResultsVerein" class="form-control")
+									input(onClick="this.select();" type="text" ng-model="selected.verein" placeholder="Verein" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-no-results="noResultsVerein" class="form-control")
 									span(class="input-group-btn")
 										button(type="button" class="btn btn-default btn noMargin" ng-click="selected.verein = '';")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
@@ -130,7 +114,7 @@ block body
 							label(class="col-sm-2 control-label") Schütze:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.user" placeholder="Schütze" uib-typeahead="user for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-template-url="userTypeahead.html" typeahead-no-results="noResultsUser" typeahead-on-select="selectUser()" class="form-control")
+									input(onClick="this.select();" type="text" ng-model="selected.user" placeholder="Schütze" uib-typeahead="user as getUserSearchTitle(user) for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-no-results="noResultsUser" typeahead-on-select="selectUser()" class="form-control")
 									span(class="input-group-btn")
 										button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser()")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
