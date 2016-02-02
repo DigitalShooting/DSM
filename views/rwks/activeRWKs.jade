@@ -18,7 +18,7 @@ block main
 				th(style="width:10%;")
 			tr
 				td(colspan="3")
-					input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
+					input(autofocus onClick="this.select();" type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
 				td(colspan="2")
 					button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
 						span(class="glyphicon glyphicon-plus" aria-hidden="true")

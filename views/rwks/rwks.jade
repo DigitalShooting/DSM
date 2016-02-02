@@ -18,7 +18,7 @@ block main
 				th(style="width:10%;")
 			tr
 				td(colspan="4")
-					input(type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
+					input(autofocus onClick="this.select();" type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
 		tbody
 			tr(ng-repeat="rwk in rwks track by $index")
 				td {{rwk.date}}
