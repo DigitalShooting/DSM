@@ -208,12 +208,12 @@ angular.module("dsm.lines", [
 		},
 		shutdown: function(){
 			performOnSelected(function(id){
-				gatewaySocket.api.shutdown(id)
+				gatewaySocket.api.setPower(id, false)
 			});
 		},
 		wakeonlan: function(){
 			performOnSelected(function(id){
-				gatewaySocket.api.wakeonlan(id)
+				gatewaySocket.api.setPower(id, true)
 			});
 		},
 		resetUser: function(){

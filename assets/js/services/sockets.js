@@ -101,15 +101,9 @@ angular.module("dsm.services.sockets", [
 				}
 			});
 		},
-		shutdown: function(line){
+		setPower: function(line, on){
 			gatewaySocket.emit("setPower", {
-				state: false,
-				line: line,
-			});
-		},
-		wakeonlan: function(line){
-			gatewaySocket.emit("setPower", {
-				state: true,
+				state: on,
 				line: line,
 			});
 		},
