@@ -154,11 +154,11 @@ angular.module("dsm.lines", [
 
 
 	// Performs method on all selected clients
-	function performOnSelected(callback){
+	function performOnSelected(callback, online){
 		for (var id in $scope.store.linesSelected){
 			if ($scope.store.linesSelected[id] == true){
 				var line = $scope.lines[id];
-				if (line != undefined && line.online == true){
+				if (line != undefined && (line.online == true || online == false)){
 					callback(id);
 				}
 			}
@@ -214,7 +214,7 @@ angular.module("dsm.lines", [
 		wakeonlan: function(){
 			performOnSelected(function(id){
 				gatewaySocket.api.setPower(id, true)
-			});
+			}, false);
 		},
 		resetUser: function(){
 			performOnSelected(function(id){
