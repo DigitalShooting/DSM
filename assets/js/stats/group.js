@@ -120,17 +120,21 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 // Displays an overlay to edit group object
 app.controller('StatsGroupEditController', function (Restangular, $scope, $uibModalInstance, group) {
 	$scope.group = group;
-	$scope.user = {
-		firstName: group.firstName,
-		lastName: group.lastName,
-		verein: group.verein,
-		vereinID: group.vereinID,
+	if (group.firstName != undefined || group.lastName != undefined){
+		$scope.user = {
+			firstName: group.firstName,
+			lastName: group.lastName,
+			verein: group.verein,
+			vereinID: group.vereinID,
+		}
 	}
-	console.log(group, $scope.user)
-	$scope.verein = {
-		name: group.verein,
-		id: group.vereinID,
+	if (group.verein != undefined || group.vereinID != undefined){
+		$scope.verein = {
+			name: group.verein,
+			id: group.vereinID,
+		}
 	}
+
 
 
 	$scope.sessions = group.getList("sessions").then(function(sessions) {
@@ -142,12 +146,13 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 
 
-	// Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList({
-	// 	// order: $scope.store.selectedOrder.field,
-	// 	// orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
-	// }).then(function(sessions) {
-	// 	$scope.sessions = sessions;
-	// });
+	Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList({
+		// order: $scope.store.selectedOrder.field,
+		// orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+	}).then(function(sessions) {
+		console.log(group)
+		$scope.sessions = sessions;
+	});
 
 
 
