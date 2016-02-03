@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "async": "x",
+    "async": "^1.5.2",
     "body-parser": "x",
     "bootstrap": "x",
     "compression": "x",

@@ -53,25 +53,44 @@ block main
 		div(class="modal-body")
 			form
 				div(class="row")
-					div(class="form-group col-md-6")
+					div(class="form-group col-md-4")
 						label(class="control-label") Datum:
 						p {{formateDate(group.unixtime)}}
-					div(class="form-group col-md-6")
+					div(class="form-group col-md-4")
 						label Linie:
 						p {{group.line}}
+					div(class="form-group col-md-4")
+						label Disziplin:
+						p {{group.disziplin}}
 						
 					.divider
-					div(ng-repeat="session in sessions track by $index")
-						div(class="row")
-							div(class="form-group col-md-6")
-								label(class="control-label") {{session.part}} ({{session.date}})
-				
+					
 					div(class="form-group col-md-6")
 						label(class="control-label") Verein:
 						verein-typeahead(user="user" verein="verein")
 					div(class="form-group col-md-6")
 						label(class="control-label") Schütze:
 						user-typeahead(user="user" verein="verein")
+					i
+					div(ng-repeat="session in sessions track by $index" class="form-group col-md-6")
+						label(class="control-label") {{session.part}}
+						table(class="table table-hover table-striped")
+							thead
+								tr
+									+tableHeader("Nummer", "number")
+									+tableHeader("Ring", "ring")
+									+tableHeader("Teiler", "ring")
+							tbody
+								tr(ng-repeat="shot in session.shots track by $index")
+									td {{shot.number}}./{{shot.serie}}.
+									td {{shot.ring}}
+									td {{shot.teiler}}
+							tfooter
+								td {{session.shots.length}}
+								td {{session.sum}} Ringe
+								td
+									
+				
 				
 				
 				.divider
