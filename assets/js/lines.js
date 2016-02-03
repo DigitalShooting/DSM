@@ -43,14 +43,19 @@ angular.module("dsm.lines", [
 	});
 	gatewaySocket.on("setSession", function(data){
 		$scope.sessionCache[data.line] = data.data
-		updateUI(); // TODO optimize
+		updateUI(false); // TODO optimize
 	});
 	// --------------------------------------------
 
 
 
 
-	function updateUI(){
+	function updateUI(force){
+		if (force == true){
+			$scope.selected.user = null;
+			$scope.selected.verein = null;
+		}
+
 		var lineID;
 		for (var id in $scope.store.linesSelected){
 			if ($scope.store.linesSelected[id] == true){
@@ -134,7 +139,7 @@ angular.module("dsm.lines", [
 		}
 	}
 	$scope.didToggle = function(){
-		updateUI();
+		updateUI(true);
 
 		performOnSelected(function(id){
 			gatewaySocket.api.getSession(id);
