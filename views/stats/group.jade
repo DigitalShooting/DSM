@@ -82,13 +82,13 @@ block main
 									+tableHeader("Teiler", "ring")
 							tbody
 								tr(ng-repeat="shot in session.shots track by $index")
-									td {{shot.number}}./{{shot.serie}}.
+									td {{shot.number}}/ {{shot.serie}}
 									td {{shot.ring}}
 									td {{shot.teiler}}
 							tfooter
 								td {{session.shots.length}}
 								td {{session.sum}} Ringe
-								td
+								td {{session.avg}} Schnitt
 									
 				
 				
