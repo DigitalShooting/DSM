@@ -3,4 +3,4 @@ module.exports = {
 		scale: 10,
 		offset: { x: 1000, y: 1000 },
 	},
-}
+};

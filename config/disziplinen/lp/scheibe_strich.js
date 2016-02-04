@@ -1,4 +1,4 @@
-var zoom = require("./zoom_strich.js")
+var zoom = require("./zoom_strich.js");
 
 module.exports = {
 	title: "LP 10m Strich",
@@ -16,4 +16,4 @@ module.exports = {
 	innenZehner: 0,
 	probeEcke: { color: "#0f0", alpha: 0.7 },
 	kugelDurchmesser: 4.5,
-}
+};

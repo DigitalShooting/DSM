@@ -18,4 +18,4 @@ module.exports = {
 		port		:	63432,
 		address		: 	"127.0.0.1",
 	},
-}
+};

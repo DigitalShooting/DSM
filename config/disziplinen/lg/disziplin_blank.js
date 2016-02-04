@@ -1,4 +1,4 @@
-var scheibe = require("./scheibe_blank.js")
+var scheibe = require("./scheibe_blank.js");
 
 module.exports = {
 	_id: "lg_blank",
@@ -37,4 +37,4 @@ module.exports = {
 			exitType: "",
 		},
 	},
-}
+};

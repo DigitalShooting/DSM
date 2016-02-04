@@ -1,4 +1,4 @@
-var zoom = require("./zoom.js")
+var zoom = require("./zoom.js");
 
 module.exports = {
 	title: "LG 10m",
@@ -23,4 +23,4 @@ module.exports = {
 	probeEcke: { color: "#0f0", alpha: 0.7 },
 	text: { size: 1.0, width: 0.3, up: 1.8, down: -0.8, left: 0.95, right: -1.7 },
 	kugelDurchmesser: 4.5,
-}
+};

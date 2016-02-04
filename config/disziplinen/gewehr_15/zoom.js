@@ -19,4 +19,4 @@ module.exports = {
 		scale: 62,
 		offset: { x: -1660, y: -1660 },
 	},
-}
+};

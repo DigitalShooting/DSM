@@ -1,4 +1,4 @@
-var zoom = require("./zoom.js")
+var zoom = require("./zoom.js");
 
 module.exports = {
 	title: "15m Gewehr",
@@ -23,4 +23,4 @@ module.exports = {
 	probeEcke: { color: "#0f0", alpha: 0.7 },
 	text: { size: 2.6, width: 0.9, up: 3.2, down: -1.2, left: 1.4, right: -3.2 },
 	kugelDurchmesser: 4.5,
-}
+};

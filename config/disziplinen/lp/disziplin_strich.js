@@ -1,4 +1,4 @@
-var scheibe = require("./scheibe_strich.js")
+var scheibe = require("./scheibe_strich.js");
 
 module.exports = {
 	_id: "lp_strich",
@@ -37,4 +37,4 @@ module.exports = {
 			exitType: "",
 		},
 	},
-}
+};

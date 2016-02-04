@@ -1,6 +1,6 @@
 var gewehr15 = {
 	zimmerstutzen: 	require("./gewehr_15/disziplin_zimmerstutzen.js"),
-}
+};
 var lg = {
 	dreiStellung: 	require("./lg/disziplin_dreiStellung.js"),
 	auflage: 		require("./lg/disziplin_auflage.js"),
@@ -11,7 +11,7 @@ var lg = {
 	training: 		require("./lg/disziplin_training.js"),
 	training_5: 	require("./lg/disziplin_training_5.js"),
 	wettkampf: 		require("./lg/disziplin_wettkampf.js"),
-}
+};
 var lp = {
 	blank: 			require("./lp/disziplin_blank.js"),
 	auflage: 		require("./lp/disziplin_auflage.js"),
@@ -22,31 +22,31 @@ var lp = {
 	training: 		require("./lp/disziplin_training.js"),
 	training_5: 	require("./lp/disziplin_training_5.js"),
 	wettkampf: 		require("./lp/disziplin_wettkampf.js"),
-}
+};
 
 
-var all = {}
-all[gewehr15.zimmerstutzen._id] = 	gewehr15.zimmerstutzen
+var all = {};
+all[gewehr15.zimmerstutzen._id] = 	gewehr15.zimmerstutzen;
 
-all[lg.dreiStellung._id] =			lg.dreiStellung
-all[lg.auflage._id] =				lg.auflage
-all[lg.blank._id] =					lg.blank
-all[lg.demo._id] =					lg.demo
-all[lg.demo_blank._id] =			lg.demo_blank
-all[lg.finale._id] =				lg.finale
-all[lg.training._id] =				lg.training
-all[lg.training_5._id] =			lg.training_5
-all[lg.wettkampf._id] =				lg.wettkampf
+all[lg.dreiStellung._id] =			lg.dreiStellung;
+all[lg.auflage._id] =				lg.auflage;
+all[lg.blank._id] =					lg.blank;
+all[lg.demo._id] =					lg.demo;
+all[lg.demo_blank._id] =			lg.demo_blank;
+all[lg.finale._id] =				lg.finale;
+all[lg.training._id] =				lg.training;
+all[lg.training_5._id] =			lg.training_5;
+all[lg.wettkampf._id] =				lg.wettkampf;
 
-all[lp.blank._id] =					lp.blank
-all[lp.auflage._id] =				lp.auflage
-all[lp.demo._id] =					lp.demo
-all[lp.demo_strich._id] =			lp.demo_strich
-all[lp.finale._id] =				lp.finale
-all[lp.strich._id] =				lp.strich
-all[lp.training._id] =				lp.training
-all[lp.training_5._id] =			lp.training_5
-all[lp.wettkampf._id] =				lp.wettkampf
+all[lp.blank._id] =					lp.blank;
+all[lp.auflage._id] =				lp.auflage;
+all[lp.demo._id] =					lp.demo;
+all[lp.demo_strich._id] =			lp.demo_strich;
+all[lp.finale._id] =				lp.finale;
+all[lp.strich._id] =				lp.strich;
+all[lp.training._id] =				lp.training;
+all[lp.training_5._id] =			lp.training_5;
+all[lp.wettkampf._id] =				lp.wettkampf;
 
 module.exports = {
 	groups: [
@@ -96,4 +96,4 @@ module.exports = {
 
 	// Default to start with
 	defaultDisziplin: lg.training,
-}
+};
