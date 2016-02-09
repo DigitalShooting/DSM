@@ -359,7 +359,7 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 
 
 	var cookieData = $cookies.getObject('ActiveRWKUsersController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
