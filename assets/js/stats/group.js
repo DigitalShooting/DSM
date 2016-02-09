@@ -49,7 +49,7 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
 		}).then(function(sessionGroups) {
 			$scope.sessionGroups = sessionGroups;
 		});
@@ -106,7 +106,7 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('StatsGroupController');
-	if (cookieData !== undefined){
+	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
@@ -116,9 +116,9 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 
 // StatsGroupEditController
 // Displays an overlay to edit group object
-app.controller('StatsGroupEditController', function (Restangular, $scope, $uibModalInstance, group) {
+app.controller('StatsGroupEditController', function (Restangular, $scope, $uibModalInstance, group, gatewaySocket) {
 	$scope.group = group;
-	if (group.firstName !== undefined || group.lastName !== undefined){
+	if (group.firstName != undefined || group.lastName != undefined){
 		$scope.user = {
 			firstName: group.firstName,
 			lastName: group.lastName,
@@ -126,12 +126,19 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 			vereinID: group.vereinID,
 		};
 	}
-	if (group.verein !== undefined || group.vereinID !== undefined){
+	if (group.verein != undefined || group.vereinID != undefined){
 		$scope.verein = {
 			name: group.verein,
 			id: group.vereinID,
 		};
 	}
+
+
+	gatewaySocket.on("setSession", function(data) {
+		if (data.line == $scope.group.line){
+			setTimeout(reload, 2500);
+		}
+	});
 
 
 	$scope.sessions = group.getList("sessions").then(function(sessions) {
@@ -142,19 +149,21 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 	$scope.selected = {};
 
 
-	Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList({
-		// order: $scope.store.selectedOrder.field,
-		// orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
-	}).then(function(sessions) {
-		$scope.sessions = sessions;
-	});
-
+	function reload(){
+		Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList({
+			// order: $scope.store.selectedOrder.field,
+			// orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+		}).then(function(sessions) {
+			$scope.sessions = sessions;
+		});
+	}
+	reload();
 
 
 
 	// save and close overlay
 	$scope.save = function () {
-		if ($scope.user !== undefined){
+		if ($scope.user != undefined){
 			$scope.group.userID = $scope.user.id;
 		}
 

@@ -37,7 +37,7 @@ angular.module('ds.services.grafik', [])
 					context.stroke();
 					context.fillStyle = "black";
 
-					if (ring.text === true){
+					if (ring.text == true){
 						context.font = "bold "+(scheibe.text.size*zoom.scale)+"px verdana, sans-serif";
 						context.fillStyle = ring.textColor;
 						context.fillText(ring.value, (lastRing.width/2 - ring.width/2 + scheibe.text.left)*zoom.scale+zoom.offset.x, (lastRing.width/2+scheibe.text.width)*zoom.scale+zoom.offset.y);
@@ -64,7 +64,7 @@ angular.module('ds.services.grafik', [])
 				}
 
 				// Probeecke
-				if (probeEcke === true){
+				if (probeEcke == true){
 					context.beginPath();
 					context.moveTo(1450,50);
 					context.lineTo(1950,50);
@@ -113,7 +113,7 @@ angular.module('ds.services.grafik', [])
 			}
 
 			function resize() {
-				if (scope.size === undefined){
+				if (scope.size == undefined){
 					var height = element.parent().outerHeight(true);
 
 					canvas.style.top = (element.parent().height() - height) / 2 + "px";
@@ -140,7 +140,7 @@ angular.module('ds.services.grafik', [])
 				var selectedShotIndex = scope.selectedshotindex;
 				var probeEcke = scope.probeecke;
 
-				if (scheibe !== undefined && serie !== undefined && zoomLevel !== undefined && selectedShotIndex !== undefined){
+				if (scheibe != undefined && serie != undefined && zoomLevel != undefined && selectedShotIndex != undefined){
 					drawScheibe(context, scheibe, serie, zoomLevel, selectedShotIndex, probeEcke);
 					drawMode(context, scheibe, serie, zoomLevel, selectedShotIndex);
 				}

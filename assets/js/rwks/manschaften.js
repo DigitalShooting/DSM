@@ -48,7 +48,7 @@ app.controller("ManschaftenController", function($scope, Restangular, $uibModal,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
 		}).then(function(manschaften) {
 			$scope.manschaften = manschaften;
 		});
@@ -95,7 +95,7 @@ app.controller("ManschaftenController", function($scope, Restangular, $uibModal,
 
 	// initial load
 	var cookieData = $cookies.getObject('ManschaftenController');
-	if (cookieData !== undefined){
+	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
@@ -119,7 +119,7 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 		id: "",
 		name: "",
 	};
-	if (manschaft.saisonID !== 0){
+	if (manschaft.saisonID != 0){
 		$scope.saison = {
 			id: manschaft.saisonID,
 			name: manschaft.saison,
@@ -130,7 +130,7 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 		id: "",
 		name: "",
 	};
-	if (manschaft.vereinID !== 0){
+	if (manschaft.vereinID != 0){
 		$scope.verein = {
 			id: manschaft.vereinID,
 			name: manschaft.verein,
@@ -181,13 +181,13 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 		});
 	};
 	$scope.getUserTitle = function(user){
-		if (user !== undefined){
+		if (user != undefined){
 			return user.firstName + " " + user.lastName;
 		}
 		return "";
 	};
 	$scope.addMember = function(){
-		if ($scope.newUser !== undefined){
+		if ($scope.newUser != undefined){
 			var userID = $scope.newUser.id;
 			$scope.manschaft.one('/member').post().then(function(member) {
 				member.userID = userID;
@@ -204,7 +204,7 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 		$scope.manschaft.all('/member').getList({
 			equals_manschaftID: $scope.manschaft.id,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
 		}).then(function(members) {
 			$scope.members = members;
 		});
@@ -232,7 +232,7 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 
 
 	var cookieData = $cookies.getObject('ManschaftEditController');
-	if (cookieData !== undefined){
+	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){

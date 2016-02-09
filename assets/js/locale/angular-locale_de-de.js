@@ -10,7 +10,7 @@ function getDecimals(n) {
 function getVF(n, opt_precision) {
   var v = opt_precision;
 
-  if (undefined === v) {
+  if (undefined == v) {
     v = Math.min(getDecimals(n), 3);
   }
 
@@ -137,6 +137,6 @@ $provide.value("$locale", {
     ]
   },
   "id": "de-de",
-  "pluralCat": function(n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v === 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
+  "pluralCat": function(n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

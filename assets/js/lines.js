@@ -44,47 +44,47 @@ angular.module("dsm.lines", [
 
 
 	function updateUI(force){
-		if (force === true){
+		if (force == true){
 			$scope.selected.user = null;
 			$scope.selected.verein = null;
 		}
 
 		var lineID;
 		for (var id in $scope.store.linesSelected){
-			if ($scope.store.linesSelected[id] === true){
+			if ($scope.store.linesSelected[id] == true){
 				var line = $scope.lines[id];
-				if (line !== undefined && line.online === true){
+				if (line != undefined && line.online == true){
 					lineID = id;
 					break;
 				}
 			}
 		}
 
-		if (lineID !== undefined){
+		if (lineID != undefined){
 			var session = $scope.sessionCache[lineID];
-			if (session === undefined){
+			if (session == undefined){
 				return;
 			}
 
-			if (typeof $scope.selected.user !== "string"){
+			if (typeof $scope.selected.user != "string"){
 				$scope.selected.user = {
 					firstName: session.user.firstName,
 					lastName: session.user.lastName,
 					vereinID: session.user.vereinID,
 				};
 			}
-			if (typeof $scope.selected.verein !== "string" && session.user.verein !== undefined && session.user.vereinID !== undefined){
+			if (typeof $scope.selected.verein != "string" && session.user.verein != undefined && session.user.vereinID != undefined){
 				$scope.selected.verein = {
 					name: session.user.verein,
 					id: session.user.vereinID,
 				};
 			}
-			if (typeof $scope.selected.disziplin !== "string"){
+			if (typeof $scope.selected.disziplin != "string"){
 				$scope.selected.disziplin = session.disziplin;
 
 				loadParts();
 
-				if (typeof $scope.selected.part !== "string"){
+				if (typeof $scope.selected.part != "string"){
 					for (var i in $scope.parts){
 						var part = $scope.parts[i];
 						if (part.id == session.type){
@@ -109,7 +109,7 @@ angular.module("dsm.lines", [
 
 	// ----- toggle selected for line -------
 	$scope.toggle = function(id, forceSet){
-		if (forceSet !== undefined){
+		if (forceSet != undefined){
 			$scope.store.linesSelected[id] = forceSet;
 		}
 		else {
@@ -118,7 +118,7 @@ angular.module("dsm.lines", [
 
 		$scope.store.linesSelectedCount = 0;
 		for (id in $scope.store.linesSelected) {
-			if ($scope.store.linesSelected[id] === true) {
+			if ($scope.store.linesSelected[id] == true) {
 				$scope.store.linesSelectedCount++;
 			}
 		}
@@ -149,9 +149,9 @@ angular.module("dsm.lines", [
 	// Performs method on all selected clients
 	function performOnSelected(callback, online){
 		for (var id in $scope.store.linesSelected){
-			if ($scope.store.linesSelected[id] === true){
+			if ($scope.store.linesSelected[id] == true){
 				var line = $scope.lines[id];
-				if (line !== undefined && (line.online === true || online === false)){
+				if (line != undefined && (line.online == true || online == false)){
 					callback(id);
 				}
 			}
@@ -221,7 +221,7 @@ angular.module("dsm.lines", [
 			$scope.selected.verein = null;
 		},
 		setUser: function(){
-			if ($scope.selected.user !== undefined && $scope.selected.user.firstName !== undefined){
+			if ($scope.selected.user != undefined && $scope.selected.user.firstName != undefined){
 				performOnSelected(function(id){
 					gatewaySocket.api.setUser(id, {
 						id: $scope.selected.user.id,
@@ -270,7 +270,7 @@ angular.module("dsm.lines", [
 
 
 	$scope.selectUser = function(){
-		if ($scope.selected.user !== undefined && $scope.selected.user.vereinID !== undefined){
+		if ($scope.selected.user != undefined && $scope.selected.user.vereinID != undefined){
 			$scope.selected.verein = {
 				id: $scope.selected.user.vereinID,
 				name: $scope.selected.user.verein,
@@ -285,7 +285,7 @@ angular.module("dsm.lines", [
 			limit: 100,
 		};
 
-		if ($scope.selected.verein !== undefined && typeof $scope.selected.verein !== "string"){
+		if ($scope.selected.verein != undefined && typeof $scope.selected.verein != "string"){
 			query.equals_vereinID = $scope.selected.verein.id;
 		}
 		return Restangular.one('/api/user').get(query).then(function(users) {
@@ -293,17 +293,17 @@ angular.module("dsm.lines", [
 		});
 	};
 	$scope.getUserTitle = function(user){
-		if (user !== undefined){
+		if (user != undefined){
 			return user.firstName + " " + user.lastName;
 		}
 		return "";
 	};
 	$scope.getUserSearchTitle = function(user){
 		var string = "";
-		if (user !== undefined){
+		if (user != undefined){
 			string = user.firstName + " " + user.lastName;
 		}
-		if ($scope.selected.verein === undefined || typeof $scope.selected.verein === "string"){
+		if ($scope.selected.verein == undefined || typeof $scope.selected.verein == "string"){
 			string += " (" + user.verein + ")";
 		}
 		return string;
@@ -312,8 +312,10 @@ angular.module("dsm.lines", [
 
 
 	$scope.$watch("selected.verein", function() {
-		if ($scope.selected.verein !== undefined && typeof $scope.selected.verein !== "string" && $scope.selected.user !== undefined && $scope.selected.verein.id != $scope.selected.user.vereinID){
-			$scope.selected.user = null;
+		if ($scope.selected.verein != undefined && typeof $scope.selected.verein != "string" && $scope.selected.user != undefined){
+			if ($scope.selected.verein.id != $scope.selected.user.vereinID){
+				$scope.selected.user = null;
+			}
 		}
 	});
 
@@ -339,7 +341,7 @@ angular.module("dsm.lines", [
 
 	// Cookie stuff
 	var cookieData = $cookies.getObject('LinesController');
-	if (cookieData !== undefined){
+	if (cookieData != undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
