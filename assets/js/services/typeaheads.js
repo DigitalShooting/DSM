@@ -44,7 +44,7 @@ angular.module('dsm.services.typeahead.user', [
 				});
 			};
 			$scope.getUserTitle = function(user){
-				if (user != undefined){
+				if (user != undefined && typeof user != "string"){
 					return user.firstName + " " + user.lastName;
 				}
 				return "";

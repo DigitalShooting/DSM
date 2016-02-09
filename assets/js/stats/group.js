@@ -150,7 +150,6 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 		// order: $scope.store.selectedOrder.field,
 		// orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
 	}).then(function(sessions) {
-		console.log(group)
 		$scope.sessions = sessions;
 	});
 
@@ -165,11 +164,12 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 	// save and close overlay
 	$scope.save = function () {
-		// $scope.group.vereinID = $scope.verein.id;
-		// $scope.user.verein = $scope.verein.name;
-		//
-		// $scope.cancel();
-		// $scope.user.post();
+		if ($scope.user !== undefined){
+			$scope.group.userID = $scope.user.id;
+		}
+
+		$scope.cancel();
+		$scope.group.post();
 	};
 
 	// delete user and close

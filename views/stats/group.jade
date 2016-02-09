@@ -96,11 +96,11 @@ block main
 				.divider
 				div(class="form-group")
 					label(for="message-text" class="control-label") Notiz:
-					textarea(class="form-control" id="message-text" ng-model="user.note")
+					textarea(class="form-control" id="message-text" ng-model="group.note")
 		div(class="modal-footer")
-			button(class="btn btn-danger pull-left" type="button" ng-click="delete()")
-				span(class="glyphicon glyphicon-trash" aria-hidden="true")
-				|  Löschen
+			//- button(class="btn btn-danger pull-left" type="button" ng-click="delete()")
+			//- 	span(class="glyphicon glyphicon-trash" aria-hidden="true")
+			//- 	|  Löschen
 			button(class="btn btn-primary" type="button" ng-click="save()")
 				span(class="glyphicon glyphicon-floppy-disk" aria-hidden="true")
 				|  Speichern
