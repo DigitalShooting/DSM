@@ -6,7 +6,7 @@ var app = angular.module("dsm.stammdaten.verein", [
 
 // VereinController
 // Lists vereine and perfor search and order
-app.controller("VereinController", function($scope, Restangular, $uibModal, $cookies, $log) {
+app.controller("VereinController", function($scope, Restangular, $uibModal, $cookies) {
 	$scope.store = {
 		itemsPerPage: 20, // items per page
 		selectedOrder: { // Ordering Infos
@@ -14,7 +14,7 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 			dir: false,
 		},
 		search: "", // Search Property
-	}
+	};
 
 	$scope.$watch('currentPage', function() {
 		reload(); // reload on page change
@@ -48,7 +48,7 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(vereine) {
 			$scope.vereine = vereine;
 		});
@@ -71,11 +71,9 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 		});
 
 		modalInstance.result.then(function (verein) {
-			reload()
-		}, function () {
-			$log.info('Modal dismissed at: ' + new Date());
-		});
-	}
+			reload();
+		}, function () {});
+	};
 	$scope.newEntry = function(){
 		Restangular.one('/api/verein').post().then(function(verein) {
 			$scope.editEntry(verein);
@@ -98,7 +96,7 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('VereinController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){

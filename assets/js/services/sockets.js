@@ -7,7 +7,7 @@ angular.module("dsm.services.sockets", [
 .factory('gatewaySocket', ["socketFactory", function (socketFactory) {
 	var gatewaySocket = socketFactory({
 		ioSocket: io.connect(dscGatewayUrl)
-	})
+	});
 
 	var auth = {key: "123"};
 
@@ -118,5 +118,5 @@ angular.module("dsm.services.sockets", [
 		},
 	};
 
-	return gatewaySocket
-}])
+	return gatewaySocket;
+}]);

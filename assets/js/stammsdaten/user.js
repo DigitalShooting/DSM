@@ -14,7 +14,7 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 			dir: false,
 		},
 		search: "", // Search Property
-	}
+	};
 
 	$scope.$watch('currentPage', function() {
 		reload(); // reload on page change
@@ -24,7 +24,7 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 		reload(); // reload on each type
 		writeToCookie();
 	});
-	$scope.$watch('store.itemsPerPage', function() {
+	$scope.$watcåh('store.itemsPerPage', function() {
 		reload(); // reload on change
 		writeToCookie();
 	});
@@ -48,7 +48,7 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(users) {
 			$scope.users = users;
 		});
@@ -71,11 +71,11 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 		});
 
 		modalInstance.result.then(function (user) {
-			reload()
+			reload();
 		}, function () {
 			$log.info('Modal dismissed at: ' + new Date());
 		});
-	}
+	};
 	$scope.newEntry = function(){
 		Restangular.one('/api/user').post().then(function(user) {
 			$scope.editEntry(user);
@@ -98,7 +98,7 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('UserController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
@@ -113,12 +113,12 @@ app.controller('UserEditController', function (Restangular, $scope, $uibModalIns
 	$scope.verein = {
 		id: "",
 		name: "",
-	}
-	if (user.vereinID != 0){
+	};
+	if (user.vereinID !== 0){
 		$scope.verein = {
 			id: user.vereinID,
 			name: user.verein,
-		}
+		};
 	}
 
 

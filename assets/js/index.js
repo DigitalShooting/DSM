@@ -76,36 +76,11 @@ app.config(['$routeProvider', function($routeProvider) {
 			redirectTo: '/lines',
 		});
 }]);
-app.run(['$rootScope','$location', '$routeParams', function($rootScope, $location, $routeParams) {
-	$rootScope.$on('$routeChangeSuccess', function(e, current, pre) {
+app.run(['$rootScope','$location', function($rootScope, $location) {
+	$rootScope.$on('$routeChangeSuccess', function() {
 		$rootScope.path = $location.path();
 	});
 
-
-
-	$rootScope.CompletedEvent = function (scope) {
-		console.log("Completed Event called");
-	};
-
-	$rootScope.ExitEvent = function (scope) {
-		console.log("Exit Event called");
-	};
-
-	$rootScope.ChangeEvent = function (targetElement, scope) {
-		console.log("Change Event called");
-		console.log(targetElement);  //The target element
-		console.log(this);  //The IntroJS object
-	};
-
-	$rootScope.BeforeChangeEvent = function (targetElement, scope) {
-		console.log("Before Change Event called");
-		console.log(targetElement);
-	};
-
-	$rootScope.AfterChangeEvent = function (targetElement, scope) {
-		console.log("After Change Event called");
-		console.log(targetElement);
-	};
 
 	$rootScope.IntroOptions = {
 		steps:[

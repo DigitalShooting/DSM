@@ -17,7 +17,7 @@ var app = angular.module("dsm.rwks.rwks", [
 
 // RWKsController
 // Lists rwks and perfor search and order
-app.controller("RWKsController", function($scope, Restangular, $uibModal, $cookies, $log) {
+app.controller("RWKsController", function($scope, Restangular, $uibModal, $cookies) {
 	$scope.store = {
 		itemsPerPage: 20, // items per page
 		selectedOrder: { // Ordering Infos
@@ -25,7 +25,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 			dir: false,
 		},
 		search: "", // Search Property
-	}
+	};
 
 	$scope.$watch('currentPage', function() {
 		reload(); // reload on page change
@@ -60,7 +60,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 			done: 1,
 		}).then(function(rwks) {
 			$scope.rwks = rwks;
@@ -84,11 +84,9 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 		});
 
 		modalInstance.result.then(function (rwk) {
-			reload()
-		}, function () {
-			$log.info('Modal dismissed at: ' + new Date());
-		});
-	}
+			reload();
+		}, function () {});
+	};
 	$scope.newEntry = function(){
 		Restangular.one('/api/rwk').post().then(function(rwk) {
 			$scope.editEntry(rwk);
@@ -111,7 +109,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('RWKsController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
@@ -123,7 +121,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 // Displays an overlay to edit rwk object
 app.controller('RWKEditController', function (Restangular, $scope, $uibModalInstance, rwk) {
 	$scope.rwk = rwk;
-	$scope.date = new Date()
+	$scope.date = new Date();
 	if (rwk.date != "0000-00-00"){
 		$scope.date = new Date(rwk.date);
 	}
@@ -137,14 +135,14 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 		name: "",
 		verein: "",
 		saison: "",
-	}
-	if (rwk.manschaftHeim != 0){
+	};
+	if (rwk.manschaftHeim !== 0){
 		$scope.heim = {
 			id: rwk.manschaftHeim,
 			name: rwk.heim,
 			verein: rwk.heimVerein,
 			saison: rwk.heimSaison,
-		}
+		};
 	}
 
 	$scope.gast = {
@@ -152,14 +150,14 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 		name: "",
 		verein: "",
 		saison: "",
-	}
-	if (rwk.manschaftGast != 0){
+	};
+	if (rwk.manschaftGast !== 0){
 		$scope.gast = {
 			id: rwk.manschaftGast,
 			name: rwk.gast,
 			verein: rwk.gastVerein,
 			saison: rwk.gastSaison,
-		}
+		};
 	}
 
 
@@ -205,14 +203,9 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 		});
 	};
 	$scope.getManschaftTitle = function(manschaft){
-		if (manschaft.verein != undefined){
+		if (manschaft.verein !== undefined){
 			return manschaft.verein + " " + manschaft.name + " ("+manschaft.saison+")";
 		}
 		return "";
-	}
-
-
-
-
-
+	};
 });

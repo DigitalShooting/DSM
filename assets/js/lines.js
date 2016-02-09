@@ -11,21 +11,14 @@ angular.module("dsm.lines", [
 		linesSelectedCount: 0,
 	};
 
-	$scope.selected = {}
-
-	$scope.sessionCache = {}
-
+	$scope.selected = {};
+	$scope.sessionCache = {};
 
 
 	Restangular.all("/api/disziplinen").getList({
 	}).then(function(disziplinen) {
 		$scope.disziplinen = disziplinen;
-		console.log(disziplinen)
 	});
-
-
-
-
 
 
 	// -- store lines recived from DSC-Gateway --
@@ -34,7 +27,7 @@ angular.module("dsm.lines", [
 
 	// listen to DSC-Gateway updates
 	gatewaySocket.on("disconnect", function(data){
-		$scope.lines = data.lines
+		$scope.lines = data.lines;
 	});
 	gatewaySocket.on("onlineLines", function(data){
 		$scope.lines = data.lines;
@@ -42,7 +35,7 @@ angular.module("dsm.lines", [
 		$scope.didToggle();
 	});
 	gatewaySocket.on("setSession", function(data){
-		$scope.sessionCache[data.line] = data.data
+		$scope.sessionCache[data.line] = data.data;
 		updateUI(false); // TODO optimize
 	});
 	// --------------------------------------------
@@ -51,25 +44,25 @@ angular.module("dsm.lines", [
 
 
 	function updateUI(force){
-		if (force == true){
+		if (force === true){
 			$scope.selected.user = null;
 			$scope.selected.verein = null;
 		}
 
 		var lineID;
 		for (var id in $scope.store.linesSelected){
-			if ($scope.store.linesSelected[id] == true){
+			if ($scope.store.linesSelected[id] === true){
 				var line = $scope.lines[id];
-				if (line != undefined && line.online == true){
+				if (line !== undefined && line.online === true){
 					lineID = id;
 					break;
 				}
 			}
 		}
 
-		if (lineID != undefined){
-			var session = $scope.sessionCache[lineID]
-			if (session == undefined){
+		if (lineID !== undefined){
+			var session = $scope.sessionCache[lineID];
+			if (session === undefined){
 				return;
 			}
 
@@ -78,13 +71,13 @@ angular.module("dsm.lines", [
 					firstName: session.user.firstName,
 					lastName: session.user.lastName,
 					vereinID: session.user.vereinID,
-				}
+				};
 			}
-			if (typeof $scope.selected.verein !== "string" && session.user.verein != undefined && session.user.vereinID != undefined){
+			if (typeof $scope.selected.verein !== "string" && session.user.verein !== undefined && session.user.vereinID !== undefined){
 				$scope.selected.verein = {
 					name: session.user.verein,
 					id: session.user.vereinID,
-				}
+				};
 			}
 			if (typeof $scope.selected.disziplin !== "string"){
 				$scope.selected.disziplin = session.disziplin;
@@ -93,7 +86,7 @@ angular.module("dsm.lines", [
 
 				if (typeof $scope.selected.part !== "string"){
 					for (var i in $scope.parts){
-						var part = $scope.parts[i]
+						var part = $scope.parts[i];
 						if (part.id == session.type){
 							$scope.selected.part = part;
 							break;
@@ -116,7 +109,7 @@ angular.module("dsm.lines", [
 
 	// ----- toggle selected for line -------
 	$scope.toggle = function(id, forceSet){
-		if (forceSet != undefined){
+		if (forceSet !== undefined){
 			$scope.store.linesSelected[id] = forceSet;
 		}
 		else {
@@ -125,26 +118,26 @@ angular.module("dsm.lines", [
 
 		$scope.store.linesSelectedCount = 0;
 		for (id in $scope.store.linesSelected) {
-			if ($scope.store.linesSelected[id] == true) {
+			if ($scope.store.linesSelected[id] === true) {
 				$scope.store.linesSelectedCount++;
 			}
 		}
 
 		writeToCookie();
-	}
+	};
 	// toggel selection for all
 	$scope.toggleAll = function(value){
-		for(id in $scope.lines){
-			$scope.toggle(id, value)
+		for(var id in $scope.lines){
+			$scope.toggle(id, value);
 		}
-	}
+	};
 	$scope.didToggle = function(){
 		updateUI(true);
 
 		performOnSelected(function(id){
 			gatewaySocket.api.getSession(id);
-		})
-	}
+		});
+	};
 	// ----------------------------------------
 
 
@@ -156,9 +149,9 @@ angular.module("dsm.lines", [
 	// Performs method on all selected clients
 	function performOnSelected(callback, online){
 		for (var id in $scope.store.linesSelected){
-			if ($scope.store.linesSelected[id] == true){
+			if ($scope.store.linesSelected[id] === true){
 				var line = $scope.lines[id];
-				if (line != undefined && (line.online == true || online == false)){
+				if (line !== undefined && (line.online === true || online === false)){
 					callback(id);
 				}
 			}
@@ -171,49 +164,49 @@ angular.module("dsm.lines", [
 	$scope.actions = {
 		resetLine: function(){
 			performOnSelected(function(id){
-				gatewaySocket.api.setDisziplin(id, $scope.selected.disziplin._id)
+				gatewaySocket.api.setDisziplin(id, $scope.selected.disziplin._id);
 			});
 			// TODO reset name
 		},
 		selectDisziplin: function(){
 			loadParts();
 			performOnSelected(function(id){
-				gatewaySocket.api.setDisziplin(id, $scope.selected.disziplin._id)
+				gatewaySocket.api.setDisziplin(id, $scope.selected.disziplin._id);
 			});
 		},
 		selectPart: function(){
 			performOnSelected(function(id){
-				gatewaySocket.api.setPart(id, $scope.selected.part.id)
+				gatewaySocket.api.setPart(id, $scope.selected.part.id);
 			});
 		},
-		print: function(all){
+		print: function(){
 			performOnSelected(function(id){
-				gatewaySocket.api.print(id)
+				gatewaySocket.api.print(id);
 			});
 		},
-		newTarget: function(all){
+		newTarget: function(){
 			performOnSelected(function(id){
-				gatewaySocket.api.setNewTarget(id)
+				gatewaySocket.api.setNewTarget(id);
 			});
 		},
 		showMessage: function(type, title){
 			performOnSelected(function(id){
-				gatewaySocket.api.showMessage(id, type, title)
+				gatewaySocket.api.showMessage(id, type, title);
 			});
 		},
 		hideMessage: function(){
 			performOnSelected(function(id){
-				gatewaySocket.api.hideMessage(id)
+				gatewaySocket.api.hideMessage(id);
 			});
 		},
 		shutdown: function(){
 			performOnSelected(function(id){
-				gatewaySocket.api.setPower(id, false)
+				gatewaySocket.api.setPower(id, false);
 			});
 		},
 		wakeonlan: function(){
 			performOnSelected(function(id){
-				gatewaySocket.api.setPower(id, true)
+				gatewaySocket.api.setPower(id, true);
 			}, false);
 		},
 		resetUser: function(){
@@ -222,13 +215,13 @@ angular.module("dsm.lines", [
 					firstName: "Gast",
 					lastName: "",
 					manschaft: "",
-				})
+				});
 			});
 			$scope.selected.user = null;
 			$scope.selected.verein = null;
 		},
 		setUser: function(){
-			if ($scope.selected.user != undefined && $scope.selected.user.firstName != undefined){
+			if ($scope.selected.user !== undefined && $scope.selected.user.firstName !== undefined){
 				performOnSelected(function(id){
 					gatewaySocket.api.setUser(id, {
 						id: $scope.selected.user.id,
@@ -237,8 +230,8 @@ angular.module("dsm.lines", [
 						verein: $scope.selected.user.verein,
 						vereinID: $scope.selected.user.vereinID,
 						manschaft: "",
-					})
-				})
+					});
+				});
 			}
 		},
 		openLine: function(){
@@ -264,7 +257,7 @@ angular.module("dsm.lines", [
 	function loadParts(){
 		// Update Parts (TODO move to function)
 		$scope.parts = [];
-		for (id in $scope.selected.disziplin.parts){
+		for (var id in $scope.selected.disziplin.parts){
 			var part = $scope.selected.disziplin.parts[id];
 			part.id = id;
 			$scope.parts.push(part);
@@ -277,22 +270,22 @@ angular.module("dsm.lines", [
 
 
 	$scope.selectUser = function(){
-		if ($scope.selected.user != undefined && $scope.selected.user.vereinID != undefined){
+		if ($scope.selected.user !== undefined && $scope.selected.user.vereinID !== undefined){
 			$scope.selected.verein = {
 				id: $scope.selected.user.vereinID,
 				name: $scope.selected.user.verein,
 			};
 		}
 		$scope.actions.setUser();
-	}
+	};
 
 	$scope.getUsers = function(serachString){
 		var query = {
 			search: serachString,
 			limit: 100,
-		}
+		};
 
-		if ($scope.selected.verein != undefined && typeof $scope.selected.verein !== "string"){
+		if ($scope.selected.verein !== undefined && typeof $scope.selected.verein !== "string"){
 			query.equals_vereinID = $scope.selected.verein.id;
 		}
 		return Restangular.one('/api/user').get(query).then(function(users) {
@@ -300,26 +293,26 @@ angular.module("dsm.lines", [
 		});
 	};
 	$scope.getUserTitle = function(user){
-		if (user != undefined){
+		if (user !== undefined){
 			return user.firstName + " " + user.lastName;
 		}
 		return "";
-	}
+	};
 	$scope.getUserSearchTitle = function(user){
 		var string = "";
-		if (user != undefined){
+		if (user !== undefined){
 			string = user.firstName + " " + user.lastName;
 		}
-		if ($scope.selected.verein == undefined || typeof $scope.selected.verein === "string"){
+		if ($scope.selected.verein === undefined || typeof $scope.selected.verein === "string"){
 			string += " (" + user.verein + ")";
 		}
 		return string;
-	}
+	};
 
 
 
 	$scope.$watch("selected.verein", function() {
-		if ($scope.selected.verein != undefined && typeof $scope.selected.verein !== "string" && $scope.selected.user != undefined && $scope.selected.verein.id != $scope.selected.user.vereinID){
+		if ($scope.selected.verein !== undefined && typeof $scope.selected.verein !== "string" && $scope.selected.user !== undefined && $scope.selected.verein.id != $scope.selected.user.vereinID){
 			$scope.selected.user = null;
 		}
 	});
@@ -346,10 +339,10 @@ angular.module("dsm.lines", [
 
 	// Cookie stuff
 	var cookieData = $cookies.getObject('LinesController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
 		$cookies.putObject('LinesController', $scope.store, {});
 	}
-})
+});

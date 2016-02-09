@@ -7,7 +7,7 @@ var app = angular.module("dsm.stats.group", [
 
 // StatsGroupController
 // Lists session groups and perfor search and order
-app.controller("StatsGroupController", function($scope, gatewaySocket, Restangular, $uibModal, $cookies, $log) {
+app.controller("StatsGroupController", function($scope, gatewaySocket, Restangular, $uibModal, $cookies) {
 	$scope.store = {
 		itemsPerPage: 20, // items per page
 		selectedOrder: { // Ordering Infos
@@ -15,7 +15,7 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 			dir: false,
 		},
 		search: "", // Search Property
-	}
+	};
 
 	$scope.$watch('currentPage', function() {
 		reload(); // reload on page change
@@ -49,15 +49,15 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(sessionGroups) {
 			$scope.sessionGroups = sessionGroups;
 		});
 	}
 
-	gatewaySocket.on("setSession", function(data){
+	gatewaySocket.on("setSession", function(data) {
 		setTimeout(reload, 2500);
-	})
+	});
 
 	// open edit for groups
 	$scope.editEntry = function(group){
@@ -76,11 +76,9 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 		});
 
 		modalInstance.result.then(function (user) {
-			reload()
-		}, function () {
-			$log.info('Modal dismissed at: ' + new Date());
-		});
-	}
+			reload();
+		}, function () {});
+	};
 	$scope.newEntry = function(){
 		Restangular.one('/api/group').post().then(function(user) {
 			$scope.editEntry(user);
@@ -103,12 +101,12 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 	// TODO move to main
 	$scope.formateDate = function(unixtime){
 		return moment(unixtime*1000).format("DD.MM.YYYY, HH:mm");
-	}
+	};
 
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('StatsGroupController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
@@ -120,30 +118,28 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 // Displays an overlay to edit group object
 app.controller('StatsGroupEditController', function (Restangular, $scope, $uibModalInstance, group) {
 	$scope.group = group;
-	if (group.firstName != undefined || group.lastName != undefined){
+	if (group.firstName !== undefined || group.lastName !== undefined){
 		$scope.user = {
 			firstName: group.firstName,
 			lastName: group.lastName,
 			verein: group.verein,
 			vereinID: group.vereinID,
-		}
+		};
 	}
-	if (group.verein != undefined || group.vereinID != undefined){
+	if (group.verein !== undefined || group.vereinID !== undefined){
 		$scope.verein = {
 			name: group.verein,
 			id: group.vereinID,
-		}
+		};
 	}
-
 
 
 	$scope.sessions = group.getList("sessions").then(function(sessions) {
 		$scope.sessions = sessions;
-		console.log($scope.sessions)
 	});
 
-	$scope.selected = {}
 
+	$scope.selected = {};
 
 
 	Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList({
@@ -152,12 +148,6 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 	}).then(function(sessions) {
 		$scope.sessions = sessions;
 	});
-
-
-
-
-
-
 
 
 
@@ -188,7 +178,7 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 	// TODO move to main
 	$scope.formateDate = function(unixtime){
 		return moment(unixtime*1000).format("DD.MM.YYYY, HH:mm");
-	}
+	};
 
 
 	// $scope.getVereine = function(serachString) {

@@ -23,20 +23,20 @@ angular.module('dsm.services.typeahead.user', [
 			user: '=',
 			verein: '=',
 		},
-		link: function postlink($scope, element, attrs){
+		link: function postlink($scope){
 			$scope.selectUser = function(){
 				$scope.verein = {
 					name: $scope.user.verein,
 					id: $scope.user.vereinID,
-				}
-			}
+				};
+			};
 			$scope.getUsers = function(serachString){
 				var query = {
 					search: serachString,
 					limit: 100,
-				}
+				};
 
-				if ($scope.verein != undefined && typeof $scope.verein !== "string"){
+				if ($scope.verein !== undefined && typeof $scope.verein !== "string"){
 					query.equals_vereinID = $scope.verein.id;
 				}
 				return Restangular.one('/api/user').get(query).then(function(users) {
@@ -44,21 +44,21 @@ angular.module('dsm.services.typeahead.user', [
 				});
 			};
 			$scope.getUserTitle = function(user){
-				if (user != undefined && typeof user != "string"){
+				if (user !== undefined && typeof user != "string"){
 					return user.firstName + " " + user.lastName;
 				}
 				return "";
-			}
+			};
 			$scope.getSearchTitle = function(user){
 				var string = "";
-				if (user != undefined){
+				if (user !== undefined){
 					string = user.firstName + " " + user.lastName;
 				}
-				if ($scope.verein == undefined || typeof $scope.verein === "string"){
+				if ($scope.verein === undefined || typeof $scope.verein === "string"){
 					string += " (" + user.verein + ")";
 				}
 				return string;
-			}
+			};
 		}
 	};
 }])
@@ -84,29 +84,29 @@ angular.module('dsm.services.typeahead.user', [
 			user: '=',
 			verein: '=',
 		},
-		link: function postlink($scope, element, attrs){
+		link: function postlink($scope){
 			$scope.getVereine = function(serachString){
 				var query = {
 					search: serachString,
 					limit: 100,
-				}
+				};
 
 				return Restangular.one('/api/verein').get(query).then(function(vereine) {
 					return vereine;
 				});
 			};
 			$scope.getTitle = function(verein){
-				if (verein != undefined){
+				if (verein !== undefined){
 					return verein.name;
 				}
 				return "";
-			}
+			};
 			$timeout(function(){
-				$scope.$watch('verein', function(value, old){
-					if ($scope.verein != undefined && typeof $scope.verein !== "string" && $scope.user != undefined && $scope.verein.id != $scope.user.vereinID){
+				$scope.$watch('verein', function(){
+					if ($scope.verein !== undefined && typeof $scope.verein !== "string" && $scope.user !== undefined && $scope.verein.id != $scope.user.vereinID){
 						$scope.user = null;
 					}
-				})
+				});
 			});
 		}
 	};
@@ -132,7 +132,7 @@ angular.module('dsm.services.typeahead.user', [
 		scope: {
 			manschaft: '=',
 		},
-		link: function postlink($scope, element, attrs){
+		link: function postlink($scope){
 			$scope.getManschaft = function(serachString) {
 				return Restangular.one('/api/manschaft').get({
 					search: serachString,
@@ -142,16 +142,11 @@ angular.module('dsm.services.typeahead.user', [
 				});
 			};
 			$scope.getTitle = function(manschaft){
-				if (manschaft.verein != undefined){
+				if (manschaft.verein !== undefined){
 					return manschaft.verein + " " + manschaft.name + " ("+manschaft.saison+")";
 				}
 				return "";
-			}
-			$timeout(function(){
-				$scope.$watch('manschaft', function(value, old){
-					// render(canvas)
-				})
-			});
+			};
 		}
 	};
 }])

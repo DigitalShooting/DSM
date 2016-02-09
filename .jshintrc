@@ -1,6 +1,14 @@
 {
-  "undef": true,
-  "unused": true,
-  "node": true,
-  "predef": [ "MY_GLOBAL" ]
+	"undef": true,
+	"unused": true,
+	"node": true,
+	"predef": [
+		"MY_GLOBAL",
+		"angular",
+		"window",
+		"document",
+		"moment",
+		"io",
+		"dscGatewayUrl"
+	]
 }
