@@ -1,6 +1,7 @@
 angular.module("dsm.lines", [
 	"dsm.services.sockets",
 	"dsm.services.filter",
+	"ds.services.grafik",
 
 	"ui.select",
 	"restangular",

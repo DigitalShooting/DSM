@@ -1,7 +1,7 @@
 extends index.jade
 
 block title
-	| Session Gruppen
+	| Sessions
 
 
 block main
@@ -72,7 +72,7 @@ block main
 						label(class="control-label") Schütze:
 						user-typeahead(user="user" verein="verein")
 					i
-					div(ng-repeat="session in sessions track by $index" class="form-group col-md-6")
+					div(ng-repeat="session in sessions track by $index" class="form-group col-md-4")
 						label(class="control-label") {{session.part}}
 						table(class="table table-hover table-striped")
 							thead
@@ -81,6 +81,9 @@ block main
 									+tableHeader("Ring", "ring")
 									+tableHeader("Teiler", "ring")
 							tbody
+								tr(colspan="3" class="fullWidth")
+									div(style="width:80%;margin-left:7%;")
+										target(zoomlevel="zoomlevel" serie="session.shots" selectedshotindex="'-1'" scheibe="scheibe" probeecke="probeecke")
 								tr(ng-repeat="shot in session.shots track by $index")
 									td {{shot.number}}/ {{shot.serie}}
 									td {{shot.ring}}

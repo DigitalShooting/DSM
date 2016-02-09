@@ -2,9 +2,8 @@ angular.module('ds.services.grafik', [])
 
 
 .directive('target', ['$timeout', '$window', function($timeout, $window){
-
 	return {
-		template: '<canvas width="2000" height="2000" style="position: relative;"></canvas>',
+		template: '<canvas width="'+(2000/scaleFactor)+'" height="'+(2000/scaleFactor)+'" style="position: relative;"></canvas>',
 		scope: {
 			scheibe: '=',
 			serie: '=',
@@ -13,7 +12,7 @@ angular.module('ds.services.grafik', [])
 			probeecke: '=',
 			size: '=', // undefined for dynamic
 		},
-		link: function postlink(scope, element){
+		link: function postlink(scope, element, attrs){
 			var canvas = element.find('canvas')[0];
 			var canvas2D = !!$window.CanvasRenderingContext2D;
 
@@ -28,22 +27,22 @@ angular.module('ds.services.grafik', [])
 					context.globalAlpha = 1.0;
 					context.fillStyle = ring.color;
 					context.beginPath();
-					context.arc(lastRing.width/2*zoom.scale+zoom.offset.x, lastRing.width/2*zoom.scale+zoom.offset.y, ring.width/2*zoom.scale, 0, 2*Math.PI);
+					context.arc(lastRing.width/2*(zoom.scale/scaleFactor)+(zoom.offset.x/scaleFactor), lastRing.width/2*(zoom.scale/scaleFactor)+(zoom.offset.y/scaleFactor), ring.width/2*(zoom.scale/scaleFactor), 0, 2*Math.PI);
 					context.closePath();
 
 					context.fill();
 					context.strokeStyle = ring.textColor;
-					context.lineWidth = 15;
+					context.lineWidth = 15/scaleFactor;
 					context.stroke();
 					context.fillStyle = "black";
 
 					if (ring.text == true){
-						context.font = "bold "+(scheibe.text.size*zoom.scale)+"px verdana, sans-serif";
+						context.font = "bold "+(scheibe.text.size*(zoom.scale/scaleFactor))+"px verdana, sans-serif";
 						context.fillStyle = ring.textColor;
-						context.fillText(ring.value, (lastRing.width/2 - ring.width/2 + scheibe.text.left)*zoom.scale+zoom.offset.x, (lastRing.width/2+scheibe.text.width)*zoom.scale+zoom.offset.y);
-						context.fillText(ring.value, (lastRing.width/2 + ring.width/2 + scheibe.text.right)*zoom.scale+zoom.offset.x, (lastRing.width/2+scheibe.text.width)*zoom.scale+zoom.offset.y);
-						context.fillText(ring.value, (lastRing.width/2-scheibe.text.width)*zoom.scale+zoom.offset.x, (lastRing.width/2 + ring.width/2 + scheibe.text.down)*zoom.scale+zoom.offset.y);
-						context.fillText(ring.value, (lastRing.width/2-scheibe.text.width)*zoom.scale+zoom.offset.x, (lastRing.width/2 - ring.width/2 + scheibe.text.up)*zoom.scale+zoom.offset.y);
+						context.fillText(ring.value, (lastRing.width/2 - ring.width/2 + scheibe.text.left)*(zoom.scale/scaleFactor)+(zoom.offset.x/scaleFactor), (lastRing.width/2+scheibe.text.width)*(zoom.scale/scaleFactor)+(zoom.offset.y/scaleFactor));
+						context.fillText(ring.value, (lastRing.width/2 + ring.width/2 + scheibe.text.right)*(zoom.scale/scaleFactor)+(zoom.offset.x/scaleFactor), (lastRing.width/2+scheibe.text.width)*(zoom.scale/scaleFactor)+(zoom.offset.y/scaleFactor));
+						context.fillText(ring.value, (lastRing.width/2-scheibe.text.width)*(zoom.scale/scaleFactor)+(zoom.offset.x/scaleFactor), (lastRing.width/2 + ring.width/2 + scheibe.text.down)*(zoom.scale/scaleFactor)+(zoom.offset.y/scaleFactor));
+						context.fillText(ring.value, (lastRing.width/2-scheibe.text.width)*(zoom.scale/scaleFactor)+(zoom.offset.x/scaleFactor), (lastRing.width/2 - ring.width/2 + scheibe.text.up)*(zoom.scale/scaleFactor)+(zoom.offset.y/scaleFactor));
 					}
 				}
 
@@ -53,22 +52,36 @@ angular.module('ds.services.grafik', [])
 					context.globalAlpha = 1.0;
 					context.fillStyle = ring.color;
 					context.beginPath();
-					context.arc(lastRing.width/2*zoom.scale+zoom.offset.x, lastRing.width/2*zoom.scale+zoom.offset.y, ring.width/2*zoom.scale, 0, 2*Math.PI);
+					context.arc(lastRing.width/2*(zoom.scale/scaleFactor)+(zoom.offset.x/scaleFactor), lastRing.width/2*(zoom.scale/scaleFactor)+(zoom.offset.y/scaleFactor), ring.width/2*(zoom.scale/scaleFactor), 0, 2*Math.PI);
 					context.closePath();
 
 					context.fill();
 					context.strokeStyle = ring.textColor;
-					context.lineWidth = 15;
+					context.lineWidth = 15/scaleFactor;
 					context.stroke();
 					context.fillStyle = "black";
+				}
+
+				for (var i = scheibe.rechteckDrawOnly.length-1; i >= 0; i--){
+					var rechteck = scheibe.rechteckDrawOnly[i];
+
+					context.beginPath();
+					context.globalAlpha = 1.0;
+					context.fillStyle = rechteck.color;
+					context.fillRect(
+						(zoom.offset.x/scaleFactor)-rechteck.width/2*(zoom.scale/scaleFactor),
+						(zoom.offset.y/scaleFactor)-rechteck.height/2*(zoom.scale/scaleFactor),
+						rechteck.width*(zoom.scale/scaleFactor),
+						rechteck.height*(zoom.scale/scaleFactor)
+					);
 				}
 
 				// Probeecke
 				if (probeEcke == true){
 					context.beginPath();
-					context.moveTo(1450,50);
-					context.lineTo(1950,50);
-					context.lineTo(1950,550);
+					context.moveTo(1450/scaleFactor, 50/scaleFactor);
+					context.lineTo(1950/scaleFactor, 50/scaleFactor);
+					context.lineTo(1950/scaleFactor, 550/scaleFactor);
 					context.fillStyle = scheibe.probeEcke.color;
 					context.globalAlpha = scheibe.probeEcke.alpha;
 					context.fill();
@@ -77,7 +90,7 @@ angular.module('ds.services.grafik', [])
 
 			function drawShot(context, scheibe, shot, zoom, last){
 				var lastRing = scheibe.ringe[scheibe.ringe.length-1];
-				var currentRing = scheibe.ringe[scheibe.ringe.length - shot.ring.int];
+				var currentRing = scheibe.ringe[scheibe.ringe.length - parseInt(shot.ring)];
 
 				if (last){
 					if (currentRing){
@@ -93,7 +106,7 @@ angular.module('ds.services.grafik', [])
 					context.globalAlpha = 0.5;
 				}
 				context.beginPath();
-				context.arc((lastRing.width/2 + shot.x/1000)*zoom.scale+zoom.offset.x, (lastRing.width/2 - shot.y/1000)*zoom.scale+zoom.offset.y, scheibe.kugelDurchmesser/2*zoom.scale, 0, 2*Math.PI);
+				context.arc((lastRing.width/2 + shot.x/1000)*(zoom.scale/scaleFactor)+(zoom.offset.x/scaleFactor), (lastRing.width/2 - shot.y/1000)*(zoom.scale/scaleFactor)+(zoom.offset.y/scaleFactor), scheibe.kugelDurchmesser/2*(zoom.scale/scaleFactor), 0, 2*Math.PI);
 				context.closePath();
 				context.fill();
 			}
@@ -114,10 +127,20 @@ angular.module('ds.services.grafik', [])
 
 			function resize() {
 				if (scope.size == undefined){
+					var width = element.parent().outerWidth(true);
 					var height = element.parent().outerHeight(true);
 
-					canvas.style.top = (element.parent().height() - height) / 2 + "px";
-					canvas.style.width = height+'px';
+					var newHeight = width;
+
+					// if (newHeight > height) {
+					// 	width = height;
+					// }
+					// else {
+						height = newHeight;
+					// }
+
+					// canvas.style.top = (element.parent().height() - height) / 2 + "px";
+					canvas.style.width = width+'px';
 					canvas.style.height = height+'px';
 				}
 				else {
@@ -140,31 +163,37 @@ angular.module('ds.services.grafik', [])
 				var selectedShotIndex = scope.selectedshotindex;
 				var probeEcke = scope.probeecke;
 
+				if (serie == undefined) {
+					serie = [];
+				}
+
 				if (scheibe != undefined && serie != undefined && zoomLevel != undefined && selectedShotIndex != undefined){
 					drawScheibe(context, scheibe, serie, zoomLevel, selectedShotIndex, probeEcke);
 					drawMode(context, scheibe, serie, zoomLevel, selectedShotIndex);
 				}
+				resize();
 			};
 
 			$timeout(function(){
-				scope.$watch('probeecke', function(){
+				scope.$watch('probeecke', function(value, old){
 					render(canvas);
 				});
-				scope.$watch('scheibe', function(){
+				scope.$watch('scheibe', function(value, old){
 					render(canvas);
 				});
-				scope.$watch('serie', function(){
+				scope.$watch('serie', function(value, old){
 					render(canvas);
 				});
-				scope.$watch('zoomlevel', function(){
+				scope.$watch('zoomlevel', function(value, old){
 					render(canvas);
 				});
-				scope.$watch('selectedshotindex', function(){
+				scope.$watch('selectedshotindex', function(value, old){
 					render(canvas);
 				});
-				scope.$watch('size', function(){
+				scope.$watch('size', function(value, old){
 					render(canvas);
 				});
+
 			});
 		}
 	};
