@@ -24,7 +24,7 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 		reload(); // reload on each type
 		writeToCookie();
 	});
-	$scope.$watcåh('store.itemsPerPage', function() {
+	$scope.$watch('store.itemsPerPage', function() {
 		reload(); // reload on change
 		writeToCookie();
 	});
