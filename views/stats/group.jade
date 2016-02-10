@@ -31,8 +31,8 @@ block main
 				td {{sessionGroup.firstName}}
 				td {{sessionGroup.lastName}}
 				td {{sessionGroup.verein}}
-				td {{sessionGroup.line}}
-				td {{sessionGroup.disziplin}}
+				td {{sessionGroup.lineTitle}}
+				td {{sessionGroup.disziplinTitle}} ({{sessionGroup.scheibeTitle}})
 				td {{formateDate(sessionGroup.unixtime)}}
 				td
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(sessionGroup)")
@@ -58,10 +58,10 @@ block main
 						p {{formateDate(group.unixtime)}}
 					div(class="form-group col-md-4")
 						label Linie:
-						p {{line.label}}
+						p {{group.lineTitle}}
 					div(class="form-group col-md-4")
 						label Disziplin:
-						p {{disziplin.title}}
+						p {{group.disziplinTitle}} ({{group.scheibeTitle}})
 						
 					.divider
 					

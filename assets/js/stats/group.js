@@ -156,9 +156,6 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 		Restangular.one("/api/disziplinen/" + $scope.group.disziplin).get().then(function(disziplin) {
 			$scope.disziplin = disziplin;
 		});
-		Restangular.one("/api/lines/" + $scope.group.line).get().then(function(line) {
-			$scope.line = line;
-		});
 	}
 	reload();
 
