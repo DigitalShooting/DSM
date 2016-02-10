@@ -150,11 +150,14 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 
 	function reload(){
-		Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList({
-			// order: $scope.store.selectedOrder.field,
-			// orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
-		}).then(function(sessions) {
+		Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList().then(function(sessions) {
 			$scope.sessions = sessions;
+		});
+		Restangular.one("/api/disziplinen/" + $scope.group.disziplin).get().then(function(disziplin) {
+			$scope.disziplin = disziplin;
+		});
+		Restangular.one("/api/lines/" + $scope.group.line).get().then(function(line) {
+			$scope.line = line;
 		});
 	}
 	reload();
@@ -191,36 +194,6 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 
 
-
-	$scope.zoomlevel = {
-		scale: 100,
-		offset: { x: -1270, y: -1270 },
-	}
-	$scope.probeecke = true;
-	$scope.scheibe = {
-		title: "LG 10m",
-		ringe: [
-			{ value: 10, width:  0.5,color: "white",  text: false, textColor: "white", zoom: $scope.zoomlevel, hitColor: "red" },
-			{ value:  9, width:  5.5, color: "black", text: false, textColor: "white", zoom: $scope.zoomlevel, hitColor: "green" },
-			{ value:  8, width: 10.5, color: "black", text: true,  textColor: "white", zoom: $scope.zoomlevel, hitColor: "yellow" },
-			{ value:  7, width: 15.5, color: "black", text: true,  textColor: "white", zoom: $scope.zoomlevel, hitColor: "#00bffF" },
-			{ value:  6, width: 20.5, color: "black", text: true,  textColor: "white", zoom: $scope.zoomlevel, hitColor: "#00bffF" },
-			{ value:  5, width: 25.5, color: "black", text: true,  textColor: "white", zoom: $scope.zoomlevel, hitColor: "#00bffF" },
-			{ value:  4, width: 30.5, color: "black", text: true,  textColor: "white", zoom: $scope.zoomlevel, hitColor: "#00bffF" },
-			{ value:  3, width: 35.5, color: "white", text: true,  textColor: "black", zoom: $scope.zoomlevel, hitColor: "#00bffF" },
-			{ value:  2, width: 40.5, color: "white", text: true,  textColor: "black", zoom: $scope.zoomlevel, hitColor: "#00bffF" },
-			{ value:  1, width: 45.5, color: "white", text: true,  textColor: "black", zoom: $scope.zoomlevel, hitColor: "#00bffF" },
-		],
-		ringeDrawOnly: [],
-		rechteckDrawOnly: [],
-		defaultHitColor: "#000000",
-		defaultZoom: $scope.zoomlevel,
-		minZoom: $scope.zoomlevel,
-		innenZehner: 200,
-		probeEcke: { color: "#0f0", alpha: 0.7 },
-		text: { size: 1.0, width: 0.3, up: 1.8, down: -0.8, left: 0.95, right: -1.7 },
-		kugelDurchmesser: 4.5,
-	}
 
 
 
