@@ -11,8 +11,8 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 	$scope.store = {
 		itemsPerPage: 20, // items per page
 		selectedOrder: { // Ordering Infos
-			field: "lastName",
-			dir: false,
+			field: "unixtime",
+			dir: true,
 		},
 		search: "", // Search Property
 	};
