@@ -71,27 +71,28 @@ block main
 					div(class="form-group col-md-6")
 						label(class="control-label") Schütze:
 						user-typeahead(user="user" verein="verein")
-					i
-					div(ng-repeat="session in sessions track by $index" class="form-group col-md-4")
+					
+					div(ng-repeat="(sessionIndex, session) in sessions" class="form-group col-md-4" ng-hide="session.shots.length == 0")
 						label(class="control-label") {{disziplin.parts[session.part].title}}
-						table(class="table table-hover table-striped")
+						table(class="table table-condensed table-striped")
 							thead
 								tr
-									+tableHeader("Nummer", "number")
+									+tableHeader("Nr.", "number")
 									+tableHeader("Ring", "ring")
 									+tableHeader("Teiler", "ring")
 							tbody
 								tr(colspan="3" class="fullWidth")
 									div(style="width:80%; margin-left:7%;")
-										target(zoomlevel="disziplin.scheibe.defaultZoom" serie="session.shots" selectedshotindex="'-1'" scheibe="disziplin.scheibe" probeecke="disziplin.parts[session.part].probeEcke")
-								tr(ng-repeat="shot in session.shots track by $index")
-									td {{shot.number}}/ {{shot.serie}}
+										target(zoomlevel="disziplin.scheibe.defaultZoom" serie="session.shots" selectedshotindex="selectedshotindex[sessionIndex]" scheibe="disziplin.scheibe" probeecke="disziplin.parts[session.part].probeEcke")
+								tr(ng-repeat="(shotIndex, shot) in session.shots" ng-click="selectedshotindex[sessionIndex] = shotIndex;" class="{{selectedshotindex[sessionIndex] == shotIndex ? 'success' : ''}}")
+									td {{((shot.number-1) % disziplin.parts[session.part].serienLength) + 1}}.
 									td {{shot.ring}}
 									td {{shot.teiler}}
 							tfooter
-								td {{session.shots.length}}
-								td {{session.sum}} Ringe
-								td {{session.avg}} Schnitt
+								tr(ng-click="selectedshotindex[sessionIndex] = -1;")
+									td {{session.shots.length}}
+									th {{session.sum}} Ringe
+									th {{session.avg}} Schnitt
 									
 				
 				

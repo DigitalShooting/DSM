@@ -118,6 +118,7 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 // Displays an overlay to edit group object
 app.controller('StatsGroupEditController', function (Restangular, $scope, $uibModalInstance, group, gatewaySocket) {
 	$scope.group = group;
+	$scope.selectedshotindex = [];
 	if (group.firstName != undefined || group.lastName != undefined){
 		$scope.user = {
 			firstName: group.firstName,
@@ -151,6 +152,10 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 	function reload(){
 		Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList().then(function(sessions) {
+			$scope.selectedshotindex = [];
+			for (var i = 0; i < sessions.length; i++){
+				$scope.selectedshotindex.push(-1);
+			}
 			$scope.sessions = sessions;
 		});
 		Restangular.one("/api/disziplinen/" + $scope.group.disziplin).get().then(function(disziplin) {
