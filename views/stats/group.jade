@@ -20,12 +20,8 @@ block main
 				+tableHeader("Datum", "unixtime")
 				th(style="width:10%;")
 			tr
-				td(colspan="6")
+				td(colspan="7")
 					input(autofocus onClick="this.select();" type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
-				td
-					button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
-						span(class="glyphicon glyphicon-plus" aria-hidden="true")
-						|  Neu
 		tbody
 			tr(ng-repeat="sessionGroup in sessionGroups track by $index")
 				td {{sessionGroup.firstName}}
@@ -72,6 +68,7 @@ block main
 						label(class="control-label") Schütze:
 						user-typeahead(user="user" verein="verein")
 					
+					.divider
 					div(ng-repeat="(sessionIndex, session) in sessions" class="form-group col-md-4" ng-hide="session.shots.length == 0")
 						label(class="control-label") {{disziplin.parts[session.part].title}}
 						table(class="table table-condensed table-striped")
@@ -95,12 +92,21 @@ block main
 									th {{session.avg}} Schnitt
 									
 				
+					.divider
+					div(class="form-group col-md-6")
+						label(class="control-label") Auf Linie laden:
+						ui-select(ng-model="selected.line" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="")
+							ui-select-match {{selected.line.label}}
+							ui-select-choices(repeat="line in lines | propsFilter: {label: $select.search}")
+								div {{line.label}}
+						button(type="submit" class="btn btn-default col-md-12" ng-click="actions.sendSessions()" ng-hide="selected.line == undefined")
+							span(class="glyphicon glyphicon glyphicon-share-alt" aria-hidden="true")
+							|  Übertragen
 				
-				
-				.divider
-				div(class="form-group")
-					label(for="message-text" class="control-label") Notiz:
-					textarea(class="form-control" id="message-text" ng-model="group.note")
+					.divider
+					div(class="form-group col-md-12")
+						label(for="message-text" class="control-label") Notiz:
+						textarea(class="form-control" id="message-text" ng-model="group.note")
 		div(class="modal-footer")
 			//- button(class="btn btn-danger pull-left" type="button" ng-click="delete()")
 			//- 	span(class="glyphicon glyphicon-trash" aria-hidden="true")

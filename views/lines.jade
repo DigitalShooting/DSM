@@ -65,7 +65,7 @@ block body
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Mode
 							div(class="col-sm-10")
-								ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="false" on-select="actions.selectPart()")
+								ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="actions.selectPart()")
 									ui-select-match {{selected.part.title}}
 									ui-select-choices(repeat="part in parts | propsFilter: {title: $select.search}")
 										div {{part.title}}

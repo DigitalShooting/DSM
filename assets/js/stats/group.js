@@ -1,7 +1,7 @@
 var app = angular.module("dsm.stats.group", [
 	"dsm.services.sockets",
 	"restangular",
-	"ui.bootstrap",
+	"ui.bootstrap", "ui.select",
 	"ngCookies",
 ]);
 
@@ -150,6 +150,10 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 	$scope.selected = {};
 
 
+	$scope.lines = [];
+	Restangular.one('/api/lines').get().then(function(lines) {
+		$scope.lines = lines;
+	});
 	function reload(){
 		Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList().then(function(sessions) {
 			$scope.selectedshotindex = [];
@@ -197,14 +201,26 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 
 
-
-
-	// $scope.getVereine = function(serachString) {
-	// 	return Restangular.one('/api/group').get({
-	// 		search: serachString,
-	// 		limit: 1000,
-	// 	}).then(function(vereine) {
-	// 		return vereine;
-	// 	});
-	// };
+	$scope.actions = {
+		sendSessions: function(){
+			var user = {
+				firstName: "Gast",
+				lastName: "",
+				verein: "",//config.line.hostVerein.name,
+				manschaft: "",
+			};
+			if ($scope.group.firstName != undefined){
+				user = {
+					id: $scope.group.userID,
+					firstName: $scope.group.firstName,
+					lastName: $scope.group.lastName,
+					verein: $scope.group.verein,
+					vereinID: $scope.group.vereinID,
+					manschaft: $scope.group.manschaft,
+				};
+			}
+			gatewaySocket.api.sendSessions($scope.selected.line._id, $scope.sessions, $scope.group, user);
+			$scope.selected.line = undefined;
+		},
+	};
 });

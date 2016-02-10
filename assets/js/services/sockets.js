@@ -89,7 +89,7 @@ angular.module("dsm.services.sockets", [
 					auth: auth,
 					type: type,
 					title: title,
-				}
+				},
 			});
 		},
 		hideMessage: function(line){
@@ -98,7 +98,7 @@ angular.module("dsm.services.sockets", [
 				line: line,
 				data: {
 					auth: auth,
-				}
+				},
 			});
 		},
 		setPower: function(line, on){
@@ -113,7 +113,19 @@ angular.module("dsm.services.sockets", [
 				line: line,
 				data: {
 					auth: auth,
-				}
+				},
+			});
+		},
+		sendSessions: function(line, sessions, group, user){
+			gatewaySocket.emit("setLine", {
+				method: "sendSessions",
+				line: line,
+				data: {
+					auth: auth,
+					sessions: sessions,
+					group: group,
+					user: user,
+				},
 			});
 		},
 	};
