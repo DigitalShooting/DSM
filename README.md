@@ -23,8 +23,8 @@ Verwaltung der Schützen
 Durchführung von RWKs
 
 ### Statistiken
-Historie aller Daten.
-
+- Historie aller Daten.
+- Laden eine alten Session auf eine Linie
 
 
 
