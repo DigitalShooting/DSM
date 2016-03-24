@@ -235,6 +235,18 @@ angular.module("dsm.lines", [
 				});
 			}
 		},
+		setCustomUser: function(){
+			performOnSelected(function(id){
+				gatewaySocket.api.setUser(id, {
+					id: $scope.selected.user.id,
+					firstName: $scope.custom_user,
+					lastName: "",
+					verein: $scope.custom_verein,
+					vereinID: "",
+					manschaft: "",
+				});
+			});
+		},
 		openLine: function(){
 			performOnSelected(function(id){
 				var line = $scope.lines[id];
