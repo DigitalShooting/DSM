@@ -15,6 +15,8 @@ angular.module("dsm.lines", [
 	$scope.selected = {};
 	$scope.sessionCache = {};
 
+	$scope.custom_verein = "";
+	$scope.custom_manschaft = "";
 
 	Restangular.all("/api/disziplinen").getList({
 	}).then(function(disziplinen) {
@@ -215,6 +217,7 @@ angular.module("dsm.lines", [
 				gatewaySocket.api.setUser(id, {
 					firstName: "Gast",
 					lastName: "",
+					verein: "",
 					manschaft: "",
 				});
 			});
@@ -243,7 +246,7 @@ angular.module("dsm.lines", [
 					lastName: "",
 					verein: $scope.custom_verein,
 					vereinID: "",
-					manschaft: "",
+					manschaft: $scope.custom_manschaft,
 				});
 			});
 		},
