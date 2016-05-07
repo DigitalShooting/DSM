@@ -36,7 +36,7 @@ angular.module('dsm.services.typeahead.user', [
 					limit: 100,
 				};
 
-				if ($scope.verein != undefined && typeof $scope.verein != "string"){
+				if ($scope.verein !== undefined && typeof $scope.verein !== "string"){
 					query.equals_vereinID = $scope.verein.id;
 				}
 				return Restangular.one('/api/user').get(query).then(function(users) {
@@ -44,17 +44,17 @@ angular.module('dsm.services.typeahead.user', [
 				});
 			};
 			$scope.getUserTitle = function(user){
-				if (user != undefined && typeof user != "string" && user.firstName != null){
+				if (user !== undefined && typeof user !== "string" && user.firstName !== null){
 					return user.firstName + " " + user.lastName;
 				}
 				return "";
 			};
 			$scope.getSearchTitle = function(user){
 				var string = "";
-				if (user != undefined){
+				if (user !== undefined){
 					string = user.firstName + " " + user.lastName;
 				}
-				if ($scope.verein == undefined || typeof $scope.verein == "string"){
+				if ($scope.verein === undefined || typeof $scope.verein === "string"){
 					string += " (" + user.verein + ")";
 				}
 				return string;
@@ -96,14 +96,14 @@ angular.module('dsm.services.typeahead.user', [
 				});
 			};
 			$scope.getTitle = function(verein){
-				if (verein != undefined){
+				if (verein !== undefined){
 					return verein.name;
 				}
 				return "";
 			};
 			$timeout(function(){
 				$scope.$watch('verein', function(){
-					if ($scope.verein != undefined && typeof $scope.verein != "string" && $scope.user != undefined && $scope.verein.id != $scope.user.vereinID){
+					if ($scope.verein !== undefined && typeof $scope.verein !== "string" && $scope.user !== undefined && $scope.verein.id !== $scope.user.vereinID){
 						$scope.user = null;
 					}
 				});
@@ -142,7 +142,7 @@ angular.module('dsm.services.typeahead.user', [
 				});
 			};
 			$scope.getTitle = function(manschaft){
-				if (manschaft.verein != undefined){
+				if (manschaft.verein !== undefined){
 					return manschaft.verein + " " + manschaft.name + " ("+manschaft.saison+")";
 				}
 				return "";

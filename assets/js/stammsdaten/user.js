@@ -48,7 +48,7 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(users) {
 			$scope.users = users;
 		});
@@ -98,7 +98,7 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('UserController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
@@ -114,7 +114,7 @@ app.controller('UserEditController', function (Restangular, $scope, $uibModalIns
 		id: "",
 		name: "",
 	};
-	if (user.vereinID != 0){
+	if (user.vereinID !== 0){
 		$scope.verein = {
 			id: user.vereinID,
 			name: user.verein,

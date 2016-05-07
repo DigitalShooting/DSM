@@ -48,7 +48,7 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(vereine) {
 			$scope.vereine = vereine;
 		});
@@ -96,7 +96,7 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('VereinController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){

@@ -60,7 +60,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 			done: 1,
 		}).then(function(rwks) {
 			$scope.rwks = rwks;
@@ -109,7 +109,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('RWKsController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
@@ -136,7 +136,7 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 		verein: "",
 		saison: "",
 	};
-	if (rwk.manschaftHeim != 0){
+	if (rwk.manschaftHeim !== 0){
 		$scope.heim = {
 			id: rwk.manschaftHeim,
 			name: rwk.heim,
@@ -151,7 +151,7 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 		verein: "",
 		saison: "",
 	};
-	if (rwk.manschaftGast != 0){
+	if (rwk.manschaftGast !== 0){
 		$scope.gast = {
 			id: rwk.manschaftGast,
 			name: rwk.gast,
@@ -203,7 +203,7 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 		});
 	};
 	$scope.getManschaftTitle = function(manschaft){
-		if (manschaft.verein != undefined){
+		if (manschaft.verein !== undefined){
 			return manschaft.verein + " " + manschaft.name + " ("+manschaft.saison+")";
 		}
 		return "";

@@ -60,7 +60,7 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 			done: 0,
 		}).then(function(rwks) {
 			$scope.rwks = rwks;
@@ -148,7 +148,7 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('ActiveRWKsController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
@@ -187,7 +187,7 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookie
 		verein: "",
 		saison: "",
 	};
-	if (rwk.manschaftHeim != 0){
+	if (rwk.manschaftHeim !== 0){
 		$scope.heim = {
 			id: rwk.manschaftHeim,
 			name: rwk.heim,
@@ -202,7 +202,7 @@ app.controller('ActiveRWKEditController', function (Restangular, $scope, $cookie
 		verein: "",
 		saison: "",
 	};
-	if (rwk.manschaftGast != 0){
+	if (rwk.manschaftGast !== 0){
 		$scope.gast = {
 			id: rwk.manschaftGast,
 			name: rwk.gast,
@@ -258,14 +258,14 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 	function loadManschaften() {
 		Restangular.all("/api/manschaft/" + $scope.rwk.manschaftHeim + "/member").getList({
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(members) {
 			$scope.heimManschaft = members;
 		});
 
 		Restangular.all("/api/manschaft/" + $scope.rwk.manschaftGast + "/member").getList({
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(members) {
 			$scope.gastManschaft = members;
 		});
@@ -320,7 +320,7 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 		$scope.rwk.all("/member").getList({
 			type: "heim",
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(members) {
 			$scope.heimMembers = members;
 		});
@@ -329,7 +329,7 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 		$scope.rwk.all("/member").getList({
 			type: "gast",
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(members) {
 			$scope.gastMembers = members;
 		});
@@ -359,7 +359,7 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 
 
 	var cookieData = $cookies.getObject('ActiveRWKUsersController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){

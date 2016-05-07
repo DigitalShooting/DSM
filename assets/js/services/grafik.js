@@ -62,7 +62,7 @@ angular.module('ds.services.grafik', [])
 					context.fillStyle = "black";
 				}
 
-				for (var i = scheibe.rechteckDrawOnly.length-1; i >= 0; i--){
+				for (i = scheibe.rechteckDrawOnly.length-1; i >= 0; i--){
 					var rechteck = scheibe.rechteckDrawOnly[i];
 
 					context.beginPath();
@@ -77,7 +77,7 @@ angular.module('ds.services.grafik', [])
 				}
 
 				// Probeecke
-				if (probeEcke == true){
+				if (probeEcke === true){
 					context.beginPath();
 					context.moveTo(1450/scaleFactor, 50/scaleFactor);
 					context.lineTo(1950/scaleFactor, 50/scaleFactor);
@@ -126,7 +126,7 @@ angular.module('ds.services.grafik', [])
 			}
 
 			function resize() {
-				if (scope.size == undefined){
+				if (scope.size === undefined){
 					var width = element.parent().outerWidth(true);
 					var height = element.parent().outerHeight(true);
 
@@ -163,11 +163,11 @@ angular.module('ds.services.grafik', [])
 				var selectedShotIndex = scope.selectedshotindex;
 				var probeEcke = scope.probeecke;
 
-				if (serie == undefined) {
+				if (serie === undefined) {
 					serie = [];
 				}
 
-				if (scheibe != undefined && serie != undefined && zoomLevel != undefined && selectedShotIndex != undefined){
+				if (scheibe !== undefined && serie !== undefined && zoomLevel !== undefined && selectedShotIndex !== undefined){
 					drawScheibe(context, scheibe, serie, zoomLevel, selectedShotIndex, probeEcke);
 					drawMode(context, scheibe, serie, zoomLevel, selectedShotIndex);
 				}

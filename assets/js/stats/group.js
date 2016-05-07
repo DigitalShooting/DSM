@@ -49,7 +49,7 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
 			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir == true ? "DESC" : "ASC",
+			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(sessionGroups) {
 			$scope.sessionGroups = sessionGroups;
 		});
@@ -106,7 +106,7 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 	// initial load
 	// reload();
 	var cookieData = $cookies.getObject('StatsGroupController');
-	if (cookieData != undefined){
+	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
 	function writeToCookie(){
@@ -119,7 +119,7 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 app.controller('StatsGroupEditController', function (Restangular, $scope, $uibModalInstance, group, gatewaySocket) {
 	$scope.group = group;
 	$scope.selectedshotindex = [];
-	if (group.firstName != undefined || group.lastName != undefined){
+	if (group.firstName !== undefined || group.lastName !== undefined){
 		$scope.user = {
 			firstName: group.firstName,
 			lastName: group.lastName,
@@ -127,7 +127,7 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 			vereinID: group.vereinID,
 		};
 	}
-	if (group.verein != undefined || group.vereinID != undefined){
+	if (group.verein !== undefined || group.vereinID !== undefined){
 		$scope.verein = {
 			name: group.verein,
 			id: group.vereinID,
@@ -172,7 +172,7 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 	// save and close overlay
 	$scope.save = function () {
-		if ($scope.user != undefined){
+		if ($scope.user !== undefined){
 			$scope.group.userID = $scope.user.id;
 		}
 
@@ -209,7 +209,7 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 				verein: "",//config.line.hostVerein.name,
 				manschaft: "",
 			};
-			if ($scope.group.firstName != undefined){
+			if ($scope.group.firstName !== undefined){
 				user = {
 					id: $scope.group.userID,
 					firstName: $scope.group.firstName,

@@ -1,7 +1,7 @@
 include mixins.jade
 
 doctype html
-html
+html(lang="de")
 	head
 		meta(charset="utf-8")
 		title DSM
@@ -96,7 +96,7 @@ html
 						+navElement("#/lines", "Stände", "glyphicon-list")
 						+navElement("#/stammdaten/", "Stammdaten", "glyphicon-user")
 						+navElement("#/rwks/", "RWKs", "glyphicon-list-alt")
-						+navElement("#/stats/", "Statistiken", "glyphicon-stats")
+						//- +navElement("#/stats/", "Statistiken", "glyphicon-stats")
 					ul(class="nav navbar-nav navbar-right")
 						//- button(type="submit" class="btn btn-link" ng-click="CallMe();")
 						//- 	span(class="glyphicon glyphicon-file" aria-hidden="true")
