@@ -153,17 +153,19 @@ block body
 					h4 Schütze
 					div(class="form-horizontal")
 						div(class="form-group")
+							label(class="col-md-2 control-label") Schütze:
+							div(class="col-md-5")
+								input(onClick="this.select();" type="text" ng-model="manualUser.firstName" placeholder="Vorname" class="form-control")
+							div(class="col-md-5")
+								input(onClick="this.select();" type="text" ng-model="manualUser.lastName" placeholder="Name" class="form-control")
+						div(class="form-group")
 							label(class="col-md-2 control-label") Verein:
 							div(class="col-md-10")
-								input(onClick="this.select();" type="text" ng-model="custom_verein" placeholder="Verein" class="form-control")
+								input(onClick="this.select();" type="text" ng-model="manualUser.verein" placeholder="Verein" class="form-control")
 						div(class="form-group")
 							label(class="col-md-2 control-label") Manschaft:
 							div(class="col-md-10")
-								input(onClick="this.select();" type="text" ng-model="custom_manschaft" placeholder="Manschaft" class="form-control")
-						div(class="form-group")
-							label(class="col-md-2 control-label") Schütze:
-							div(class="col-md-10")
-								input(onClick="this.select();" type="text" ng-model="custom_user" placeholder="Schütze" class="form-control")
+								input(onClick="this.select();" type="text" ng-model="manualUser.manschaft" placeholder="Manschaft" class="form-control")
 						div(class="form-group")
 							div(class="btn-group col-md-12" role="group")
 								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.setCustomUser()")
@@ -171,32 +173,31 @@ block body
 									|  Übertragen
 									
 				
-				//- RWK
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1")
-					h4 RWK
-					div(class="form-horizontal")
-						div(class="form-group")
-							label(class="col-sm-2 control-label") RWK:
-							div(class="col-md-10")
-								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.rwk" placeholder="RWK" uib-typeahead="rwk as getRWKTitle(rwk) for rwk in getRWK($viewValue)" typeahead-loading="loadingRWK" typeahead-no-results="noResultsRWK" typeahead-input-formatter="getRWKTitle($model)" class="form-control")
-									span(class="input-group-btn")
-										button(type="button" class="btn btn-default btn noMargin" ng-click="selected.rwk = '';")
-											span(class="glyphicon glyphicon-remove" aria-hidden="true")
-								i(ng-show="loadingRWK" class="glyphicon glyphicon-refresh")
-								div(ng-show="noResultsRWK")
-									i(class="glyphicon glyphicon-remove")
-									| Kein RWK gefunden
-						div(class="form-group")
-							label(class="col-sm-2 control-label") Schütze:
-							div(class="col-md-10")
-								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.rwkUser" placeholder="Schütze" uib-typeahead="user as getRWKUserTitle(user) for user in getRWKUsers($viewValue)" typeahead-loading="loadingRWKUser" typeahead-input-formatter="getRWKUserTitle($model)" typeahead-no-results="noResultsRWKUser" typeahead-on-select="selectUser()" class="form-control")
-									span(class="input-group-btn")
-										button(type="button" class="btn btn-default btn noMargin")
-											//-  ng-click="actions.resetUser()")
-											span(class="glyphicon glyphicon-remove" aria-hidden="true")
-								i(ng-show="loadingRWKUser" class="glyphicon glyphicon-refresh")
-								div(ng-show="noResultsRWKUser")
-									i(class="glyphicon glyphicon-remove")
-									| Kein Schütze gefunden
+				//- //- RWK
+				//- div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1")
+				//- 	h4 RWK
+				//- 	div(class="form-horizontal")
+				//- 		div(class="form-group")
+				//- 			label(class="col-sm-2 control-label") RWK:
+				//- 			div(class="col-md-10")
+				//- 				.input-group
+				//- 					input(onClick="this.select();" type="text" ng-model="selected.rwk" placeholder="RWK" uib-typeahead="rwk as getRWKTitle(rwk) for rwk in getRWK($viewValue)" typeahead-loading="loadingRWK" typeahead-no-results="noResultsRWK" typeahead-input-formatter="getRWKTitle($model)" class="form-control")
+				//- 					span(class="input-group-btn")
+				//- 						button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser();")
+				//- 							span(class="glyphicon glyphicon-remove" aria-hidden="true")
+				//- 				i(ng-show="loadingRWK" class="glyphicon glyphicon-refresh")
+				//- 				div(ng-show="noResultsRWK")
+				//- 					i(class="glyphicon glyphicon-remove")
+				//- 					| Kein RWK gefunden
+				//- 		div(class="form-group")
+				//- 			label(class="col-sm-2 control-label") Schütze:
+				//- 			div(class="col-md-10")
+				//- 				.input-group
+				//- 					input(onClick="this.select();" type="text" ng-model="selected.rwkUser" placeholder="Schütze" uib-typeahead="user as getRWKUserTitle(user) for user in getRWKUsers($viewValue)" typeahead-loading="loadingRWKUser" typeahead-input-formatter="getRWKUserTitle($model)" typeahead-no-results="noResultsRWKUser" typeahead-on-select="selectUser()" class="form-control")
+				//- 					span(class="input-group-btn")
+				//- 						button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser();")
+				//- 							span(class="glyphicon glyphicon-remove" aria-hidden="true")
+				//- 				i(ng-show="loadingRWKUser" class="glyphicon glyphicon-refresh")
+				//- 				div(ng-show="noResultsRWKUser")
+				//- 					i(class="glyphicon glyphicon-remove")
+				//- 					| Kein Schütze gefunden

@@ -13,10 +13,29 @@ angular.module("dsm.lines", [
 	};
 
 	$scope.selected = {};
-	$scope.sessionCache = {};
 
-	$scope.custom_verein = "";
-	$scope.custom_manschaft = "";
+	var resetDBUser = function(){
+		$scope.selected.user = null;
+		$scope.selected.verein = null;
+	};
+	var resetRWKUser = function(){
+		$scope.selected.rwk = null;
+		$scope.selected.rwkUser = null;
+	};
+
+	// Manual user
+	var resetManualUser = function(){
+		$scope.manualUser = {
+			firstName: "",
+			lastName: "",
+			verein: "",
+			manschaft: "",
+		};
+	};
+	resetManualUser();
+
+
+	$scope.dataCache = {};
 
 	Restangular.all("/api/disziplinen").getList({
 	}).then(function(disziplinen) {
@@ -38,7 +57,7 @@ angular.module("dsm.lines", [
 		$scope.didToggle();
 	});
 	gatewaySocket.on("setData", function(data){
-		$scope.sessionCache[data.line] = data.data.sessionParts[data.data.sessionIndex];
+		$scope.dataCache[data.line] = data.data;
 		updateUI(false); // TODO optimize
 	});
 	// --------------------------------------------
@@ -48,10 +67,9 @@ angular.module("dsm.lines", [
 
 	function updateUI(force){
 		if (force === true){
-			$scope.selected.user = null;
-			$scope.selected.verein = null;
-			$scope.selected.rwk = null;
-			$scope.selected.rwkUser = null;
+			resetDBUser();
+			resetRWKUser();
+			resetManualUser();
 		}
 
 		var lineID;
@@ -66,26 +84,47 @@ angular.module("dsm.lines", [
 		}
 
 		if (lineID !== undefined){
-			var session = $scope.sessionCache[lineID];
+			var data = $scope.dataCache[lineID];
+			if (data === undefined){
+				return;
+			}
+
+			var session = data.sessionParts[data.sessionIndex];
 			if (session === undefined){
 				return;
 			}
 
-			if (typeof $scope.selected.user != "string"){
-				$scope.selected.user = {
-					firstName: session.user.firstName,
-					lastName: session.user.lastName,
-					vereinID: session.user.vereinID,
-				};
+
+			if (data.user.rwkID !== undefined){
+				$scope.selected.rwkUser = data.user;
+				Restangular.one('/api/rwk/'+data.user.rwkID).get({
+					limit: 1,
+				}).then(function(rwk) {
+					$scope.selected.rwk = rwk;
+				});
 			}
-			if (typeof $scope.selected.verein !== "string" && session.user.verein !== undefined && session.user.vereinID !== undefined){
-				$scope.selected.verein = {
-					name: session.user.verein,
-					id: session.user.vereinID,
-				};
+			else if (data.user.id === "" || data.user.id === null || data.user.id === undefined) { // if no id, set to manual user
+				$scope.manualUser = data.user;
 			}
+			else { // if id, use database
+				if (typeof $scope.selected.user != "string"){
+					$scope.selected.user = {
+						firstName: data.user.firstName,
+						lastName: data.user.lastName,
+						vereinID: data.user.vereinID,
+					};
+				}
+				if (typeof $scope.selected.verein !== "string" && data.user.verein !== undefined && data.user.vereinID !== undefined){
+					$scope.selected.verein = {
+						name: data.user.verein,
+						id: data.user.vereinID,
+					};
+				}
+			}
+
+
 			if (typeof $scope.selected.disziplin != "string"){
-				$scope.selected.disziplin = session.disziplin;
+				$scope.selected.disziplin = data.disziplin;
 
 				loadParts();
 
@@ -101,10 +140,9 @@ angular.module("dsm.lines", [
 			}
 		}
 		else {
-			$scope.selected.user = null;
-			$scope.selected.verein = null;
-			$scope.selected.disziplin = null;
-			$scope.selected.part = null;
+			resetDBUser();
+			resetRWKUser();
+			resetManualUser();
 		}
 	}
 
@@ -140,7 +178,7 @@ angular.module("dsm.lines", [
 		updateUI(true);
 
 		performOnSelected(function(id){
-			gatewaySocket.api.getSession(id);
+			gatewaySocket.api.getData(id);
 		});
 	};
 	// ----------------------------------------
@@ -223,11 +261,17 @@ angular.module("dsm.lines", [
 					manschaft: "",
 				});
 			});
-			$scope.selected.user = null;
-			$scope.selected.verein = null;
+			resetDBUser();
+			resetRWKUser();
+			resetManualUser();
 		},
 		setUser: function(){
 			if ($scope.selected.user !== undefined && $scope.selected.user.firstName !== undefined){
+
+				// reset maunal user
+				resetManualUser();
+				resetRWKUser();
+
 				performOnSelected(function(id){
 					gatewaySocket.api.setUser(id, {
 						id: $scope.selected.user.id,
@@ -246,14 +290,18 @@ angular.module("dsm.lines", [
 			});
 		},
 		setCustomUser: function(){
+
+			resetDBUser();
+			resetRWKUser();
+
 			performOnSelected(function(id){
 				gatewaySocket.api.setUser(id, {
-					id: $scope.selected.user.id,
-					firstName: $scope.custom_user,
-					lastName: "",
-					verein: $scope.custom_verein,
+					id: "",
+					firstName: $scope.manualUser.firstName,
+					lastName: $scope.manualUser.lastName,
+					verein: $scope.manualUser.verein,
 					vereinID: "",
-					manschaft: $scope.custom_manschaft,
+					manschaft: $scope.manualUser.manschaft,
 				});
 			});
 		},
@@ -293,7 +341,7 @@ angular.module("dsm.lines", [
 
 
 	$scope.selectUser = function(){
-		if ($scope.selected.user !== undefined && $scope.selected.user.vereinID !== undefined){
+		if ($scope.selected.user !== undefined && $scope.selected.user !== null && $scope.selected.user.vereinID !== undefined){
 			$scope.selected.verein = {
 				id: $scope.selected.user.vereinID,
 				name: $scope.selected.user.verein,
@@ -308,7 +356,7 @@ angular.module("dsm.lines", [
 			limit: 100,
 		};
 
-		if ($scope.selected.verein !== undefined && typeof $scope.selected.verein !== "string"){
+		if ($scope.selected.verein !== undefined && $scope.selected.verein !== null && typeof $scope.selected.verein !== "string"){
 			query.equals_vereinID = $scope.selected.verein.id;
 		}
 		return Restangular.one('/api/user').get(query).then(function(users) {
@@ -316,7 +364,7 @@ angular.module("dsm.lines", [
 		});
 	};
 	$scope.getUserTitle = function(user){
-		if (user !== undefined){
+		if (user !== undefined && user !== null){
 			return user.firstName + " " + user.lastName;
 		}
 		return "";
@@ -326,7 +374,7 @@ angular.module("dsm.lines", [
 		if (user !== undefined){
 			string = user.firstName + " " + user.lastName;
 		}
-		if ($scope.selected.verein === undefined || typeof $scope.selected.verein === "string"){
+		if ($scope.selected.verein === undefined || $scope.selected.verein === null || typeof $scope.selected.verein === "string"){
 			string += " (" + user.verein + ")";
 		}
 		return string;
@@ -335,7 +383,7 @@ angular.module("dsm.lines", [
 
 
 	$scope.$watch("selected.verein", function() {
-		if ($scope.selected.verein !== undefined && typeof $scope.selected.verein !== "string" && $scope.selected.user !== undefined){
+		if ($scope.selected.verein !== undefined && $scope.selected.verein !== null && typeof $scope.selected.verein !== "string" && $scope.selected.user !== undefined && $scope.selected.user !== null){
 			if ($scope.selected.verein.id != $scope.selected.user.vereinID){
 				$scope.selected.user = null;
 			}
@@ -354,7 +402,10 @@ angular.module("dsm.lines", [
 
 
 	$scope.getRWKTitle = function(rwk){
-		return rwk.heimVerein + " " + rwk.heim + " - " + rwk.gastVerein + " " + rwk.gast;
+		if (rwk !== undefined && rwk !== null){
+			return rwk.heimVerein + " " + rwk.heim + " - " + rwk.gastVerein + " " + rwk.gast;
+		}
+		return "";
 	};
 	$scope.getRWK = function(serachString) {
 		return Restangular.one('/api/rwk').get({
@@ -370,8 +421,11 @@ angular.module("dsm.lines", [
 
 
 	$scope.$watch("selected.rwkUser", function() {
-		if ($scope.selected.rwkUser !== undefined && typeof $scope.selected.rwkUser !== "string"){
-			console.log($scope.selected.rwkUser)
+		if ($scope.selected.rwkUser !== undefined && $scope.selected.rwkUser !== null && typeof $scope.selected.rwkUser !== "string"){
+
+			resetDBUser();
+			resetManualUser();
+
 			$scope.actions.setBareUser({
 				firstName: $scope.selected.rwkUser.firstName,
 				lastName: $scope.selected.rwkUser.lastName,
@@ -383,7 +437,10 @@ angular.module("dsm.lines", [
 		}
 	});
 	$scope.getRWKUserTitle = function(user){
-		return user.firstName + " " + user.lastName + " (" + user.verein + ")";
+		if (user !== undefined && user !== null){
+			return user.firstName + " " + user.lastName + " (" + user.verein + ")";
+		}
+		return "";
 	};
 	$scope.getRWKUsers = function(serachString) {
 		return Restangular.one('/api/manschaft/' + $scope.selected.rwk.manschaftHeim + "/member").get({

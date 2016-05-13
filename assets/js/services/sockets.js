@@ -107,9 +107,9 @@ angular.module("dsm.services.sockets", [
 				line: line,
 			});
 		},
-		getSession: function(line){
+		getData: function(line){
 			gatewaySocket.emit("setLine", {
-				method: "getSession",
+				method: "getData",
 				line: line,
 				data: {
 					auth: auth,
