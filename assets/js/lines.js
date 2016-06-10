@@ -7,6 +7,7 @@ angular.module("dsm.lines", [
 	"restangular",
 ])
 .controller("LinesController", function ($scope, $cookies, gatewaySocket, Restangular) {
+
 	$scope.store = {
 		linesSelected: {},
 		linesSelectedCount: 0,
@@ -37,7 +38,7 @@ angular.module("dsm.lines", [
 
 	$scope.dataCache = {};
 
-	Restangular.all("/api/disziplinen").getList({
+	Restangular.all("/disziplinen").getList({
 	}).then(function(disziplinen) {
 		$scope.disziplinen = disziplinen;
 	});
@@ -83,8 +84,10 @@ angular.module("dsm.lines", [
 			}
 		}
 
+		$scope.selectedData = null; // contains data when only one line is selected
 		if (lineID !== undefined){
 			var data = $scope.dataCache[lineID];
+			$scope.selectedData = data;
 			if (data === undefined){
 				return;
 			}
@@ -97,7 +100,7 @@ angular.module("dsm.lines", [
 
 			if (data.user.rwkID !== undefined){
 				$scope.selected.rwkUser = data.user;
-				Restangular.one('/api/rwk/'+data.user.rwkID).get({
+				Restangular.one('/rwk/'+data.user.rwkID).get({
 					limit: 1,
 				}).then(function(rwk) {
 					$scope.selected.rwk = rwk;
@@ -359,7 +362,7 @@ angular.module("dsm.lines", [
 		if ($scope.selected.verein !== undefined && $scope.selected.verein !== null && typeof $scope.selected.verein !== "string"){
 			query.equals_vereinID = $scope.selected.verein.id;
 		}
-		return Restangular.one('/api/user').get(query).then(function(users) {
+		return Restangular.one('/user').get(query).then(function(users) {
 			return users;
 		});
 	};
@@ -391,7 +394,7 @@ angular.module("dsm.lines", [
 	});
 
 	$scope.getVereine = function(serachString) {
-		return Restangular.one('/api/verein').get({
+		return Restangular.one('/verein').get({
 			search: serachString,
 			limit: 1000,
 		}).then(function(vereine) {
@@ -408,7 +411,7 @@ angular.module("dsm.lines", [
 		return "";
 	};
 	$scope.getRWK = function(serachString) {
-		return Restangular.one('/api/rwk').get({
+		return Restangular.one('/rwk').get({
 			search: serachString,
 			limit: 1000,
 		}).then(function(vereine) {
@@ -420,7 +423,7 @@ angular.module("dsm.lines", [
 
 
 
-	$scope.$watch("selected.rwkUser", function() {
+	$scope.selectRWKUser =  function() {
 		if ($scope.selected.rwkUser !== undefined && $scope.selected.rwkUser !== null && typeof $scope.selected.rwkUser !== "string"){
 
 			resetDBUser();
@@ -434,25 +437,44 @@ angular.module("dsm.lines", [
 				manschaft: $scope.selected.rwkUser.manschaft,
 				rwkID: $scope.selected.rwk.id,
 			});
+
+
+
+			// update dataID in server db
+			Restangular.one("rwk", $scope.selected.rwk.id).one("member", $scope.selected.rwkUser.id).get().then(function(rwkUser) {
+				Restangular.one("rwk", $scope.selected.rwk.id).get().then(function(rwk) {
+					var disziplinID = rwk.heimSaisonDisziplinID;
+					if (rwkUser.gast){
+						disziplinID = rwk.gastSaisonDisziplinID;
+					}
+
+					if ($scope.selectedData._id != rwkUser.dataID){
+						performOnSelected(function(id){
+							gatewaySocket.api.setDisziplin(id, disziplinID);
+						});
+
+						// Wait 5 sec to write the correct sessionID into db
+						setTimeout(function(){
+							rwkUser.dataID = $scope.selectedData._id;
+							rwkUser.post();
+						}, 5000);
+					}
+				});
+			});
 		}
-	});
+	};
 	$scope.getRWKUserTitle = function(user){
 		if (user !== undefined && user !== null){
-			return user.firstName + " " + user.lastName + " (" + user.verein + ")";
+			return user.firstName + " " + user.lastName + " (" + user.verein + " " + user.manschaft + ")";
 		}
 		return "";
 	};
 	$scope.getRWKUsers = function(serachString) {
-		return Restangular.one('/api/manschaft/' + $scope.selected.rwk.manschaftHeim + "/member").get({
+		return Restangular.one('/rwk/' + $scope.selected.rwk.id + "/member").get({
 			search: serachString,
 			limit: 1000,
-		}).then(function(usersHeim) {
-			return Restangular.one('/api/manschaft/' + $scope.selected.rwk.manschaftGast + "/member").get({
-				search: serachString,
-				limit: 1000,
-			}).then(function(usersGast) {
-				return usersHeim.concat(usersGast);
-			});
+		}).then(function(users) {
+			return users;
 		});
 	};
 

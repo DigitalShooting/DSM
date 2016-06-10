@@ -78,7 +78,9 @@ app.config(['$routeProvider', function($routeProvider) {
 			redirectTo: '/lines',
 		});
 }]);
-app.run(['$rootScope','$location', function($rootScope, $location) {
+app.run(['$rootScope','$location', 'Restangular', function($rootScope, $location, Restangular) {
+	Restangular.setBaseUrl('/api/');
+
 	$rootScope.$on('$routeChangeSuccess', function() {
 		$rootScope.path = $location.path();
 	});

@@ -38,12 +38,12 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 
 	// Reload total item count and vereine
 	function reload(){
-		Restangular.one('/api/verein/info').get({
+		Restangular.one('/verein/info').get({
 			search: $scope.store.search,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
-		Restangular.all('/api/verein').getList({
+		Restangular.all('/verein').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
@@ -75,7 +75,7 @@ app.controller("VereinController", function($scope, Restangular, $uibModal, $coo
 		}, function () {});
 	};
 	$scope.newEntry = function(){
-		Restangular.one('/api/verein').post().then(function(verein) {
+		Restangular.one('/verein').post().then(function(verein) {
 			$scope.editEntry(verein);
 		});
 	};

@@ -49,13 +49,13 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 
 	// Reload total item count and rwks
 	function reload(){
-		Restangular.one('/api/rwk/info').get({
+		Restangular.one('/rwk/info').get({
 			search: $scope.store.search,
 			done: 1,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
-		Restangular.all('/api/rwk').getList({
+		Restangular.all('/rwk').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
@@ -88,7 +88,7 @@ app.controller("RWKsController", function($scope, Restangular, $uibModal, $cooki
 		}, function () {});
 	};
 	$scope.newEntry = function(){
-		Restangular.one('/api/rwk').post().then(function(rwk) {
+		Restangular.one('/rwk').post().then(function(rwk) {
 			$scope.editEntry(rwk);
 		});
 	};
@@ -195,7 +195,7 @@ app.controller('RWKEditController', function (Restangular, $scope, $uibModalInst
 
 
 	$scope.getManschaft = function(serachString) {
-		return Restangular.one('/api/manschaft').get({
+		return Restangular.one('/manschaft').get({
 			search: serachString,
 			limit: 1000,
 		}).then(function(manschaften) {

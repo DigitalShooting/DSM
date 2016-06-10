@@ -46,6 +46,13 @@ block main
 					div(class="form-group col-md-6")
 						label(class="control-label") Name:
 						input(type="text" class="form-control" ng-model="saison.name")
+					div(class="form-group col-md-6")
+						label(class="control-label") Disziplin:
+						ui-select(ng-model="saison.disziplin" theme="bootstrap" title="Choose a person")
+							ui-select-match {{saison.disziplin.title}} ({{saison.disziplin.scheibe.title}})
+							ui-select-choices(repeat="disziplin in disziplinen")
+								div(ng-bind-html="person.name | highlight: $select.search")
+								small {{disziplin.title}} ({{disziplin.scheibe.title}})
 				.divider
 				div(class="form-group")
 					label(for="message-text" class="control-label") Notiz:

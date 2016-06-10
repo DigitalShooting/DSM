@@ -49,13 +49,13 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 
 	// Reload total item count and rwks
 	function reload(){
-		Restangular.one('/api/rwk/info').get({
+		Restangular.one('/rwk/info').get({
 			search: $scope.store.search,
 			done: 0,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
-		Restangular.all('/api/rwk').getList({
+		Restangular.all('/rwk').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
@@ -107,7 +107,7 @@ app.controller("ActiveRWKsController", function($scope, Restangular, $uibModal, 
 		}, function (){});
 	};
 	$scope.newEntry = function(){
-		Restangular.one('/api/rwk').post().then(function(rwk) {
+		Restangular.one('/rwk').post().then(function(rwk) {
 			$scope.editEntry(rwk);
 		});
 	};
@@ -256,14 +256,14 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 
 	// Load manschaften
 	function loadManschaften() {
-		Restangular.all("/api/manschaft/" + $scope.rwk.manschaftHeim + "/member").getList({
+		Restangular.all("/manschaft/" + $scope.rwk.manschaftHeim + "/member").getList({
 			order: $scope.store.selectedOrder.field,
 			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(members) {
 			$scope.heimManschaft = members;
 		});
 
-		Restangular.all("/api/manschaft/" + $scope.rwk.manschaftGast + "/member").getList({
+		Restangular.all("/manschaft/" + $scope.rwk.manschaftGast + "/member").getList({
 			order: $scope.store.selectedOrder.field,
 			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(members) {
@@ -372,6 +372,22 @@ app.controller('ActiveRWKUsersController', function (Restangular, $scope, $cooki
 // ActiveRWKScoresController
 // Displays an overlay to edit rwk scores
 app.controller('ActiveRWKScoresController', function (Restangular, $scope, $cookies, $uibModalInstance, rwk) {
+
+	Restangular.one("rwk", rwk.id).all("member").getList({
+		results: "true",
+		type: "heim"
+	}).then(function(heimMembers) {
+		$scope.heimMembers = heimMembers;
+		console.log(heimMembers)
+	});
+
+	Restangular.one("rwk", rwk.id).all("member").getList({
+		results: "true",
+		type: "gast"
+	}).then(function(gastMembers) {
+		$scope.gastMembers = gastMembers;
+		console.log(gastMembers)
+	});
 
 	// close
 	$scope.cancel = function () {

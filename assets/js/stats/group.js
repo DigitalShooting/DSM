@@ -39,12 +39,12 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 
 	// Reload total item count and groups
 	function reload(){
-		Restangular.one('/api/group/info').get({
+		Restangular.one('/group/info').get({
 			search: $scope.store.search,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
-		Restangular.all('/api/group').getList({
+		Restangular.all('/group').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
@@ -80,7 +80,7 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 		}, function () {});
 	};
 	$scope.newEntry = function(){
-		Restangular.one('/api/group').post().then(function(user) {
+		Restangular.one('/group').post().then(function(user) {
 			$scope.editEntry(user);
 		});
 	};
@@ -151,18 +151,18 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 
 	$scope.lines = [];
-	Restangular.one('/api/lines').get().then(function(lines) {
+	Restangular.one('/lines').get().then(function(lines) {
 		$scope.lines = lines;
 	});
 	function reload(){
-		Restangular.all("/api/group/" + $scope.group.id + "/sessions").getList().then(function(sessions) {
+		Restangular.all("/group/" + $scope.group.id + "/sessions").getList().then(function(sessions) {
 			$scope.selectedshotindex = [];
 			for (var i = 0; i < sessions.length; i++){
 				$scope.selectedshotindex.push(-1);
 			}
 			$scope.sessions = sessions;
 		});
-		Restangular.one("/api/disziplinen/" + $scope.group.disziplin).get().then(function(disziplin) {
+		Restangular.one("/disziplinen/" + $scope.group.disziplin).get().then(function(disziplin) {
 			$scope.disziplin = disziplin;
 		});
 	}

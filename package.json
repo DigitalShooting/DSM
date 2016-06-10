@@ -18,7 +18,7 @@
     "jquery": "x",
     "less": "x",
     "less-middleware": "x",
-    "mongodb": "x",
+    "mongodb": "^2.1.18",
     "mysql": "^2.9.0",
     "path": "x",
     "restify": "^4.0.3",

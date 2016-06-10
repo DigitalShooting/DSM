@@ -38,12 +38,12 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 
 	// Reload total item count and users
 	function reload(){
-		Restangular.one('/api/user/info').get({
+		Restangular.one('/user/info').get({
 			search: $scope.store.search,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
-		Restangular.all('/api/user').getList({
+		Restangular.all('/user').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
@@ -77,7 +77,7 @@ app.controller("UserController", function($scope, Restangular, $uibModal, $cooki
 		});
 	};
 	$scope.newEntry = function(){
-		Restangular.one('/api/user').post().then(function(user) {
+		Restangular.one('/user').post().then(function(user) {
 			$scope.editEntry(user);
 		});
 	};

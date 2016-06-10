@@ -39,7 +39,7 @@ angular.module('dsm.services.typeahead.user', [
 				if ($scope.verein !== undefined && typeof $scope.verein !== "string"){
 					query.equals_vereinID = $scope.verein.id;
 				}
-				return Restangular.one('/api/user').get(query).then(function(users) {
+				return Restangular.one('/user').get(query).then(function(users) {
 					return users;
 				});
 			};
@@ -91,7 +91,7 @@ angular.module('dsm.services.typeahead.user', [
 					limit: 100,
 				};
 
-				return Restangular.one('/api/verein').get(query).then(function(vereine) {
+				return Restangular.one('/verein').get(query).then(function(vereine) {
 					return vereine;
 				});
 			};
@@ -134,7 +134,7 @@ angular.module('dsm.services.typeahead.user', [
 		},
 		link: function postlink($scope){
 			$scope.getManschaft = function(serachString) {
-				return Restangular.one('/api/manschaft').get({
+				return Restangular.one('/manschaft').get({
 					search: serachString,
 					limit: 1000,
 				}).then(function(manschaften) {
@@ -173,7 +173,7 @@ angular.module('dsm.services.typeahead.user', [
 		},
 		link: function postlink($scope, element, attrs){
 			$scope.getSaison = function(serachString) {
-				return Restangular.one('/api/saison').get({
+				return Restangular.one('/saison').get({
 					search: serachString,
 					limit: 1000,
 				}).then(function(saisons) {

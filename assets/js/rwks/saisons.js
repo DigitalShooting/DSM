@@ -38,12 +38,12 @@ app.controller("SaisonController", function($scope, Restangular, $uibModal, $coo
 
 	// Reload total item count and saisons
 	function reload(){
-		Restangular.one('/api/saison/info').get({
+		Restangular.one('/saison/info').get({
 			search: $scope.store.search,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
-		Restangular.all('/api/saison').getList({
+		Restangular.all('/saison').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
@@ -75,7 +75,7 @@ app.controller("SaisonController", function($scope, Restangular, $uibModal, $coo
 		}, function () {});
 	};
 	$scope.newEntry = function(){
-		Restangular.one('/api/saison').post().then(function(saison) {
+		Restangular.one('/saison').post().then(function(saison) {
 			$scope.editEntry(saison);
 		});
 	};
@@ -109,9 +109,20 @@ app.controller("SaisonController", function($scope, Restangular, $uibModal, $coo
 app.controller('SaisonEditController', function (Restangular, $scope, $uibModalInstance, saison) {
 	$scope.saison = saison;
 
+	Restangular.all("disziplinen").getList().then(function(disziplinen) {
+		$scope.disziplinen = disziplinen;
+		console.log(disziplinen)
+	});
+	Restangular.one("disziplinen", $scope.saison.disziplinID).get().then(function(disziplin) {
+		saison.disziplin = disziplin;
+		console.log(disziplin)
+	});
+
 
 	// save and close overlay
 	$scope.save = function () {
+		$scope.saison.disziplinID = saison.disziplin._id;
+
 		$scope.cancel();
 		$scope.saison.post();
 	};

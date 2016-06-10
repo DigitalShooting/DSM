@@ -38,12 +38,12 @@ app.controller("ManschaftenController", function($scope, Restangular, $uibModal,
 
 	// Reload total item count and manschaften
 	function reload(){
-		Restangular.one('/api/manschaft/info').get({
+		Restangular.one('/manschaft/info').get({
 			search: $scope.store.search,
 		}).then(function(info) {
 			$scope.totalItems = info.count;
 		});
-		Restangular.all('/api/manschaft').getList({
+		Restangular.all('/manschaft').getList({
 			search: $scope.store.search,
 			limit: $scope.store.itemsPerPage,
 			page: $scope.currentPage-1,
@@ -75,7 +75,7 @@ app.controller("ManschaftenController", function($scope, Restangular, $uibModal,
 		}, function () {});
 	};
 	$scope.newEntry = function(){
-		Restangular.one('/api/manschaft').post().then(function(manschaft) {
+		Restangular.one('/manschaft').post().then(function(manschaft) {
 			$scope.editEntry(manschaft);
 		});
 	};
@@ -172,7 +172,7 @@ app.controller('ManschaftEditController', function (Restangular, $scope, $cookie
 
 
 	$scope.getUsers = function(serachString) {
-		return Restangular.one('/api/user').get({
+		return Restangular.one('/user').get({
 			search: serachString,
 			limit: 1000,
 			equals_vereinID: $scope.verein.id,
