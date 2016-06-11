@@ -20,6 +20,7 @@ module.exports = {
 		probe: {
 			title: "Probe",
 			probeEcke: true,
+			mainPart: false,
 			neueScheibe: false,
 			serienLength: 10,
 			anzahlShots: 0,
@@ -39,6 +40,7 @@ module.exports = {
 		match: {
 			title: "Match",
 			probeEcke: false,
+			mainPart: true,
 			neueScheibe: false,
 			serienLength: 10,
 			anzahlShots: 40,

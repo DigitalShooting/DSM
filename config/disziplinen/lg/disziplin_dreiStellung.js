@@ -20,6 +20,7 @@ module.exports = {
 		probeK: {
 			title: "Probe (Kniend)",
 			probeEcke: true,
+			mainPart: false,
 			neueScheibe: false,
 			serienLength: 10,
 			anzahlShots: 0,
@@ -39,6 +40,7 @@ module.exports = {
 		matchK: {
 			title: "Match (Kniend)",
 			probeEcke: false,
+			mainPart: true,
 			neueScheibe: false,
 			serienLength: 10,
 			anzahlShots: 20,
@@ -58,6 +60,7 @@ module.exports = {
 		probeL: {
 			title: "Probe (Liegend)",
 			probeEcke: true,
+			mainPart: false,
 			neueScheibe: false,
 			serienLength: 10,
 			anzahlShots: 0,
@@ -77,6 +80,7 @@ module.exports = {
 		matchL: {
 			title: "Match (Liegend)",
 			probeEcke: false,
+			mainPart: true,
 			neueScheibe: false,
 			serienLength: 10,
 			anzahlShots: 20,
@@ -96,6 +100,7 @@ module.exports = {
 		probeS: {
 			title: "Probe (Stehend)",
 			probeEcke: true,
+			mainPart: false,
 			neueScheibe: false,
 			serienLength: 10,
 			anzahlShots: 0,
@@ -115,6 +120,7 @@ module.exports = {
 		matchS: {
 			title: "Match (Stehend)",
 			probeEcke: false,
+			mainPart: true,
 			neueScheibe: false,
 			serienLength: 10,
 			anzahlShots: 20,

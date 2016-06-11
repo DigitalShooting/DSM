@@ -7,7 +7,7 @@ module.exports = {
 		name: "esa",
 		band: {
 			onChangePart: 5,
-			onShot: 3,
+			onShot: 2,
 		},
 	},
 	time: {
@@ -20,6 +20,7 @@ module.exports = {
 		probe: {
 			title: "Probe",
 			probeEcke: false,
+			mainPart: true,
 			neueScheibe: true,
 			serienLength: 50,
 			anzahlShots: 0,
