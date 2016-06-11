@@ -200,7 +200,16 @@ block main
 										input(type="checkbox" disabled ng-model="member.ersatz" ng-true-value="1" ng-false-value="0" ng-change="member.post();")
 									td {{member.firstName}}
 									td {{member.lastName}}
-									td {{member.data.sessionParts[0].gesamt}}
+									td
+										table(ng-repeat="session in member.mainSessions")
+											tbody
+												td(ng-repeat="serie in session.serien") {{serie.gesamt}}
+												th {{session.gesamt}}
+								tr
+									td
+									td
+									td
+									th {{heimGesamt}}
 
 					div(class="form-group col-md-6" ng-hide="members.length == 0")
 						label(class="control-label") Gast:
@@ -217,9 +226,17 @@ block main
 										input(type="checkbox" disabled ng-model="member.ersatz" ng-true-value="1" ng-false-value="0" ng-change="member.post();")
 									td {{member.firstName}}
 									td {{member.lastName}}
-									td {{member.data.sessionParts[0].gesamt}}
+									td
+										table(ng-repeat="session in member.mainSessions")
+											tbody
+												td(ng-repeat="serie in session.serien") {{serie.gesamt}}
+												th {{session.gesamt}}
+								tr
+									td
+									td
+									td
+									th {{gastGesamt}}
 
-											
 		div(class="modal-footer")
 			button(class="btn btn-default" type="button" ng-click="cancel()")
 				| Fertig

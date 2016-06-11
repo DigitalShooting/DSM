@@ -377,21 +377,51 @@ app.controller('ActiveRWKScoresController', function (Restangular, $scope, $cook
 		results: "true",
 		type: "heim"
 	}).then(function(heimMembers) {
+		$scope.heimGesamt = 0;
+
+		for (var i in heimMembers) {
+			heimMembers[i].mainSessions = $scope.getMainSessions(heimMembers[i].data);
+
+			for (var j in heimMembers[i].mainSessions) {
+				$scope.heimGesamt += heimMembers[i].mainSessions[j].gesamt;
+			}
+		}
 		$scope.heimMembers = heimMembers;
-		console.log(heimMembers)
 	});
 
 	Restangular.one("rwk", rwk.id).all("member").getList({
 		results: "true",
 		type: "gast"
 	}).then(function(gastMembers) {
+		$scope.gastGesamt = 0;
+
+		for (var i in gastMembers) {
+			gastMembers[i].mainSessions = $scope.getMainSessions(gastMembers[i].data);
+
+			for (var j in gastMembers[i].mainSessions) {
+				$scope.heimGesamt += gastMembers[i].mainSessions[j].gesamt;
+			}
+		}
 		$scope.gastMembers = gastMembers;
-		console.log(gastMembers)
 	});
 
 	// close
 	$scope.cancel = function () {
 		$uibModalInstance.close($scope.rwk);
+	};
+
+
+	$scope.getMainSessions = function(data) {
+		if (data !== undefined) {
+			var mainParts = [];
+			for (var i in data.sessionParts) {
+				if (data.disziplin.parts[data.sessionParts[i].type].mainPart) {
+					mainParts.push(data.sessionParts[i]);
+				}
+			}
+			return mainParts;
+		}
+		return [];
 	};
 
 });
