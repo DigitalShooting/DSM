@@ -1,14 +1,22 @@
 @import "../node_modules/bootstrap/less/bootstrap.less";
 
+html, body {
+
+	// disable selection
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
 h1, h2 {
 	text-align: center;
 }
-.lAlign {
-	text-align: left;
-}
-.rAlign {
-	text-align: right;
-}
+.lAlign { text-align: left; }
+.rAlign { text-align: right; }
+.lFloat { float: left; }
+.rFloat { float: right; }
 
 table {
 	width: 100%;
@@ -54,15 +62,15 @@ button {
 	z-index: 1000;
 	display: none;
 	background-color: #f9f9f9;
-  }
+}
 
-  .typeahead-demo .custom-popup-wrapper > .message {
+.typeahead-demo .custom-popup-wrapper > .message {
 	padding: 10px 20px;
 	border-bottom: 1px solid #ddd;
 	color: #868686;
-  }
+}
 
-  .typeahead-demo .custom-popup-wrapper > .dropdown-menu {
+.typeahead-demo .custom-popup-wrapper > .dropdown-menu {
 	position: static;
 	float: none;
 	display: block;
@@ -71,7 +79,7 @@ button {
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
-  }
+}
 
 
 

@@ -11,9 +11,13 @@ angular.module("dsm.lines", [
 	$scope.store = {
 		linesSelected: {},
 		linesSelectedCount: 0,
+		dashboardMode: "normal", // normal/ rwk
 	};
+	console.log("fuch", $scope.store.dashboardMode);
 
 	$scope.selected = {};
+
+	$scope.rwk = {};
 
 	var resetDBUser = function(){
 		$scope.selected.user = null;
@@ -98,12 +102,16 @@ angular.module("dsm.lines", [
 			}
 
 
+			$scope.getRWK();
+
+
 			if (data.user.rwkID !== undefined){
 				$scope.selected.rwkUser = data.user;
 				Restangular.one('/rwk/'+data.user.rwkID).get({
 					limit: 1,
 				}).then(function(rwk) {
 					$scope.selected.rwk = rwk;
+					$scope.getRWKUsers();
 				});
 			}
 			else if (data.user.id === "" || data.user.id === null || data.user.id === undefined) { // if no id, set to manual user
@@ -169,7 +177,7 @@ angular.module("dsm.lines", [
 			}
 		}
 
-		writeToCookie();
+		$scope.writeToCookie();
 	};
 	// toggel selection for all
 	$scope.toggleAll = function(value){
@@ -414,13 +422,18 @@ angular.module("dsm.lines", [
 		return Restangular.one('/rwk').get({
 			search: serachString,
 			limit: 1000,
-		}).then(function(vereine) {
-			return vereine;
+		}).then(function(rwks) {
+			$scope.rwk.rwks = rwks;
+			return rwks;
 		});
 	};
 
 
 
+
+	$scope.rwkDidSelect = function() {
+		$scope.getRWKUsers();
+	};
 
 
 	$scope.selectRWKUser =  function() {
@@ -470,13 +483,19 @@ angular.module("dsm.lines", [
 		return "";
 	};
 	$scope.getRWKUsers = function(serachString) {
-		return Restangular.one('/rwk/' + $scope.selected.rwk.id + "/member").get({
-			search: serachString,
-			limit: 1000,
-		}).then(function(users) {
-			return users;
-		});
+		if ($scope.selected.rwk !== undefined) {
+			return Restangular.one('/rwk/' + $scope.selected.rwk.id + "/member").get({
+				search: serachString,
+				limit: 1000,
+			}).then(function(users) {
+				$scope.rwk.users = users;
+				return users;
+			});
+		}
+		return [];
 	};
+
+
 
 
 
@@ -493,7 +512,7 @@ angular.module("dsm.lines", [
 	if (cookieData !== undefined){
 		$scope.store = cookieData;
 	}
-	function writeToCookie(){
+	$scope.writeToCookie = function(){
 		$cookies.putObject('LinesController', $scope.store, {});
-	}
+	};
 });

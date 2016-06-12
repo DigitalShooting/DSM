@@ -3,6 +3,7 @@ extends base.jade
 block title
 	| Verwaltung
 
+
 block body
 	section(class="col-md-3")
 		h2 Stände
@@ -22,6 +23,12 @@ block body
 	section(class="col-md-9")
 		h1
 			block title
+
+		ul(class="nav nav-tabs")
+			li(role="presentation" class="{{store.dashboardMode == 'normal' ? 'active' : ''}}" ng-click="store.dashboardMode = 'normal'; writeToCookie();")
+				a Standard
+			li(role="presentation" class="{{store.dashboardMode == 'rwk' ? 'active' : ''}}" ng-click="store.dashboardMode = 'rwk'; writeToCookie();")
+				a RWK
 		
 		.row
 		
@@ -49,7 +56,7 @@ block body
 
 
 				//- Disziplinen selection
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount == 0")
+				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount == 0 || store.dashboardMode!= 'normal'")
 					h4 Disziplin & Scheibe
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -118,7 +125,7 @@ block body
 
 
 				//- User
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1")
+				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1 || store.dashboardMode!= 'normal'")
 					h4 Schütze (Datenbank)
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -149,7 +156,7 @@ block body
 
 
 				//- User
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1")
+				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1 || store.dashboardMode!= 'normal'")
 					h4 Schütze
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -174,14 +181,18 @@ block body
 									
 				
 				//- RWK
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1")
+				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1 || store.dashboardMode!= 'rwk'")
 					h4 RWK
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") RWK:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.rwk" placeholder="RWK" uib-typeahead="rwk as getRWKTitle(rwk) for rwk in getRWK($viewValue)" typeahead-loading="loadingRWK" typeahead-no-results="noResultsRWK" typeahead-input-formatter="getRWKTitle($model)" class="form-control")
+									ui-select(ng-model="selected.rwk" placeholder="RWK" theme="bootstrap" on-select="rwkDidSelect()")
+										ui-select-match {{getRWKTitle(selected.rwk)}}
+										ui-select-choices(repeat="rwk in rwk.rwks" position="auto")
+											div(ng-bind-html="rwk | highlight: $select.search")
+											small {{getRWKTitle(rwk)}} 
 									span(class="input-group-btn")
 										button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser();")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
@@ -189,11 +200,15 @@ block body
 								div(ng-show="noResultsRWK")
 									i(class="glyphicon glyphicon-remove")
 									| Kein RWK gefunden
-						div(class="form-group")
+						div(class="form-group" ng-hide="selected.rwk === null")
 							label(class="col-sm-2 control-label") Schütze:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.rwkUser" placeholder="Schütze" uib-typeahead="user as getRWKUserTitle(user) for user in getRWKUsers($viewValue)" typeahead-loading="loadingRWKUser" typeahead-input-formatter="getRWKUserTitle($model)" typeahead-no-results="noResultsRWKUser" typeahead-on-select="selectRWKUser()" class="form-control")
+									ui-select(ng-model="selected.rwkUser" placeholder="Schütze" theme="bootstrap" on-select="selectRWKUser()")
+										ui-select-match {{getRWKUserTitle(selected.rwkUser)}}
+										ui-select-choices(repeat="user in rwk.users")
+											div(ng-bind-html="getRWKUserTitle(user) | highlight: $select.search")
+											small {{getRWKUserTitle(user)}} 
 									span(class="input-group-btn")
 										button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser();")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")

@@ -1,10 +1,10 @@
 var express = require("express");
-var compression = require('compression');
+var compression = require("compression");
 var http = require("http");
-var lessMiddleware = require('less-middleware');
+var lessMiddleware = require("less-middleware");
 var config = require("./config/");
 var routes = require("./routes");
-var proxy = require('express-http-proxy');
+var proxy = require("express-http-proxy");
 
 var app = express({ strict: true });
 
@@ -14,7 +14,7 @@ app.use(function(req, res, next){
 });
 
 // set up jade
-app.set('view engine', 'jade');
+app.set("view engine", "jade");
 
 // route fonts
 app.use("/fonts/", express.static("./node_modules/bootstrap/fonts"));
@@ -52,9 +52,9 @@ app.get("/", function(req, res){
 
 // start api and map to /api
 require("./lib/api/index.js");
-app.use('/api/', proxy("127.0.0.1:" + config.network.api.port, {
+app.use("/api/", proxy("127.0.0.1:" + config.network.api.port, {
 	forwardPath: function(req, res) {
-		return require('url').parse(req.url).path;
+		return require("url").parse(req.url).path;
 	}
 }));
 
@@ -64,8 +64,8 @@ app.use('/api/', proxy("127.0.0.1:" + config.network.api.port, {
 
 // Set up express & socket.io
 var server = http.Server(app);
-require('socket.io')(server); // Only for client script TODO -> bower and remove
+require("socket.io")(server); // Only for client script TODO -> bower and remove
 server.listen(config.network.webinterface.port, config.network.webinterface.address);
-server.on('listening', function() {
-	console.log('Express server started on at %s:%s', server.address().address, server.address().port);
+server.on("listening", function() {
+	console.log("[INFO] DSM started (%s:%s)", server.address().address, server.address().port);
 });

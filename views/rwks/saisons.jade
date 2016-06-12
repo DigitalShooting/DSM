@@ -53,6 +53,7 @@ block main
 							ui-select-choices(repeat="disziplin in disziplinen")
 								div(ng-bind-html="person.name | highlight: $select.search")
 								small {{disziplin.title}} ({{disziplin.scheibe.title}})
+
 				.divider
 				div(class="form-group")
 					label(for="message-text" class="control-label") Notiz:
