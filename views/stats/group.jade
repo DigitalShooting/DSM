@@ -24,12 +24,12 @@ block main
 					input(autofocus onClick="this.select();" type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
 		tbody
 			tr(ng-repeat="sessionGroup in sessionGroups track by $index")
-				td {{sessionGroup.firstName}}
-				td {{sessionGroup.lastName}}
-				td {{sessionGroup.verein}}
-				td {{sessionGroup.lineTitle}}
-				td {{sessionGroup.disziplinTitle}} ({{sessionGroup.scheibeTitle}})
-				td {{formateDate(sessionGroup.unixtime)}}
+				td {{sessionGroup.user.firstName}}
+				td {{sessionGroup.user.lastName}}
+				td {{sessionGroup.user.verein}}
+				td {{sessionGroup.line}}
+				td {{sessionGroup.disziplin.title}} ({{sessionGroup.disziplin.scheibe.title}})
+				td {{formateDate(sessionGroup.date/1000)}}
 				td
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(sessionGroup)")
 						span(class="glyphicon glyphicon-pencil" aria-hidden="true")
@@ -45,54 +45,80 @@ block main
 				span(aria-hidden="true") &times
 			h4(class="modal-title" id="exampleModalLabel")
 				span(class="glyphicon glyphicon-user" aria-hidden="true")
-				|  {{line.label}} - {{group.firstName}} {{group.lastName}} ({{group.verein}})
+				|  {{sessionGroup.line}} - {{sessionGroup.user.firstName}} {{sessionGroup.user.lastName}} ({{sessionGroup.user.verein}})
 		div(class="modal-body")
 			form
 				div(class="row")
 					div(class="form-group col-md-4")
 						label(class="control-label") Datum:
-						p {{formateDate(group.unixtime)}}
+						p {{formateDate(sessionGroup.date/1000)}}
 					div(class="form-group col-md-4")
 						label Linie:
-						p {{group.lineTitle}}
+						p {{sessionGroup.line}}
 					div(class="form-group col-md-4")
 						label Disziplin:
-						p {{group.disziplinTitle}} ({{group.scheibeTitle}})
+						p {{sessionGroup.disziplin.title}} ({{sessionGroup.disziplin.scheibe.title}})
 						
 					.divider
 					
-					div(class="form-group col-md-6")
-						label(class="control-label") Verein:
-						verein-typeahead(user="user" verein="verein")
-					div(class="form-group col-md-6")
-						label(class="control-label") Schütze:
-						user-typeahead(user="user" verein="verein")
+					//- div(class="form-group col-md-6")
+					//- 	label(class="control-label") Verein:
+					//- 	verein-typeahead(user="user" verein="verein")
+					//- div(class="form-group col-md-6")
+					//- 	label(class="control-label") Schütze:
+					//- 	user-typeahead(user="user" verein="verein")
+					//- 
+					//- .divider
 					
-					.divider
-					div(ng-repeat="(sessionIndex, session) in sessions" class="form-group col-md-4" ng-hide="session.shots.length == 0")
-						label(class="control-label") {{disziplin.parts[session.part].title}}
-						table(class="table table-condensed table-striped")
+					div(ng-repeat="(sessionIndex, session) in sessionGroup.sessionParts" class="form-group col-md-12" ng-hide="session.anzahl == 0")
+						table(class="table table-condensed table-striped" )
 							thead
 								tr
-									+tableHeader("Nr.", "number")
-									+tableHeader("Ring", "ring")
-									+tableHeader("Teiler", "ring")
+									+tableHeader("Type", "")
+									+tableHeader("Anzahl", "")
+									+tableHeader("Gesamt", "")
+									+tableHeader("Schnitt", "")
+									+tableHeader("Innenzehner", "")
+									+tableHeader("10,0", "")
+									+tableHeader("9,9", "")
+									+tableHeader("Bester Teiler", "")
+									+tableHeader("Hochrechnung", "")
 							tbody
-								tr(colspan="3" class="fullWidth")
-									div(style="width:80%; margin-left:7%;")
-										target(zoomlevel="disziplin.scheibe.defaultZoom" serie="session.shots" selectedshotindex="selectedshotindex[sessionIndex]" scheibe="disziplin.scheibe" probeecke="disziplin.parts[session.part].probeEcke")
-								tr(ng-repeat="(shotIndex, shot) in session.shots" ng-click="selectedshotindex[sessionIndex] = shotIndex;" class="{{selectedshotindex[sessionIndex] == shotIndex ? 'success' : ''}}")
-									td {{((shot.number-1) % disziplin.parts[session.part].serienLength) + 1}}.
-									td {{shot.ring}}
-									td {{shot.teiler}}
-							tfooter
-								tr(ng-click="selectedshotindex[sessionIndex] = -1;")
-									td {{session.shots.length}}
-									th {{session.sum}} Ringe
-									th {{session.avg}} Schnitt
-									
-				
-					.divider
+								tr
+									td {{sessionGroup.disziplin.parts[session.type].title}}
+									td {{session.anzahl}}
+									td {{session.gesamt}}
+									td {{session.schnitt}}
+									td {{session.counts.innenZehner}}
+									td {{session.counts.zehnNull}}
+									td {{session.counts.neunNeun}}
+									td {{session.bestTeiler}}
+									td {{session.schnittCalc}}
+						
+						div(ng-repeat="(serieIndex, serie) in session.serien" class="form-group col-md-4")
+							label(class="control-label") {{disziplin.parts[session.part].title}}
+							table(class="table table-condensed table-striped" )
+								thead
+									tr
+										+tableHeader("Nr.", "number")
+										+tableHeader("Ring", "ring")
+										+tableHeader("Teiler", "ring")
+								tbody
+									tr(colspan="3" class="fullWidth")
+										div(style="width:80%; margin-left:7%;")
+											target(zoomlevel="sessionGroup.disziplin.scheibe.defaultZoom" serie="serie.shots" selectedshotindex="-1" scheibe="sessionGroup.disziplin.scheibe" probeecke="sessionGroup.disziplin.parts[session.type].probeEcke")
+									tr(ng-repeat="(shotIndex, shot) in serie.shots")
+										td {{shot.number}}.
+										td {{shot.ring.display}}
+										td {{shot.teiler}}
+								tfooter
+									tr(ng-click="selectedshotindex[sessionIndex] = -1;")
+										td {{serie.anzahl.length}}
+										th {{serie.gesamt}} Ringe
+										th {{serie.schnitt}} Schnitt
+						.divider
+
+
 					div(class="form-group col-md-6")
 						label(class="control-label") Auf Linie laden:
 						ui-select(ng-model="selected.line" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="")

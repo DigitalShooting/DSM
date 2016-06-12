@@ -39,17 +39,13 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 
 	// Reload total item count and groups
 	function reload(){
-		Restangular.one('/group/info').get({
-			search: $scope.store.search,
-		}).then(function(info) {
-			$scope.totalItems = info.count;
+		Restangular.one('/sessions/info').get().then(function(info) {
+			$scope.totalItems = info;
 		});
-		Restangular.all('/group').getList({
-			search: $scope.store.search,
-			limit: $scope.store.itemsPerPage,
+
+		Restangular.all('/sessions').getList({
+			limit: $scope.itemsPerPage,
 			page: $scope.currentPage-1,
-			order: $scope.store.selectedOrder.field,
-			orderDir: $scope.store.selectedOrder.dir === true ? "DESC" : "ASC",
 		}).then(function(sessionGroups) {
 			$scope.sessionGroups = sessionGroups;
 		});
@@ -117,28 +113,30 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 // StatsGroupEditController
 // Displays an overlay to edit group object
 app.controller('StatsGroupEditController', function (Restangular, $scope, $uibModalInstance, group, gatewaySocket) {
-	$scope.group = group;
-	$scope.selectedshotindex = [];
-	if (group.firstName !== undefined || group.lastName !== undefined){
-		$scope.user = {
-			firstName: group.firstName,
-			lastName: group.lastName,
-			verein: group.verein,
-			vereinID: group.vereinID,
-		};
-	}
-	if (group.verein !== undefined || group.vereinID !== undefined){
-		$scope.verein = {
-			name: group.verein,
-			id: group.vereinID,
-		};
-	}
+	$scope.sessionGroup = group;
+
+	// $scope.group = group;
+	// $scope.selectedshotindex = [];
+	// if (group.firstName !== undefined || group.lastName !== undefined){
+	// 	$scope.user = {
+	// 		firstName: group.firstName,
+	// 		lastName: group.lastName,
+	// 		verein: group.verein,
+	// 		vereinID: group.vereinID,
+	// 	};
+	// }
+	// if (group.verein !== undefined || group.vereinID !== undefined){
+	// 	$scope.verein = {
+	// 		name: group.verein,
+	// 		id: group.vereinID,
+	// 	};
+	// }
 
 
 	gatewaySocket.on("setSession", function(data) {
-		if (data.line == $scope.group.line){
-			setTimeout(reload, 2500);
-		}
+		// if (data.line == $scope.group.line){
+		// 	setTimeout(reload, 2500);
+		// }
 	});
 
 
@@ -154,38 +152,38 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 	Restangular.one('/lines').get().then(function(lines) {
 		$scope.lines = lines;
 	});
-	function reload(){
-		Restangular.all("/group/" + $scope.group.id + "/sessions").getList().then(function(sessions) {
-			$scope.selectedshotindex = [];
-			for (var i = 0; i < sessions.length; i++){
-				$scope.selectedshotindex.push(-1);
-			}
-			$scope.sessions = sessions;
-		});
-		Restangular.one("/disziplinen/" + $scope.group.disziplin).get().then(function(disziplin) {
-			$scope.disziplin = disziplin;
-		});
-	}
-	reload();
+	// function reload(){
+	// 	Restangular.all("/group/" + $scope.group.id + "/sessions").getList().then(function(sessions) {
+	// 		$scope.selectedshotindex = [];
+	// 		for (var i = 0; i < sessions.length; i++){
+	// 			$scope.selectedshotindex.push(-1);
+	// 		}
+	// 		$scope.sessions = sessions;
+	// 	});
+	// 	Restangular.one("/disziplinen/" + $scope.group.disziplin).get().then(function(disziplin) {
+	// 		$scope.disziplin = disziplin;
+	// 	});
+	// }
+	// reload();
 
 
 
 	// save and close overlay
-	$scope.save = function () {
-		if ($scope.user !== undefined){
-			$scope.group.userID = $scope.user.id;
-		}
-
-		$scope.cancel();
-		$scope.group.post();
-	};
+	// $scope.save = function () {
+	// 	if ($scope.user !== undefined){
+	// 		$scope.group.userID = $scope.user.id;
+	// 	}
+	//
+	// 	$scope.cancel();
+	// 	$scope.group.post();
+	// };
 
 	// delete user and close
 	// TODO: ALERT
-	$scope.delete = function () {
-		$scope.cancel();
-		$scope.group.remove();
-	};
+	// $scope.delete = function () {
+	// 	$scope.cancel();
+	// 	$scope.group.remove();
+	// };
 
 	// close
 	$scope.cancel = function () {
@@ -202,25 +200,25 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 
 	$scope.actions = {
-		sendSessions: function(){
-			var user = {
-				firstName: "Gast",
-				lastName: "",
-				verein: "",//config.line.hostVerein.name,
-				manschaft: "",
-			};
-			if ($scope.group.firstName !== undefined){
-				user = {
-					id: $scope.group.userID,
-					firstName: $scope.group.firstName,
-					lastName: $scope.group.lastName,
-					verein: $scope.group.verein,
-					vereinID: $scope.group.vereinID,
-					manschaft: $scope.group.manschaft,
-				};
-			}
-			gatewaySocket.api.sendSessions($scope.selected.line._id, $scope.sessions, $scope.group, user);
-			$scope.selected.line = undefined;
-		},
+		// sendSessions: function(){
+		// 	var user = {
+		// 		firstName: "Gast",
+		// 		lastName: "",
+		// 		verein: "",//config.line.hostVerein.name,
+		// 		manschaft: "",
+		// 	};
+		// 	if ($scope.group.firstName !== undefined){
+		// 		user = {
+		// 			id: $scope.group.userID,
+		// 			firstName: $scope.group.firstName,
+		// 			lastName: $scope.group.lastName,
+		// 			verein: $scope.group.verein,
+		// 			vereinID: $scope.group.vereinID,
+		// 			manschaft: $scope.group.manschaft,
+		// 		};
+		// 	}
+		// 	gatewaySocket.api.sendSessions($scope.selected.line._id, $scope.sessions, $scope.group, user);
+		// 	$scope.selected.line = undefined;
+		// },
 	};
 });

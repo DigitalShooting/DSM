@@ -51,12 +51,14 @@ app.get("/", function(req, res){
 
 
 // start api and map to /api
-require("./lib/api/index.js");
-app.use("/api/", proxy("127.0.0.1:" + config.network.api.port, {
-	forwardPath: function(req, res) {
-		return require("url").parse(req.url).path;
-	}
-}));
+require("./lib/api/index.js")(function() {
+	app.use("/api/", proxy("127.0.0.1:" + config.network.api.port, {
+		forwardPath: function(req, res) {
+			return require("url").parse(req.url).path;
+		}
+	}));
+});
+
 
 
 

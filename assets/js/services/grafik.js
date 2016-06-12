@@ -103,7 +103,7 @@ angular.module('ds.services.grafik', [])
 				}
 				else {
 					context.fillStyle = "#cccccc";
-					context.globalAlpha = 0.5;
+					context.globalAlpha = 0.7;
 				}
 				context.beginPath();
 				context.arc((lastRing.width/2 + shot.x/1000)*(zoom.scale/scaleFactor)+(zoom.offset.x/scaleFactor), (lastRing.width/2 - shot.y/1000)*(zoom.scale/scaleFactor)+(zoom.offset.y/scaleFactor), scheibe.kugelDurchmesser/2*(zoom.scale/scaleFactor), 0, 2*Math.PI);
