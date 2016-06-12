@@ -2,9 +2,8 @@
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
-SET foreign_key_checks = 0;
-SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
+DROP TABLE IF EXISTS `manschaft`;
 CREATE TABLE `manschaft` (
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -15,6 +14,7 @@ CREATE TABLE `manschaft` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+DROP TABLE IF EXISTS `memberIn`;
 CREATE TABLE `memberIn` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL,
@@ -25,6 +25,7 @@ CREATE TABLE `memberIn` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+DROP TABLE IF EXISTS `rwk`;
 CREATE TABLE `rwk` (
   `manschaftHeim` int(11) NOT NULL,
   `manschaftGast` int(11) NOT NULL,
@@ -37,61 +38,30 @@ CREATE TABLE `rwk` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+DROP TABLE IF EXISTS `saison`;
 CREATE TABLE `saison` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `note` text COLLATE utf8_unicode_ci NOT NULL,
+  `disziplinID` tinytext COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-CREATE TABLE `session` (
-  `id` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `sessionGroupID` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `part` text COLLATE utf8_unicode_ci NOT NULL,
-  `unixtime` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`(20),`sessionGroupID`(20))
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-CREATE TABLE `sessionGroup` (
-  `id` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `disziplin` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `unixtime` bigint(20) NOT NULL,
-  `userID` int(11) NOT NULL,
-  `line` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`(20))
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-CREATE TABLE `shot` (
-  `number` int(11) NOT NULL,
-  `sessionID` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `serie` int(11) NOT NULL,
-  `ring` double NOT NULL,
-  `ringValue` double NOT NULL,
-  `teiler` double NOT NULL,
-  `winkel` double NOT NULL,
-  `x` double NOT NULL,
-  `y` double NOT NULL,
-  `unixtime` bigint(20) NOT NULL,
-  `id` int(11) NOT NULL,
-  PRIMARY KEY (`number`,`sessionID`(20)),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
+DROP TABLE IF EXISTS `shotIn`;
 CREATE TABLE `shotIn` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL,
   `rwkID` int(11) NOT NULL,
   `ersatz` tinyint(1) NOT NULL,
   `gast` tinyint(1) NOT NULL,
+  `dataID` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userID_rwkID_gast` (`userID`,`rwkID`,`gast`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `lastName` text COLLATE utf8_unicode_ci NOT NULL,
   `firstName` text COLLATE utf8_unicode_ci NOT NULL,
@@ -117,6 +87,7 @@ CREATE TABLE `user` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+DROP TABLE IF EXISTS `verein`;
 CREATE TABLE `verein` (
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -125,4 +96,4 @@ CREATE TABLE `verein` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- 2016-02-03 16:17:07
+-- 2016-06-12 15:01:20
