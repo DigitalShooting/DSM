@@ -41,7 +41,7 @@ block main
 	script(type="text/ng-template" id="modalEditingOverlay.html")
 
 		div(class="modal-header")
-			button(type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()")
+			button(type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()")
 				span(aria-hidden="true") &times
 			h4(class="modal-title" id="exampleModalLabel")
 				span(class="glyphicon glyphicon-user" aria-hidden="true")
@@ -138,4 +138,4 @@ block main
 			//- 	span(class="glyphicon glyphicon-trash" aria-hidden="true")
 			//- 	|  Löschen
 			button(class="btn btn-primary" type="button" ng-click="close()")
-				|  Fertig
+				| Fertig
