@@ -115,78 +115,12 @@ app.controller("StatsGroupController", function($scope, gatewaySocket, Restangul
 app.controller('StatsGroupEditController', function (Restangular, $scope, $uibModalInstance, group, gatewaySocket) {
 	$scope.sessionGroup = group;
 
-	// $scope.group = group;
-	// $scope.selectedshotindex = [];
-	// if (group.firstName !== undefined || group.lastName !== undefined){
-	// 	$scope.user = {
-	// 		firstName: group.firstName,
-	// 		lastName: group.lastName,
-	// 		verein: group.verein,
-	// 		vereinID: group.vereinID,
-	// 	};
-	// }
-	// if (group.verein !== undefined || group.vereinID !== undefined){
-	// 	$scope.verein = {
-	// 		name: group.verein,
-	// 		id: group.vereinID,
-	// 	};
-	// }
-
-
-	gatewaySocket.on("setSession", function(data) {
-		// if (data.line == $scope.group.line){
-		// 	setTimeout(reload, 2500);
-		// }
-	});
-
-
-	$scope.sessions = group.getList("sessions").then(function(sessions) {
-		$scope.sessions = sessions;
-	});
-
-
 	$scope.selected = {};
 
 
-	$scope.lines = [];
-	Restangular.one('/lines').get().then(function(lines) {
-		$scope.lines = lines;
-	});
-	// function reload(){
-	// 	Restangular.all("/group/" + $scope.group.id + "/sessions").getList().then(function(sessions) {
-	// 		$scope.selectedshotindex = [];
-	// 		for (var i = 0; i < sessions.length; i++){
-	// 			$scope.selectedshotindex.push(-1);
-	// 		}
-	// 		$scope.sessions = sessions;
-	// 	});
-	// 	Restangular.one("/disziplinen/" + $scope.group.disziplin).get().then(function(disziplin) {
-	// 		$scope.disziplin = disziplin;
-	// 	});
-	// }
-	// reload();
-
-
-
-	// save and close overlay
-	// $scope.save = function () {
-	// 	if ($scope.user !== undefined){
-	// 		$scope.group.userID = $scope.user.id;
-	// 	}
-	//
-	// 	$scope.cancel();
-	// 	$scope.group.post();
-	// };
-
-	// delete user and close
-	// TODO: ALERT
-	// $scope.delete = function () {
-	// 	$scope.cancel();
-	// 	$scope.group.remove();
-	// };
 
 	// close
-	$scope.cancel = function () {
+	$scope.close = function () {
 		$uibModalInstance.close($scope.group);
 	};
 
@@ -198,27 +132,33 @@ app.controller('StatsGroupEditController', function (Restangular, $scope, $uibMo
 
 
 
-
 	$scope.actions = {
-		// sendSessions: function(){
-		// 	var user = {
-		// 		firstName: "Gast",
-		// 		lastName: "",
-		// 		verein: "",//config.line.hostVerein.name,
-		// 		manschaft: "",
-		// 	};
-		// 	if ($scope.group.firstName !== undefined){
-		// 		user = {
-		// 			id: $scope.group.userID,
-		// 			firstName: $scope.group.firstName,
-		// 			lastName: $scope.group.lastName,
-		// 			verein: $scope.group.verein,
-		// 			vereinID: $scope.group.vereinID,
-		// 			manschaft: $scope.group.manschaft,
-		// 		};
-		// 	}
-		// 	gatewaySocket.api.sendSessions($scope.selected.line._id, $scope.sessions, $scope.group, user);
-		// 	$scope.selected.line = undefined;
-		// },
+		sendSessions: function(){
+			gatewaySocket.api.loadData($scope.selected.line.id, $scope.sessionGroup);
+			console.log($scope.sessionGroup);
+			$scope.selected.line = undefined;
+		},
 	};
+
+
+
+
+	// ------------ Lines -------------
+	$scope.lines = [];
+	gatewaySocket.emit("getLines", {});
+
+	// listen to DSC-Gateway updates
+	var updateLines = function(data){
+		var lines = [];
+		for (var key in data.lines){
+			if (data.lines[key].online) {
+				lines.push(data.lines[key]);
+			}
+		}
+		$scope.lines = lines;
+	};
+	gatewaySocket.on("disconnect", updateLines);
+	gatewaySocket.on("onlineLines", updateLines);
+
+
 });

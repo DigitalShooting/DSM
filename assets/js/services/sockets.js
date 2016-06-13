@@ -116,16 +116,14 @@ angular.module("dsm.services.sockets", [
 				},
 			});
 		},
-		sendSessions: function(line, sessions, group, user){
+		loadData: function(line, data){
 			gatewaySocket.emit("setLine", {
-				method: "sendSessions",
+				method: "loadData",
 				line: line,
 				data: {
 					auth: auth,
-					sessions: sessions,
-					group: group,
-					user: user,
-				},
+					data: data,
+				}
 			});
 		},
 	};
