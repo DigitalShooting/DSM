@@ -10,18 +10,19 @@ module.exports = function(grunt) {
 
     sass: {
       options: {
-        style: 'expanded',
+        outputStyle: 'expanded',
         sourcemap: 'none',
-        // Increase Sass' default (5) precision to 9 to match Less output.
+        // Increase Sass' number "precision" to 8 to match Less output.
         //
         // @see https://github.com/twbs/bootstrap-sass#sass-number-precision
         // @see https://github.com/sass/node-sass/issues/673#issue-57581701
         // @see https://github.com/sass/sass/issues/1122
-        precision: 9
+        precision: 8
       },
       dist: {
         files: {
           'docs/css/select2-bootstrap.css': 'src/build.scss',
+          'docs/_site/css/select2-bootstrap.css': 'src/build.scss',
           'dist/select2-bootstrap.css': 'src/build.scss'
         }
       },
@@ -47,11 +48,11 @@ module.exports = function(grunt) {
     bump: {
       options: {
         files: [
-          'package.json',
-          'bower.json'
+          'package.json'
         ],
         push: false,
-        createTag: false
+        createTag: false,
+        commit: false
       }
     },
 
@@ -104,25 +105,94 @@ module.exports = function(grunt) {
       },
       build: {
         d: null
-      },
-      serve: {
-        options: {
-          serve: true,
-          watch: true
-        }
       }
     },
 
     watch: {
-      files: 'src/select2-bootstrap.scss',
-      tasks: ['sass'],
+      sass: {
+        files: 'src/select2-bootstrap.scss',
+        tasks: ['sass']
+      },
+      jekyll: {
+        files: ['docs/_layouts/*.html', 'docs/_includes/*.html', '*.html'],
+        tasks: ['jekyll']
+      }
+    },
+
+    browserSync: {
+      files: {
+        src : ['docs/_site/css/*.css']
+      },
       options: {
-        livereload: true
+        watchTask: true,
+        ghostMode: {
+          clicks: true,
+          scroll: true,
+          links: true,
+          forms: true
+        },
+        server: {
+          baseDir: 'docs/_site'
+        }
+      }
+    },
+
+    postcss: {
+      options: {
+        map: false,
+        processors: [
+          // Autoprefixer browser settings as required by Bootstrap
+          //
+          // @see https://github.com/twbs/bootstrap-sass#sass-autoprefixer
+          require('autoprefixer')({browsers: [
+            "Android 2.3",
+            "Android >= 4",
+            "Chrome >= 20",
+            "Firefox >= 24",
+            "Explorer >= 8",
+            "iOS >= 6",
+            "Opera >= 12",
+            "Safari >= 6"
+          ]})
+        ]
+      },
+      dist: {
+        src: [
+          'docs/css/select2-bootstrap.css',
+          'docs/_site/css/select2-bootstrap.css',
+          'dist/select2-bootstrap.css'
+        ]
+      },
+      test: {
+        src: [
+          'tmp/select2-bootstrap.css'
+        ]
+      }
+    },
+
+    scss2less: {
+      convert: {
+        files: [{
+          src: 'src/select2-bootstrap.scss',
+          dest: 'src/select2-bootstrap.less'
+        }]
+      }
+    },
+
+    // Only used to generate CSS for the tests.
+    less: {
+      test: {
+        options: {
+          sourceMap: false
+        },
+        src: 'src/build.less',
+        dest: 'tmp/select2-bootstrap.css'
       }
     }
+
   });
 
   // Default tasks.
-  grunt.registerTask('build', ['sass', 'cssmin', 'copy', 'jekyll:build']);
-  grunt.registerTask('serve', ['jekyll:serve']);
+  grunt.registerTask('build', ['sass', 'postcss', 'cssmin', 'copy', 'jekyll:build']);
+  grunt.registerTask('serve', ['build', 'browserSync', 'watch']);
 };

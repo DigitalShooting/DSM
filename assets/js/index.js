@@ -2,8 +2,7 @@
 var app = angular.module('dsm', [
 	"ngRoute", "angular-intro",
 	"dsm.lines",
-	"dsm.stammdaten.user", "dsm.stammdaten.verein",
-	"dsm.rwks.saisons", "dsm.rwks.manschaften", "dsm.rwks.rwks", "dsm.rwks.activeRWKs",
+	"dsm.stammdaten.user", "dsm.stammdaten.verein", "dsm.stammdaten.manschaften",
 	"dsm.stats.group",
 	"dsm.services.typeahead.user",
 ]);
@@ -32,29 +31,10 @@ app.config(['$routeProvider', function($routeProvider) {
 			templateUrl: '/stammdaten/vereine/',
 			controller: 'VereinController',
 		}).
-
-
-		// stammdaten routes
-		when('/rwks/', {
-			redirectTo: '/rwks/active/'
-		}).
-		when('/rwks/saisons/', {
-			templateUrl: '/rwks/saisons/',
-			controller: 'SaisonController',
-		}).
-		when('/rwks/manschaften/', {
-			templateUrl: '/rwks/manschaften/',
+		when('/stammdaten/manschaften/', {
+			templateUrl: '/stammdaten/manschaften/',
 			controller: 'ManschaftenController',
 		}).
-		when('/rwks/rwks/', {
-			templateUrl: '/rwks/rwks/',
-			controller: 'RWKsController',
-		}).
-		when('/rwks/active/', {
-			templateUrl: '/rwks/activeRWKs/',
-			controller: 'ActiveRWKsController',
-		}).
-
 
 
 		// stats routes

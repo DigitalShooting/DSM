@@ -22,7 +22,7 @@
  * Implementing Drag and Drop functionality in AngularJS is easier than ever.
  * Demo: http://codef0rmer.github.com/angular-dragdrop/
  *
- * @version 1.0.12
+ * @version 1.0.13
  *
  * (c) 2013 Amit Gharat a.k.a codef0rmer <amit.2006.it@gmail.com> - amitgharat.wordpress.com
  */
@@ -47,7 +47,7 @@ var jqyoui = angular.module('ngDragDrop', []).service('ngDragDropService', ['$ti
       // call either $scoped method i.e. $scope.dropCallback or constructor's method i.e. this.dropCallback.
       // Removing scope.$apply call that was performance intensive (especially onDrag) and does not require it
       // always. So call it within the callback if needed.
-      return (scope[callback] || scope[constructor][callback]).apply(scope, args);
+      return (scope[callback] || scope[constructor][callback]).apply(scope[callback] ? scope : scope[constructor], args);
       
       function extract(callbackName) {
         var atStartBracket = callbackName.indexOf('(') !== -1 ? callbackName.indexOf('(') : callbackName.length,
@@ -183,7 +183,8 @@ var jqyoui = angular.module('ngDragDrop', []).service('ngDragDropService', ['$ti
       var zIndex = $fromEl.css('z-index'),
         fromPos = $fromEl[dropSettings.containment || 'offset'](),
         displayProperty = $toEl.css('display'), // sometimes `display` is other than `block`
-        hadNgHideCls = $toEl.hasClass('ng-hide');
+        hadNgHideCls = $toEl.hasClass('ng-hide'),
+        hadDNDHideCls = $toEl.hasClass('angular-dragdrop-hide');
 
       if (toPos === null && $toEl.length > 0) {
         if (($toEl.attr('jqyoui-draggable') || $toEl.attr('data-jqyoui-draggable')) !== undefined && $toEl.ngattr('ng-model') !== undefined && $toEl.is(':visible') && dropSettings && dropSettings.multiple) {
@@ -197,6 +198,7 @@ var jqyoui = angular.module('ngDragDrop', []).service('ngDragDropService', ['$ti
           // Angular v1.2 uses ng-hide to hide an element 
           // so we've to remove it in order to grab its position
           if (hadNgHideCls) $toEl.removeClass('ng-hide');
+          if (hadDNDHideCls) $toEl.removeClass('angular-dragdrop-hide');
           toPos = $toEl.css({'visibility': 'hidden', 'display': 'block'})[dropSettings.containment || 'offset']();
           $toEl.css({'visibility': '','display': displayProperty});
         }
@@ -210,6 +212,7 @@ var jqyoui = angular.module('ngDragDrop', []).service('ngDragDropService', ['$ti
           // hide the element (while swapping) if it was hidden already
           // because we remove the display:none in this.invokeDrop()
           if (hadNgHideCls) $toEl.addClass('ng-hide');
+          if (hadDNDHideCls) $toEl.addClass('angular-dragdrop-hide');
           $fromEl.css('z-index', zIndex);
           if (callback) callback();
         });
@@ -348,13 +351,14 @@ var jqyoui = angular.module('ngDragDrop', []).service('ngDragDropService', ['$ti
       priority: 1,
       link: function(scope, elem, attrs) {
         var element = $(elem);
-        var dropSettings, killWatcher;
+        var dropSettings, jqyouiOptions, killWatcher;
         var updateDroppable = function(newValue, oldValue) {
           if (newValue) {
             dropSettings = scope.$eval($(element).attr('jqyoui-droppable') || $(element).attr('data-jqyoui-droppable')) || {};
+            jqyouiOptions = scope.$eval(attrs.jqyouiOptions) || {};
             element
               .droppable({disabled: false})
-              .droppable(scope.$eval(attrs.jqyouiOptions) || {})
+              .droppable(jqyouiOptions)
               .droppable({
                 over: function(event, ui) {
                   ngDragDropService.callEventCallback(scope, dropSettings.onOver, event, ui);
@@ -383,7 +387,7 @@ var jqyoui = angular.module('ngDragDrop', []).service('ngDragDropService', ['$ti
                       ngDragDropService.callEventCallback(scope, dropSettings.onDrop, event, ui);
                     }
                   }), function() {
-                    ui.draggable.css({left: '', top: ''});
+                    ui.draggable.animate({left: '', top: ''}, jqyouiOptions.revertDuration || 0);
                   });
                 }
               });

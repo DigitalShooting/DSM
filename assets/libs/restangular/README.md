@@ -765,7 +765,7 @@ These are the methods that can be called on the Restangular object.
 * **customDELETE(path, [params, headers])**: Does a DELETE to the specific path. Optionally you can set params and headers.
 * **customPOST([elem, path, params, headers])**: Does a POST to the specific path. Optionally you can set params and headers and elem. Elem is the element to post. If it's not set, it's assumed that it's the element itself from which you're calling this function.
 * **customPUT([elem, path, params, headers])**: Does a PUT to the specific path. Optionally you can set params and headers and elem. Elem is the element to post. If it's not set, it's assumed that it's the element itself from which you're calling this function.
-* **customOperation(operation, path, [params, headers, elem])**: This does a custom operation to the path that we specify. This method is actually used from all the others in this subsection. Operation can be one of: get, post, put, delete, head, options, patch, trace
+* **customOperation(operation, path, [params, headers, elem])**: This does a custom operation to the path that we specify. This method is actually used from all the others in this subsection. Operation can be one of: get, post, put, remove, head, options, patch, trace
 * **addRestangularMethod(name, operation, [path, params, headers, elem])**: This will add a new restangular method to this object with the name `name` to the operation and path specified (or current path otherwise). There's a section on how to do this later.
 
 Let's see an example of this:
@@ -1120,7 +1120,7 @@ In this case, you'd need to use RestangularProvider's `addResponseInterceptor`. 
 ````javascript
 app.config(function(RestangularProvider) {
 
-    // add a response intereceptor
+    // add a response interceptor
     RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
       var extractedData;
       // .. to look for getList operations
@@ -1149,7 +1149,7 @@ RestangularProvider.setRestangularFields({
 
 #### **What if each of my models has a different ID name like CustomerID for Customer**
 
-In some cases, peolpe have different ID name for each entity. For example, they have CustomerID for customer and EquipmentID for Equipment. If that's the case, you can override's Restangular's getIdFromElem. For that, you need to do:
+In some cases, people have different ID name for each entity. For example, they have CustomerID for customer and EquipmentID for Equipment. If that's the case, you can override's Restangular's getIdFromElem. For that, you need to do:
 
 ````js
 RestangularProvider.configuration.getIdFromElem = function(elem) {
