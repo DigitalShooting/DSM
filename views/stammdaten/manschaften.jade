@@ -12,12 +12,11 @@ block main
 	table(class="table table-hover table-striped")
 		thead
 			tr
-				+tableHeader("Saison", "saison")
 				+tableHeader("Verein", "verein")
 				+tableHeader("Name", "name")
 				th(style="width:10%;")
 			tr
-				td(colspan="3")
+				td(colspan="2")
 					input(autofocus onClick="this.select();" type="text" class="form-control container-fluid" ng-model="store.search" placeholder="Suche")
 				td
 					button(type="button" class="btn btn-primary btn noMargin col-xs-12" ng-click="newEntry()")
@@ -25,7 +24,6 @@ block main
 						|  Neu
 		tbody
 			tr(ng-repeat="manschaft in manschaften track by $index")
-				td {{manschaft.saison}}
 				td {{manschaft.verein}}
 				td {{manschaft.name}}
 				td
@@ -63,48 +61,14 @@ block main
 			form
 				div(class="row")
 					div(class="form-group col-md-6")
+						label(class="control-label") Verein:
+						verein-typeahead(verein="verein" manschaft="verein")
+					div(class="form-group col-md-6")
 						label(class="control-label") Manschafts Name/ Nummer:
 						input(type="text" class="form-control" ng-model="manschaft.name")
 					div(class="form-group col-md-6")
-						label(class="control-label") Runde:
-						saison-typeahead(saison="saison")
-					div(class="form-group col-md-6")
-						label(class="control-label") Verein:
-						verein-typeahead(verein="verein" manschaft="verein")
-				.divider
-				div(class="row")
-					div(class="form-group col-md-6" ng-hide="members.length == 0")
-						label(class="control-label") Schützen:
-						table(class="table table-hover table-striped")
-							thead
-								tr
-									+tableHeader("Stamm", "stamm")
-									+tableHeader("Vorname", "firstName")
-									+tableHeader("Name", "lastName")
-									th(style="width:10%;")
-							tbody
-								tr(ng-repeat="member in members track by $index")
-									td
-										input(type="checkbox" ng-model="member.stamm" ng-true-value="1" ng-false-value="0" ng-change="member.post();")
-									td {{member.firstName}}
-									td {{member.lastName}}
-									td
-										button(type="button" class="btn btn-danger-link btn-sm noMargin col-md-12" ng-click="deleteMember(member)")
-											span(class="glyphicon glyphicon-trash" aria-hidden="true")
-											|  Löschen
-					div(class="form-group col-md-6")
-						label(class="control-label") Schütze hinzufügen:
-						div(class="input-group col-md-12")
-							input(type="text" ng-model="newUser" placeholder="Schütze hinzufügen" uib-typeahead="user for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-template-url="userTypeahead.html" typeahead-no-results="noResultsUser" class="form-control")
-							i(ng-show="loadingUser" class="glyphicon glyphicon-refresh")
-							div(ng-show="noResultsUser")
-								i(class="glyphicon glyphicon-remove")
-								| Kein Schütze gefunden
-							span(class="input-group-btn")
-								button(type="button" class="btn btn-default btn noMargin" ng-click="addMember()")
-									span(class="glyphicon glyphicon-plus" aria-hidden="true")
-									|  Hinzufügen
-
+						label(class="control-label") Anzahl Schützen:
+						input(type="text" class="form-control" ng-model="manschaft.anzahlSchuetzen")
 				.divider
 				div(class="form-group")
 					label(for="message-text" class="control-label") Notiz:

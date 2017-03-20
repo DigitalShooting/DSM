@@ -65,14 +65,9 @@ html(lang="de")
 		script(src="/js/lines.js")
 		
 		// stammsdaten controller
-		script(src="/js/stammsdaten/user.js")
-		script(src="/js/stammsdaten/verein.js")
-		
-		// rwks controller
-		script(src="/js/rwks/saisons.js")
-		script(src="/js/rwks/manschaften.js")
-		script(src="/js/rwks/rwks.js")
-		script(src="/js/rwks/activeRWKs.js")
+		script(src="/js/stammdaten/user.js")
+		script(src="/js/stammdaten/verein.js")
+		script(src="/js/stammdaten/manschaften.js")
 		
 		// stats controller
 		script(src="/js/stats/group.js")
@@ -95,7 +90,7 @@ html(lang="de")
 					ul(class="nav navbar-nav")
 						+navElement("#/lines", "Stände", "glyphicon-list")
 						+navElement("#/stammdaten/", "Stammdaten", "glyphicon-user")
-						+navElement("#/rwks/", "RWKs", "glyphicon-list-alt")
+						//-+navElement("#/rwks/", "RWKs", "glyphicon-list-alt")
 						+navElement("#/stats/", "Statistiken", "glyphicon-stats")
 					ul(class="nav navbar-nav navbar-right")
 						//- button(type="submit" class="btn btn-link" ng-click="CallMe();")

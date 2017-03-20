@@ -34,7 +34,6 @@ app.use(compression());
 
 // Main routes
 app.use("/stammdaten/", routes.stammdaten);
-app.use("/rwks/", routes.rwks);
 app.use("/lines", routes.lines);
 app.use("/stats", routes.stats);
 app.use("/dashboard", function(req, res){

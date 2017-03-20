@@ -5,17 +5,17 @@ block title
 
 
 block body
-	section(class="col-md-3")
+	section(class="col-md-3" ng-controller="controller_lines_selected")
 		h2 Stände
 		ul(class="nav nav-pills nav-stacked")
 			li(ng-repeat="line in lines" class="col-md-12")
 				div(class="btn-group fullWidth" role="group")
-					button(type="button" ng-click="toggleAll(false); toggle(line.id); didToggle();" class="btn col-md-10 {{line.online ? 'btn-primary btn-full-primary' : 'btn-default' }} {{store.linesSelected[line.id] == true ? 'selected' : 'deselected'}}") {{line.label}}
-					button(type="button" ng-click="toggle(line.id); didToggle();" class="btn col-md-2 {{line.online ? 'btn-primary' : 'btn-default' }} {{store.linesSelected[line.id] == true ? 'selected' : 'deselected'}}")
-						span(class="glyphicon {{store.linesSelected[line.id] == true ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
+					button(type="button" ng-click="selectAllLines(false); toggleLine(line.id);" class="btn col-md-10 {{line.online ? 'btn-primary btn-full-primary' : 'btn-default' }} {{selectedLines[line.id] == true ? 'selected' : 'deselected'}}") {{line.label}}
+					button(type="button" ng-click="toggleLine(line.id);" class="btn col-md-2 {{line.online ? 'btn-primary' : 'btn-default' }} {{selectedLines[line.id] == true ? 'selected' : 'deselected'}}")
+						span(class="glyphicon {{selectedLines[line.id] == true ? 'glyphicon-remove' : 'glyphicon-plus'}}" aria-hidden="true")
 			li(class="col-md-12 btn-group" role="group")
-				button(type="button" ng-click="toggleAll(true); didToggle();" class="btn col-md-10 btn-default") Alle markieren
-				button(type="button" ng-click="toggleAll(false); didToggle();" class="btn col-md-2 btn-default")
+				button(type="button" ng-click="selectAllLines(true);" class="btn col-md-10 btn-default") Alle markieren
+				button(type="button" ng-click="selectAllLines(false);" class="btn col-md-2 btn-default")
 					span(class="glyphicon glyphicon-remove" aria-hidden="true")
 
 
@@ -23,13 +23,7 @@ block body
 	section(class="col-md-9")
 		h1
 			block title
-
-		ul(class="nav nav-tabs")
-			li(role="presentation" class="{{store.dashboardMode == 'normal' ? 'active' : ''}}" ng-click="store.dashboardMode = 'normal'; writeToCookie();")
-				a Standard
-			li(role="presentation" class="{{store.dashboardMode == 'rwk' ? 'active' : ''}}" ng-click="store.dashboardMode = 'rwk'; writeToCookie();")
-				a RWK
-		
+			
 		.row
 		
 			//- Alert no selection
@@ -42,65 +36,66 @@ block body
 
 			.col-md-6
 				//- Main controls
-				div(class="bs-callout bs-callout-danger" ng-hide="store.linesSelectedCount == 0")
+				div(class="bs-callout bs-callout-danger" ng-hide="store.linesSelectedCount == 0" ng-controller="controller_lines_power")
 					h4 Status
 					div(class="form-group")
 						div(class="btn-group fullWidth" role="group")
-							button(type="submit" class="btn btn-danger col-md-6" ng-click="actions.shutdown()")
+							button(type="submit" class="btn btn-danger col-md-6" ng-click="setPower(false)")
 								span(class="glyphicon glyphicon glyphicon-flash" aria-hidden="true")
 								|  Herunterfahren
-							button(type="submit" class="btn btn-primary col-md-6" ng-click="actions.wakeonlan()")
+							button(type="submit" class="btn btn-primary col-md-6" ng-click="setPower(true)")
 								span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
 								|  Hochfahren
 
 
 
 				//- Disziplinen selection
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount == 0 || store.dashboardMode!= 'normal'")
+				div(class="bs-callout bs-callout-primary" ng-controller="controller_lines_disziplinen")
+					//- ng-hide="store.linesSelectedCount == 0 || store.dashboardMode!= 'normal'"
 					h4 Disziplin & Scheibe
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Disziplin
 							div(class="col-sm-10")
-								ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="actions.selectDisziplin()")
+								ui-select(ng-model="selected.disziplin" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="didSelectDisziplin()")
 									ui-select-match {{selected.disziplin.title}} ({{selected.disziplin.scheibe.title}})
 									ui-select-choices(group-by="groupByType" repeat="disziplin in disziplinen | propsFilter: {title: $select.search}" )
 										div {{disziplin.title}} ({{disziplin.scheibe.title}})
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Mode
 							div(class="col-sm-10")
-								ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="actions.selectPart()")
+								ui-select(ng-model="selected.part" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="didSelectPart()")
 									ui-select-match {{selected.part.title}}
 									ui-select-choices(repeat="part in parts | propsFilter: {title: $select.search}")
 										div {{part.title}}
 						div(class="form-group")
 							div(class="btn-group col-md-12")
 								div(class="btn-group fullWidth" role="group")
-									button(type="submit" class="btn btn-default col-md-6" ng-click="actions.newTarget()")
+									button(type="submit" class="btn btn-default col-md-6" ng-click="newTarget()")
 										span(class="glyphicon glyphicon glyphicon-plus" aria-hidden="true")
 										|  Neue Scheibe
-									button(type="submit" class="btn btn-danger col-md-6" ng-click="actions.resetLine()")
+									button(type="submit" class="btn btn-danger col-md-6" ng-click="resetLine()")
 										span(class="glyphicon glyphicon glyphicon-log-out" aria-hidden="true")
 										|  Zurücksetzen
 
 
 
 				//- Message
-				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0")
+				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0" ng-controller="controller_lines_message")
 					h4 Nachricht
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Art
 							div(class="btn-group col-md-10" role="group")
-								button(type="submit" class="btn btn-danger col-md-6 noMargin" ng-click="actions.showMessage('danger', 'Sicherheit')")
+								button(type="submit" class="btn btn-danger col-md-6 noMargin" ng-click="showMessage('danger', 'Sicherheit')")
 									span(class="glyphicon glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 									|  Sicherheit
-								button(type="submit" class="btn btn-warning col-md-6 noMargin" ng-click="actions.showMessage('default', 'Pause')")
+								button(type="submit" class="btn btn-warning col-md-6 noMargin" ng-click="showMessage('default', 'Pause')")
 									span(class="glyphicon glyphicon glyphicon-pause" aria-hidden="true")
 									|  Pause
 						div(class="form-group")
 							div(class="btn-group col-md-12" role="group")
-								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.hideMessage()")
+								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="hideMessage()")
 									span(class="glyphicon glyphicon glyphicon-eye-close" aria-hidden="true")
 									|  Verstecken
 
@@ -108,33 +103,34 @@ block body
 
 			.col-md-6
 				//- Druck & Log
-				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0")
+				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0" ng-controller="controller_lines_print")
 					h4 Druck & Log
 					div(class="btn-group fullWidth" role="group")
-						button(type="submit" class="btn btn-default col-md-12" ng-click="actions.print(true)")
+						button(type="submit" class="btn btn-default col-md-12" ng-click="print()")
 							span(class="glyphicon glyphicon glyphicon-print" aria-hidden="true")
 							|  Ausdruck erstellen
 					div(class="btn-group fullWidth" role="group")
-						button(type="submit" class="btn btn-default col-md-6" ng-click="actions.openLine()")
+						button(type="submit" class="btn btn-default col-md-6" ng-click="openLine()")
 							span(class="glyphicon glyphicon glyphicon-record" aria-hidden="true")
 							|  Stand öffnen
-						button(type="submit" class="btn btn-default col-md-6" ng-click="actions.openLog()")
+						button(type="submit" class="btn btn-default col-md-6" ng-click="openLog()")
 							span(class="glyphicon glyphicon glyphicon-list" aria-hidden="true")
 							|  Log öffnen
 
 
 
 				//- User
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1 || store.dashboardMode!= 'normal'")
+				//- ng-hide="store.linesSelectedCount != 1 || store.dashboardMode!= 'normal'"
+				div(class="bs-callout bs-callout-primary" ng-controller="LineUserController")
 					h4 Schütze (Datenbank)
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Verein:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.verein" placeholder="Verein" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-no-results="noResultsVerein" class="form-control")
+									input(onClick="this.select();" type="text" ng-model="selected.verein" placeholder="" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-no-results="noResultsVerein" class="form-control")
 									span(class="input-group-btn")
-										button(type="button" class="btn btn-default btn noMargin" ng-click="selected.verein = '';")
+										button(type="button" class="btn btn-default btn noMargin" ng-click="resetVerein()")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
 								i(ng-show="loadingVereine" class="glyphicon glyphicon-refresh")
 								div(ng-show="noResultsVerein")
@@ -144,75 +140,50 @@ block body
 							label(class="col-sm-2 control-label") Schütze:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.user" placeholder="Schütze" uib-typeahead="user as getUserSearchTitle(user) for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-no-results="noResultsUser" typeahead-on-select="selectUser()" class="form-control")
+									input(onClick="this.select();" type="text" ng-model="selected.user" placeholder="" uib-typeahead="user as getUserSearchTitle(user) for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-no-results="noResultsUser" typeahead-on-select="selectUser()" class="form-control")
 									span(class="input-group-btn")
-										button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser()")
+										button(type="button" class="btn btn-default btn noMargin" ng-click="resetUser()")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
 								i(ng-show="loadingUser" class="glyphicon glyphicon-refresh")
 								div(ng-show="noResultsUser")
 									i(class="glyphicon glyphicon-remove")
 									| Kein Schütze gefunden
+						div(class="form-group")
+							label(class="col-sm-2 control-label") Manschaft:
+							div(class="col-md-10")
+								.input-group
+									input(onClick="this.select();" type="text" ng-model="selected.manschaft" placeholder="" uib-typeahead="manschaft as getManschaftTitle(manschaft) for manschaft in getManschaften($viewValue)" typeahead-loading="loadingManschaften" typeahead-no-results="noResultsManschaften" class="form-control")
+									span(class="input-group-btn")
+										button(type="button" class="btn btn-default btn noMargin" ng-click="resetTeam()")
+											span(class="glyphicon glyphicon-remove" aria-hidden="true")
+								i(ng-show="loadingmanschaften" class="glyphicon glyphicon-refresh")
+								div(ng-show="noResultsmanschaften")
+									i(class="glyphicon glyphicon-remove")
+									| Keine Manschaft gefunden
 
 
 
 				//- User
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1 || store.dashboardMode!= 'normal'")
-					h4 Schütze
-					div(class="form-horizontal")
-						div(class="form-group")
-							label(class="col-md-2 control-label") Schütze:
-							div(class="col-md-5")
-								input(onClick="this.select();" type="text" ng-model="manualUser.firstName" placeholder="Vorname" class="form-control")
-							div(class="col-md-5")
-								input(onClick="this.select();" type="text" ng-model="manualUser.lastName" placeholder="Name" class="form-control")
-						div(class="form-group")
-							label(class="col-md-2 control-label") Verein:
-							div(class="col-md-10")
-								input(onClick="this.select();" type="text" ng-model="manualUser.verein" placeholder="Verein" class="form-control")
-						div(class="form-group")
-							label(class="col-md-2 control-label") Manschaft:
-							div(class="col-md-10")
-								input(onClick="this.select();" type="text" ng-model="manualUser.manschaft" placeholder="Manschaft" class="form-control")
-						div(class="form-group")
-							div(class="btn-group col-md-12" role="group")
-								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.setCustomUser()")
-									span(class="glyphicon glyphicon glyphicon-ok" aria-hidden="true")
-									|  Übertragen
+				//- div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1 || store.dashboardMode != 'manual'")
+				//- 	h4 Schütze
+				//- 	div(class="form-horizontal")
+				//- 		div(class="form-group")
+				//- 			label(class="col-md-2 control-label") Schütze:
+				//- 			div(class="col-md-5")
+				//- 				input(onClick="this.select();" type="text" ng-model="manualUser.firstName" placeholder="Vorname" class="form-control")
+				//- 			div(class="col-md-5")
+				//- 				input(onClick="this.select();" type="text" ng-model="manualUser.lastName" placeholder="Name" class="form-control")
+				//- 		div(class="form-group")
+				//- 			label(class="col-md-2 control-label") Verein:
+				//- 			div(class="col-md-10")
+				//- 				input(onClick="this.select();" type="text" ng-model="manualUser.verein" placeholder="Verein" class="form-control")
+				//- 		div(class="form-group")
+				//- 			label(class="col-md-2 control-label") Manschaft:
+				//- 			div(class="col-md-10")
+				//- 				input(onClick="this.select();" type="text" ng-model="manualUser.manschaft" placeholder="Manschaft" class="form-control")
+				//- 		div(class="form-group")
+				//- 			div(class="btn-group col-md-12" role="group")
+				//- 				button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.setCustomUser()")
+				//- 					span(class="glyphicon glyphicon glyphicon-ok" aria-hidden="true")
+				//- 					|  Übertragen
 									
-				
-				//- RWK
-				div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1 || store.dashboardMode!= 'rwk'")
-					h4 RWK
-					div(class="form-horizontal")
-						div(class="form-group")
-							label(class="col-sm-2 control-label") RWK:
-							div(class="col-md-10")
-								.input-group
-									ui-select(ng-model="selected.rwk" placeholder="RWK" theme="bootstrap" on-select="rwkDidSelect()")
-										ui-select-match {{getRWKTitle(selected.rwk)}}
-										ui-select-choices(repeat="rwk in rwk.rwks" position="auto")
-											div(ng-bind-html="rwk | highlight: $select.search")
-											small {{getRWKTitle(rwk)}} 
-									span(class="input-group-btn")
-										button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser();")
-											span(class="glyphicon glyphicon-remove" aria-hidden="true")
-								i(ng-show="loadingRWK" class="glyphicon glyphicon-refresh")
-								div(ng-show="noResultsRWK")
-									i(class="glyphicon glyphicon-remove")
-									| Kein RWK gefunden
-						div(class="form-group" ng-hide="selected.rwk === null")
-							label(class="col-sm-2 control-label") Schütze:
-							div(class="col-md-10")
-								.input-group
-									ui-select(ng-model="selected.rwkUser" placeholder="Schütze" theme="bootstrap" on-select="selectRWKUser()")
-										ui-select-match {{getRWKUserTitle(selected.rwkUser)}}
-										ui-select-choices(repeat="user in rwk.users")
-											div(ng-bind-html="getRWKUserTitle(user) | highlight: $select.search")
-											small {{getRWKUserTitle(user)}} 
-									span(class="input-group-btn")
-										button(type="button" class="btn btn-default btn noMargin" ng-click="actions.resetUser();")
-											span(class="glyphicon glyphicon-remove" aria-hidden="true")
-								i(ng-show="loadingRWKUser" class="glyphicon glyphicon-refresh")
-								div(ng-show="noResultsRWKUser")
-									i(class="glyphicon glyphicon-remove")
-									| Kein Schütze gefunden

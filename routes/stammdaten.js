@@ -12,6 +12,9 @@ router.use("/user/", function(req, res){
 router.use("/vereine/", function(req, res){
 	res.render("stammdaten/vereine");
 });
+router.use("/manschaften/", function(req, res){
+	res.render("stammdaten/manschaften");
+});
 
 
 module.exports = router;
