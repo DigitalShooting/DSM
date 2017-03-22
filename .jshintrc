@@ -10,5 +10,6 @@
 		"moment",
 		"io",
 		"dscGatewayUrl"
-	]
+	],
+	 "-W041": false
 }

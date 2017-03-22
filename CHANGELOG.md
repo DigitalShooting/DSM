@@ -5,7 +5,7 @@
 - `ADD` Add Help/ Doku
 
 ## v2.0 (In dev)
-- `ADD` RWK Module
+- `ADD` RWK live
 - `ADD` Statistic page
 
 ## v1.0

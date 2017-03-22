@@ -53,6 +53,13 @@ angular.module("dsm.lines", [
 		},
 
 		/**
+		 Number of selected lines
+		 */
+		getLinesSelectedCount: function() {
+			return linesSelectedCount;
+		},
+
+		/**
 		 Set selected state for given lineID
 		 */
 		selectLine: function(id, value) {
@@ -157,6 +164,23 @@ angular.module("dsm.lines", [
 			}
 		},
 
+		/**
+		 Get an object with all user objects for each online and selected line.
+		 */
+		getAllSelectedUsers: function() {
+			var users = {};
+			var lines = Lines.getLines();
+			for (var id in linesSelected){
+				if (linesSelected[id] == true){
+					var line = lines[id];
+					if (line != null && (line.online == true)){
+						users[id] = line.cache.setData.user;
+					}
+				}
+			}
+			return users;
+		}
+
 	};
 })
 
@@ -191,7 +215,7 @@ angular.module("dsm.lines", [
 		triggerUpdate();
 	});
 	gatewaySocket.on("setData", function(data){
-		lines[data.line].cache["setData"] = data.data;
+		lines[data.line].cache.setData = data.data;
 		$rootScope.$broadcast('didSetLineData');
 	});
 
@@ -239,7 +263,6 @@ angular.module("dsm.lines", [
 	 */
 	$scope.showMessage = function(kind, message) {
 		SelectedLines.performOnSelected(function(id) {
-
 			gatewaySocket.api.showMessage(id, kind, message);
 		}, true);
 	};
@@ -342,7 +365,6 @@ angular.module("dsm.lines", [
 	$scope.didSelectPart = function() {
 		if ($scope.selected.part != null) {
 			SelectedLines.performOnSelected(function(id){
-				console.log($scope.selected.part)
 				gatewaySocket.api.setPart(id, $scope.selected.part.id);
 			}, true);
 		}
@@ -388,6 +410,57 @@ angular.module("dsm.lines", [
 
 })
 
+.controller("LineManualUserController", function ($scope, SelectedLines, gatewaySocket) {
+	$scope.user = null;
+
+	$scope.$on("didChangeSelectedUser", function () {
+		$scope.user = SelectedLines.getSelectedUser();
+	});
+
+	$scope.setCustomUser = function() {
+		if ($scope.user != null) {
+			SelectedLines.performOnSelected(function(id){
+				gatewaySocket.api.setUser(id, $scope.user);
+			}, true);
+		}
+	};
+})
+.controller("LineManualTeamController", function ($scope, SelectedLines, gatewaySocket) {
+	var users = null;
+
+	$scope.$on("didChangeSelectedUser", function () {
+		users = SelectedLines.getAllSelectedUsers();
+		var manschaft = null;
+		for (var i in users) {
+			if (manschaft == null) {
+				manschaft = {
+					name: users[i].manschaft,
+					anzahlSchuetzen: users[i].manschaftAnzahlSchuetzen,
+				};
+			}
+			else if (users[i].manschaft != manschaft.name) {
+				manschaft = null;
+			}
+		}
+		$scope.selected.manschaft = manschaft;
+	});
+
+	$scope.selected = {};
+
+	$scope.setCustomUser = function() {
+		if ($scope.selected.manschaft != null) {
+			SelectedLines.performOnSelected(function(id){
+				var user = users[id];
+				if (user != null) {
+					user.manschaft = $scope.selected.manschaft.name;
+					user.manschaftAnzahlSchuetzen = $scope.selected.manschaft.anzahlSchuetzen;
+					gatewaySocket.api.setUser(id, user);
+				}
+			}, true);
+		}
+	};
+
+})
 
 
 .controller("LineUserController", function ($scope, SelectedLines, gatewaySocket, Restangular) {
@@ -398,17 +471,6 @@ angular.module("dsm.lines", [
 		$scope.user = SelectedLines.getSelectedUser();
 		if ($scope.user != null) {
 
-			if ($scope.user.verein != null && $scope.user.verein != "") {
-				$scope.selected.verein = {
-					_set: true,
-					name: $scope.user.verein,
-					vereinID: $scope.user.vereinID,
-				};
-			}
-			else {
-				$scope.selected.verein = null;
-			}
-
 			$scope.selected.user = {
 				_set: true,
 				firstName: $scope.user.firstName,
@@ -416,17 +478,17 @@ angular.module("dsm.lines", [
 				id: $scope.user.userID,
 			};
 
-			if ($scope.user.manschaft != null && $scope.user.manschaft != "") {
-				$scope.selected.manschaft = {
+			if ($scope.user.verein != null && $scope.user.verein != "") {
+				$scope.selected.verein = {
 					_set: true,
-					name: $scope.user.manschaft,
-					id: $scope.user.manschaftID,
+					name: $scope.user.verein,
+					id: $scope.user.vereinID,
 				};
+				$scope.selected.user.vereinID = $scope.user.vereinID;
 			}
 			else {
-				$scope.selected.manschaft = null;
+				$scope.selected.verein = null;
 			}
-
 		}
 	});
 
@@ -454,18 +516,6 @@ angular.module("dsm.lines", [
 		}
 	});
 
-	$scope.$watch("selected.manschaft", function() {
-		if ($scope.selected.manschaft != null && typeof $scope.selected.manschaft != "string") {
-			if ($scope.selected.manschaft._set == true) {
-				return;
-			}
-
-			if ($scope.user == null || $scope.selected.manschaft.id != $scope.user.manschaftID) {
-				setCurrentInfo();
-			}
-		}
-	});
-
 
 
 	function setCurrentInfo() {
@@ -483,11 +533,7 @@ angular.module("dsm.lines", [
 			};
 			if ($scope.selected.verein != null) {
 				user.verein = $scope.selected.verein.name;
-				user.vereinID = $scope.selected.verein.id
-			}
-			if ($scope.selected.manschaft != null) {
-				user.manschaft = $scope.selected.manschaft.name;
-				user.manschaftID = $scope.selected.manschaft.id
+				user.vereinID = $scope.selected.verein.id;
 			}
 		}
 
@@ -548,8 +594,77 @@ angular.module("dsm.lines", [
 
 
 
+	$scope.resetVerein = function() {
+		$scope.selected.verein = null;
+		$scope.selected.user = null;
+		$scope.selected.manschaft = null;
+		setCurrentInfo();
+	};
+
+	$scope.resetUser = function() {
+		$scope.selected.user = null;
+		setCurrentInfo();
+	};
+})
+
+
+
+.controller("LineTeamController", function ($scope, SelectedLines, gatewaySocket, Restangular) {
+
+	var users = null;
+
+	$scope.$on("didChangeSelectedUser", function () {
+		users = SelectedLines.getAllSelectedUsers();
+		var manschaft = null;
+		for (var i in users) {
+			if (manschaft == null) {
+				manschaft = {
+					_set: true,
+					name: users[i].manschaft,
+					anzahlSchuetzen: users[i].manschaftAnzahlSchuetzen,
+				};
+			}
+			else if (users[i].manschaft != manschaft.name) {
+				manschaft = null;
+			}
+		}
+		$scope.selected.manschaft = manschaft;
+	});
+
+
+	$scope.selected = {
+
+	};
+
+
+	$scope.$watch("selected.manschaft", function() {
+		if ($scope.selected.manschaft != null && typeof $scope.selected.manschaft != "string") {
+			if ($scope.selected.manschaft._set == true) {
+				return;
+			}
+
+			setCurrentInfo();
+		}
+	});
+
+	function setCurrentInfo() {
+		if ($scope.selected.manschaft != null) {
+			SelectedLines.performOnSelected(function(id){
+				var user = users[id];
+				if (user != null) {
+					user.manschaft = $scope.selected.manschaft.name;
+					user.manschaftAnzahlSchuetzen = $scope.selected.manschaft.anzahlSchuetzen;
+					gatewaySocket.api.setUser(id, user);
+				}
+			}, true);
+		}
+	}
+
+
+
+
 	$scope.getManschaften = function(serachString) {
-		return Restangular.one("/verein/" + $scope.selected.verein.id + "/manschaft").get({
+		return Restangular.one("/manschaft").get({
 			search: serachString,
 			limit: 1000,
 		}).then(function(manschaften) {
@@ -565,20 +680,6 @@ angular.module("dsm.lines", [
 
 
 
-
-
-	$scope.resetVerein = function() {
-		$scope.selected.verein = null;
-		$scope.selected.user = null;
-		$scope.selected.manschaft = null;
-		setCurrentInfo();
-	};
-
-	$scope.resetUser = function() {
-		$scope.selected.user = null;
-		setCurrentInfo();
-	};
-
 	$scope.resetTeam = function() {
 		$scope.selected.manschaft = null;
 		setCurrentInfo();
@@ -587,8 +688,16 @@ angular.module("dsm.lines", [
 
 })
 
-.controller("LinesController", function ($scope, $rootScope, $cookies, gatewaySocket, Restangular, Lines) {
+.controller("LinesController", function ($scope, SelectedLines) {
+	$scope.linesSelectedCount = 0;
 
+	$scope.store = {
+		dashboardMode: "database",
+	};
+
+	$scope.$on("didChangeSelectedLines", function () {
+		$scope.linesSelectedCount = SelectedLines.getLinesSelectedCount();
+	});
 })
 
 

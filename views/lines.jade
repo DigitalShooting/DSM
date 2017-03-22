@@ -24,11 +24,18 @@ block body
 		h1
 			block title
 			
+	
+		ul(class="nav nav-tabs")
+			li(role="presentation" class="{{store.dashboardMode == 'database' ? 'active' : ''}}" ng-click="store.dashboardMode = 'database';")
+				a Datenbank
+			li(role="presentation" class="{{store.dashboardMode == 'manual' ? 'active' : ''}}" ng-click="store.dashboardMode = 'manual';")
+				a Manuell
+		
 		.row
 		
 			//- Alert no selection
 			.col-md-12
-				div(class="bs-callout bs-callout-info" ng-hide="store.linesSelectedCount != 0")
+				div(class="bs-callout bs-callout-info" ng-hide="linesSelectedCount != 0")
 					h4 Info
 					p Kein Stand ausgewählt.
 
@@ -36,7 +43,7 @@ block body
 
 			.col-md-6
 				//- Main controls
-				div(class="bs-callout bs-callout-danger" ng-hide="store.linesSelectedCount == 0" ng-controller="controller_lines_power")
+				div(class="bs-callout bs-callout-danger" ng-hide="linesSelectedCount == 0" ng-controller="controller_lines_power")
 					h4 Status
 					div(class="form-group")
 						div(class="btn-group fullWidth" role="group")
@@ -50,8 +57,7 @@ block body
 
 
 				//- Disziplinen selection
-				div(class="bs-callout bs-callout-primary" ng-controller="controller_lines_disziplinen")
-					//- ng-hide="store.linesSelectedCount == 0 || store.dashboardMode!= 'normal'"
+				div(class="bs-callout bs-callout-primary" ng-controller="controller_lines_disziplinen" ng-hide="linesSelectedCount == 0")
 					h4 Disziplin & Scheibe
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -81,7 +87,7 @@ block body
 
 
 				//- Message
-				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0" ng-controller="controller_lines_message")
+				div(class="bs-callout bs-callout-default" ng-hide="linesSelectedCount == 0" ng-controller="controller_lines_message")
 					h4 Nachricht
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -103,7 +109,7 @@ block body
 
 			.col-md-6
 				//- Druck & Log
-				div(class="bs-callout bs-callout-default" ng-hide="store.linesSelectedCount == 0" ng-controller="controller_lines_print")
+				div(class="bs-callout bs-callout-default" ng-hide="linesSelectedCount == 0" ng-controller="controller_lines_print")
 					h4 Druck & Log
 					div(class="btn-group fullWidth" role="group")
 						button(type="submit" class="btn btn-default col-md-12" ng-click="print()")
@@ -120,9 +126,8 @@ block body
 
 
 				//- User
-				//- ng-hide="store.linesSelectedCount != 1 || store.dashboardMode!= 'normal'"
-				div(class="bs-callout bs-callout-primary" ng-controller="LineUserController")
-					h4 Schütze (Datenbank)
+				div(class="bs-callout bs-callout-primary" ng-controller="LineUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'database'")
+					h4 Schütze
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Verein:
@@ -148,6 +153,12 @@ block body
 								div(ng-show="noResultsUser")
 									i(class="glyphicon glyphicon-remove")
 									| Kein Schütze gefunden
+									
+				
+				//- Manschaft
+				div(class="bs-callout bs-callout-primary" ng-controller="LineTeamController" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'database'")
+					h4 Manschaft
+					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Manschaft:
 							div(class="col-md-10")
@@ -164,26 +175,40 @@ block body
 
 
 				//- User
-				//- div(class="bs-callout bs-callout-primary" ng-hide="store.linesSelectedCount != 1 || store.dashboardMode != 'manual'")
-				//- 	h4 Schütze
-				//- 	div(class="form-horizontal")
-				//- 		div(class="form-group")
-				//- 			label(class="col-md-2 control-label") Schütze:
-				//- 			div(class="col-md-5")
-				//- 				input(onClick="this.select();" type="text" ng-model="manualUser.firstName" placeholder="Vorname" class="form-control")
-				//- 			div(class="col-md-5")
-				//- 				input(onClick="this.select();" type="text" ng-model="manualUser.lastName" placeholder="Name" class="form-control")
-				//- 		div(class="form-group")
-				//- 			label(class="col-md-2 control-label") Verein:
-				//- 			div(class="col-md-10")
-				//- 				input(onClick="this.select();" type="text" ng-model="manualUser.verein" placeholder="Verein" class="form-control")
-				//- 		div(class="form-group")
-				//- 			label(class="col-md-2 control-label") Manschaft:
-				//- 			div(class="col-md-10")
-				//- 				input(onClick="this.select();" type="text" ng-model="manualUser.manschaft" placeholder="Manschaft" class="form-control")
-				//- 		div(class="form-group")
-				//- 			div(class="btn-group col-md-12" role="group")
-				//- 				button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="actions.setCustomUser()")
-				//- 					span(class="glyphicon glyphicon glyphicon-ok" aria-hidden="true")
-				//- 					|  Übertragen
+				div(class="bs-callout bs-callout-primary" ng-controller="LineManualUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'manual'")
+					h4 Schütze
+					div(class="form-horizontal")
+						div(class="form-group")
+							label(class="col-md-2 control-label") Schütze:
+							div(class="col-md-5")
+								input(onClick="this.select();" type="text" ng-model="user.firstName" placeholder="Vorname" class="form-control")
+							div(class="col-md-5")
+								input(onClick="this.select();" type="text" ng-model="user.lastName" placeholder="Name" class="form-control")
+						div(class="form-group")
+							label(class="col-md-2 control-label") Verein:
+							div(class="col-md-10")
+								input(onClick="this.select();" type="text" ng-model="user.verein" placeholder="Verein" class="form-control")
+						div(class="form-group")
+							div(class="btn-group col-md-12" role="group")
+								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="setCustomUser()")
+									span(class="glyphicon glyphicon glyphicon-ok" aria-hidden="true")
+									|  Übertragen
+									
+				//- Manschaft
+				div(class="bs-callout bs-callout-primary" ng-controller="LineManualTeamController" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'manual'")
+					h4 Manschaft
+					div(class="form-horizontal")
+						div(class="form-group")
+							label(class="col-md-2 control-label") Manschaft:
+							div(class="col-md-10")
+								input(onClick="this.select();" type="text" ng-model="selected.manschaft.name" placeholder="" class="form-control")
+						div(class="form-group")
+							label(class="col-md-2 control-label") Anzahl (Schützen):
+							div(class="col-md-10")
+								input(onClick="this.select();" type="text" ng-model="selected.manschaft.anzahlSchuetzen" placeholder="" class="form-control")
+						div(class="form-group")
+							div(class="btn-group col-md-12" role="group")
+								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="setCustomUser()")
+									span(class="glyphicon glyphicon glyphicon-ok" aria-hidden="true")
+									|  Übertragen
 									
