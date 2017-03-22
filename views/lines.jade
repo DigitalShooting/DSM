@@ -126,14 +126,14 @@ block body
 
 
 				//- User
-				div(class="bs-callout bs-callout-primary" ng-controller="LineUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'database'")
+				div(class="bs-callout bs-callout-primary" ng-controller="LineUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'database'" ng-focus="focus = true;" ng-blur="focus = false; update();")
 					h4 Schütze
 					div(class="form-horizontal")
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Verein:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.verein" placeholder="" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-no-results="noResultsVerein" class="form-control")
+									input(onClick="this.select();" type="text" ng-model="selected.verein" placeholder="" uib-typeahead="verein as verein.name for verein in getVereine($viewValue)" typeahead-loading="loadingVereine" typeahead-no-results="noResultsVerein" class="form-control" ng-focus="focus(true)" ng-blur="focus(false)")
 									span(class="input-group-btn")
 										button(type="button" class="btn btn-default btn noMargin" ng-click="resetVerein()")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
@@ -145,7 +145,7 @@ block body
 							label(class="col-sm-2 control-label") Schütze:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.user" placeholder="" uib-typeahead="user as getUserSearchTitle(user) for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-no-results="noResultsUser" typeahead-on-select="selectUser()" class="form-control")
+									input(onClick="this.select();" type="text" ng-model="selected.user" placeholder="" uib-typeahead="user as getUserSearchTitle(user) for user in getUsers($viewValue)" typeahead-loading="loadingUser" typeahead-input-formatter="getUserTitle($model)" typeahead-no-results="noResultsUser" typeahead-on-select="selectUser()" class="form-control" ng-focus="focus(true)" ng-blur="focus(false)")
 									span(class="input-group-btn")
 										button(type="button" class="btn btn-default btn noMargin" ng-click="resetUser()")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
@@ -153,7 +153,12 @@ block body
 								div(ng-show="noResultsUser")
 									i(class="glyphicon glyphicon-remove")
 									| Kein Schütze gefunden
-									
+						//- div(class="form-group")
+						//- 	label(class="col-sm-2 control-label") Ersatz:
+						//- 	div(class="col-md-10")
+						//- 		.input-group
+						//- 			input(type="checkbox" ng-model="seleeeect" class="form-control")
+
 				
 				//- Manschaft
 				div(class="bs-callout bs-callout-primary" ng-controller="LineTeamController" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'database'")
@@ -163,7 +168,7 @@ block body
 							label(class="col-sm-2 control-label") Manschaft:
 							div(class="col-md-10")
 								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.manschaft" placeholder="" uib-typeahead="manschaft as getManschaftTitle(manschaft) for manschaft in getManschaften($viewValue)" typeahead-loading="loadingManschaften" typeahead-no-results="noResultsManschaften" class="form-control")
+									input(onClick="this.select();" type="text" ng-model="selected.manschaft" placeholder="" uib-typeahead="manschaft as getManschaftTitle(manschaft) for manschaft in getManschaften($viewValue)" typeahead-loading="loadingManschaften" typeahead-no-results="noResultsManschaften" class="form-control" ng-focus="focus(true)" ng-blur="focus(false)")
 									span(class="input-group-btn")
 										button(type="button" class="btn btn-default btn noMargin" ng-click="resetTeam()")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
@@ -181,13 +186,13 @@ block body
 						div(class="form-group")
 							label(class="col-md-2 control-label") Schütze:
 							div(class="col-md-5")
-								input(onClick="this.select();" type="text" ng-model="user.firstName" placeholder="Vorname" class="form-control")
+								input(onClick="this.select();" type="text" ng-model="user.firstName" placeholder="Vorname" class="form-control" ng-focus="focus(true)" ng-blur="focus(false)")
 							div(class="col-md-5")
-								input(onClick="this.select();" type="text" ng-model="user.lastName" placeholder="Name" class="form-control")
+								input(onClick="this.select();" type="text" ng-model="user.lastName" placeholder="Name" class="form-control" ng-focus="focus(true)" ng-blur="focus(false)")
 						div(class="form-group")
 							label(class="col-md-2 control-label") Verein:
 							div(class="col-md-10")
-								input(onClick="this.select();" type="text" ng-model="user.verein" placeholder="Verein" class="form-control")
+								input(onClick="this.select();" type="text" ng-model="user.verein" placeholder="Verein" class="form-control" ng-focus="focus(true)" ng-blur="focus(false)")
 						div(class="form-group")
 							div(class="btn-group col-md-12" role="group")
 								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="setCustomUser()")
@@ -201,11 +206,11 @@ block body
 						div(class="form-group")
 							label(class="col-md-2 control-label") Manschaft:
 							div(class="col-md-10")
-								input(onClick="this.select();" type="text" ng-model="selected.manschaft.name" placeholder="" class="form-control")
+								input(onClick="this.select();" type="text" ng-model="selected.manschaft.name" placeholder="" class="form-control" ng-focus="focus(true)" ng-blur="focus(false)")
 						div(class="form-group")
 							label(class="col-md-2 control-label") Anzahl (Schützen):
 							div(class="col-md-10")
-								input(onClick="this.select();" type="text" ng-model="selected.manschaft.anzahlSchuetzen" placeholder="" class="form-control")
+								input(onClick="this.select();" type="text" ng-model="selected.manschaft.anzahlSchuetzen" placeholder="" class="form-control" ng-focus="focus(true)" ng-blur="focus(false)")
 						div(class="form-group")
 							div(class="btn-group col-md-12" role="group")
 								button(type="submit" class="btn btn-default col-md-12 noMargin" ng-click="setCustomUser()")

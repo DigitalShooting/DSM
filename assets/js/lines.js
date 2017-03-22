@@ -413,9 +413,35 @@ angular.module("dsm.lines", [
 .controller("LineManualUserController", function ($scope, SelectedLines, gatewaySocket) {
 	$scope.user = null;
 
-	$scope.$on("didChangeSelectedUser", function () {
-		$scope.user = SelectedLines.getSelectedUser();
+	var timer;
+	var focus = false;
+	$scope.focus = function(value) {
+		if (value) {
+			clearTimeout(timer);
+			focus = true;
+		}
+		else {
+			timer = setTimeout(function(){
+				focus = false;
+				update();
+			}, 10000);
+		}
+	};
+
+	$scope.$on("didSetLineData", function() {
+		if (focus == false) {
+			update();
+		}
 	});
+
+	$scope.$on("didChangeSelectedUser", function () {
+		focus = false;
+		update();
+	});
+
+	function update() {
+		$scope.user = SelectedLines.getSelectedUser();
+	}
 
 	$scope.setCustomUser = function() {
 		if ($scope.user != null) {
@@ -428,7 +454,33 @@ angular.module("dsm.lines", [
 .controller("LineManualTeamController", function ($scope, SelectedLines, gatewaySocket) {
 	var users = null;
 
+	var timer;
+	var focus = false;
+	$scope.focus = function(value) {
+		if (value) {
+			clearTimeout(timer);
+			focus = true;
+		}
+		else {
+			timer = setTimeout(function(){
+				focus = false;
+				update();
+			}, 10000);
+		}
+	};
+
+	$scope.$on("didSetLineData", function() {
+		if (focus == false) {
+			update();
+		}
+	});
+
 	$scope.$on("didChangeSelectedUser", function () {
+		focus = false;
+		update();
+	});
+
+	function update() {
 		users = SelectedLines.getAllSelectedUsers();
 		var manschaft = null;
 		for (var i in users) {
@@ -443,7 +495,7 @@ angular.module("dsm.lines", [
 			}
 		}
 		$scope.selected.manschaft = manschaft;
-	});
+	}
 
 	$scope.selected = {};
 
@@ -467,7 +519,33 @@ angular.module("dsm.lines", [
 
 	$scope.user = null;
 
+	var timer;
+	var focus = false;
+	$scope.focus = function(value) {
+		if (value) {
+			clearTimeout(timer);
+			focus = true;
+		}
+		else {
+			timer = setTimeout(function(){
+				focus = false;
+				update();
+			}, 10000);
+		}
+	};
+
+	$scope.$on("didSetLineData", function() {
+		if (focus == false) {
+			update();
+		}
+	});
+
 	$scope.$on("didChangeSelectedUser", function () {
+		focus = false;
+		update();
+	});
+
+	function update() {
 		$scope.user = SelectedLines.getSelectedUser();
 		if ($scope.user != null) {
 
@@ -490,7 +568,7 @@ angular.module("dsm.lines", [
 				$scope.selected.verein = null;
 			}
 		}
-	});
+	}
 
 
 	$scope.selected = {
@@ -519,26 +597,26 @@ angular.module("dsm.lines", [
 
 
 	function setCurrentInfo() {
-		var user = {
-			firstName: "Gast",
-			lastName: "",
-			verein: "",
-			vereinID: null,
-		};
 		if ($scope.selected.user != null) {
-			user = {
-				firstName: $scope.selected.user.firstName,
-				lastName: $scope.selected.user.lastName,
-				id: $scope.selected.user.id
-			};
+			$scope.user.firstName = $scope.selected.user.firstName;
+			$scope.user.lastName = $scope.selected.user.lastName;
+			$scope.user.id = $scope.selected.user.id;
+
 			if ($scope.selected.verein != null) {
-				user.verein = $scope.selected.verein.name;
-				user.vereinID = $scope.selected.verein.id;
+				$scope.user.verein = $scope.selected.verein.name;
+				$scope.user.vereinID = $scope.selected.verein.id;
 			}
+		}
+		else {
+			$scope.user.firstName = "Gast";
+			$scope.user.lastName = "";
+			$scope.user.id = "";
+			$scope.user.verein = "";
+			$scope.user.vereinID = "";
 		}
 
 		SelectedLines.performOnSelected(function(id){
-			gatewaySocket.api.setUser(id, user);
+			gatewaySocket.api.setUser(id, $scope.user);
 		}, true);
 	}
 
@@ -606,14 +684,37 @@ angular.module("dsm.lines", [
 		setCurrentInfo();
 	};
 })
-
-
-
 .controller("LineTeamController", function ($scope, SelectedLines, gatewaySocket, Restangular) {
 
 	var users = null;
 
+	var timer;
+	var focus = false;
+	$scope.focus = function(value) {
+		if (value) {
+			clearTimeout(timer);
+			focus = true;
+		}
+		else {
+			timer = setTimeout(function(){
+				focus = false;
+				update();
+			}, 10000);
+		}
+	};
+
+	$scope.$on("didSetLineData", function() {
+		if (focus == false) {
+			update();
+		}
+	});
+
 	$scope.$on("didChangeSelectedUser", function () {
+		focus = false;
+		update();
+	});
+
+	function update() {
 		users = SelectedLines.getAllSelectedUsers();
 		var manschaft = null;
 		for (var i in users) {
@@ -628,8 +729,13 @@ angular.module("dsm.lines", [
 				manschaft = null;
 			}
 		}
-		$scope.selected.manschaft = manschaft;
-	});
+		if (manschaft != null && manschaft.name != "") {
+			$scope.selected.manschaft = manschaft;
+		}
+		else {
+			$scope.selected.manschaft = null;
+		}
+	}
 
 
 	$scope.selected = {
@@ -648,12 +754,19 @@ angular.module("dsm.lines", [
 	});
 
 	function setCurrentInfo() {
-		if ($scope.selected.manschaft != null) {
+		var manschaft = $scope.selected.manschaft;
+		if (manschaft == null) {
+			manschaft = {
+				name: "",
+			};
+		}
+
+		if (manschaft != null) {
 			SelectedLines.performOnSelected(function(id){
 				var user = users[id];
 				if (user != null) {
-					user.manschaft = $scope.selected.manschaft.name;
-					user.manschaftAnzahlSchuetzen = $scope.selected.manschaft.anzahlSchuetzen;
+					user.manschaft = manschaft.name;
+					user.manschaftAnzahlSchuetzen = manschaft.anzahlSchuetzen;
 					gatewaySocket.api.setUser(id, user);
 				}
 			}, true);
