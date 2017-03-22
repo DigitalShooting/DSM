@@ -601,16 +601,18 @@ angular.module("dsm.lines", [
 			$scope.user.firstName = $scope.selected.user.firstName;
 			$scope.user.lastName = $scope.selected.user.lastName;
 			$scope.user.id = $scope.selected.user.id;
-
-			if ($scope.selected.verein != null) {
-				$scope.user.verein = $scope.selected.verein.name;
-				$scope.user.vereinID = $scope.selected.verein.id;
-			}
 		}
 		else {
 			$scope.user.firstName = "Gast";
 			$scope.user.lastName = "";
 			$scope.user.id = "";
+		}
+
+		if ($scope.selected.verein != null) {
+			$scope.user.verein = $scope.selected.verein.name;
+			$scope.user.vereinID = $scope.selected.verein.id;
+		}
+		else {
 			$scope.user.verein = "";
 			$scope.user.vereinID = "";
 		}
