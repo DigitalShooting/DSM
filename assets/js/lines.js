@@ -7,8 +7,6 @@ angular.module("dsm.lines", [
 	"restangular",
 ])
 
-
-
 /**
  Manages the selected lines.
  Calles "didChangeSelectedLines" after each change.
@@ -200,8 +198,6 @@ angular.module("dsm.lines", [
 	};
 })
 
-
-
 /**
  Listen for changes in the online lines form DSC-Gateway.
  Calles "didChangeLines" on rootScope after each lines status change,
@@ -216,10 +212,7 @@ angular.module("dsm.lines", [
 	// -- store lines recived from DSC-Gateway --
 	var lines = [];
 
-
-
 	gatewaySocket.emit("getLines", {});
-
 
 	// listen to DSC-Gateway updates
 	gatewaySocket.on("disconnect", function(data){
@@ -245,7 +238,26 @@ angular.module("dsm.lines", [
 	};
 })
 
+/**
+ Main Lines Controller, manages the count of selected lines.
+ */
+.controller("controller_lines", function ($scope, SelectedLines) {
+	$scope.linesSelectedCount = 0;
+	$scope.hasOnlineSelectedLine = false;
 
+	$scope.store = {
+		dashboardMode: "database",
+	};
+
+	onDidChangeSelectedLines();
+	$scope.$on("didChangeSelectedLines", function () {
+		onDidChangeSelectedLines();
+	});
+	function onDidChangeSelectedLines() {
+		$scope.linesSelectedCount = SelectedLines.getLinesSelectedCount();
+		$scope.hasOnlineSelectedLine = SelectedLines.hasOnlineSelectedLine();
+	}
+})
 
 /**
  Power on and off selected lines
@@ -263,8 +275,6 @@ angular.module("dsm.lines", [
 	};
 
 })
-
-
 
 /**
  Control the shown message on the lines (Sicherheit, Pause, ...)
@@ -293,8 +303,6 @@ angular.module("dsm.lines", [
 	};
 
 })
-
-
 
 /**
  Print selected lines and open log
@@ -337,8 +345,9 @@ angular.module("dsm.lines", [
 
 })
 
-
-
+/**
+ Manage disziplin selection
+ */
 .controller("controller_lines_disziplinen", function ($scope, SelectedLines, gatewaySocket, Restangular) {
 
 	$scope.disziplinen = [];
@@ -349,12 +358,16 @@ angular.module("dsm.lines", [
 		part: null,
 	};
 
+	didChangeSelectedDisziplin();
 	$scope.$on("didChangeSelectedDisziplin", function () {
+		didChangeSelectedDisziplin();
+	});
+	function didChangeSelectedDisziplin() {
 		var values = SelectedLines.getSelectedDisziplin();
 		$scope.selected.disziplin = values.disziplin;
 		$scope.selected.part = values.part;
 		loadParts();
-	});
+	}
 
 	// Store disziplinen once
 	Restangular.all("/disziplinen").getList({
@@ -426,7 +439,10 @@ angular.module("dsm.lines", [
 
 })
 
-.controller("LineManualUserController", function ($scope, SelectedLines, gatewaySocket) {
+/**
+ Set the user/ verein data manual
+ */
+.controller("controller_lines_manual_user", function ($scope, SelectedLines, gatewaySocket) {
 	$scope.user = null;
 
 	var timer;
@@ -444,16 +460,24 @@ angular.module("dsm.lines", [
 		}
 	};
 
+	onDidSetLineData();
 	$scope.$on("didSetLineData", function() {
+		onDidSetLineData();
+	});
+	function onDidSetLineData() {
 		if (focus == false) {
 			update();
 		}
-	});
+	}
 
+	onDidChangeSelectedUser();
 	$scope.$on("didChangeSelectedUser", function () {
+		onDidChangeSelectedUser();
+	});
+	function onDidChangeSelectedUser() {
 		focus = false;
 		update();
-	});
+	}
 
 	function update() {
 		$scope.user = SelectedLines.getSelectedUser();
@@ -467,8 +491,14 @@ angular.module("dsm.lines", [
 		}
 	};
 })
-.controller("LineManualTeamController", function ($scope, SelectedLines, gatewaySocket) {
+
+/**
+ Set team manual
+ */
+.controller("controller_lines_manual_team", function ($scope, SelectedLines, gatewaySocket) {
 	var users = null;
+
+	$scope.selected = {};
 
 	var timer;
 	var focus = false;
@@ -485,16 +515,24 @@ angular.module("dsm.lines", [
 		}
 	};
 
+	onDidSetLineData();
 	$scope.$on("didSetLineData", function() {
+		onDidSetLineData();
+	});
+	function onDidSetLineData() {
 		if (focus == false) {
 			update();
 		}
-	});
+	}
 
+	onDidChangeSelectedUser();
 	$scope.$on("didChangeSelectedUser", function () {
+		onDidChangeSelectedUser();
+	});
+	function onDidChangeSelectedUser() {
 		focus = false;
 		update();
-	});
+	}
 
 	function update() {
 		users = SelectedLines.getAllSelectedUsers();
@@ -513,8 +551,6 @@ angular.module("dsm.lines", [
 		$scope.selected.manschaft = manschaft;
 	}
 
-	$scope.selected = {};
-
 	$scope.setCustomUser = function() {
 		if ($scope.selected.manschaft != null) {
 			SelectedLines.performOnSelected(function(id){
@@ -530,10 +566,14 @@ angular.module("dsm.lines", [
 
 })
 
-
-.controller("LineUserController", function ($scope, SelectedLines, gatewaySocket, Restangular) {
+/**
+ Set user/ verein form database
+ */
+.controller("controller_lines_database_user", function ($scope, SelectedLines, gatewaySocket, Restangular) {
 
 	$scope.user = null;
+
+	$scope.selected = {};
 
 	var timer;
 	var focus = false;
@@ -550,16 +590,24 @@ angular.module("dsm.lines", [
 		}
 	};
 
+	onDidSetLineData();
 	$scope.$on("didSetLineData", function() {
+		onDidSetLineData();
+	});
+	function onDidSetLineData() {
 		if (focus == false) {
 			update();
 		}
-	});
+	}
 
+	onDidChangeSelectedUser();
 	$scope.$on("didChangeSelectedUser", function () {
+		onDidChangeSelectedUser();
+	});
+	function onDidChangeSelectedUser() {
 		focus = false;
 		update();
-	});
+	}
 
 	function update() {
 		$scope.user = SelectedLines.getSelectedUser();
@@ -585,12 +633,6 @@ angular.module("dsm.lines", [
 			}
 		}
 	}
-
-
-	$scope.selected = {
-
-	};
-
 
 
 	$scope.$watch("selected.user", function() {
@@ -702,9 +744,15 @@ angular.module("dsm.lines", [
 		setCurrentInfo();
 	};
 })
-.controller("LineTeamController", function ($scope, SelectedLines, gatewaySocket, Restangular) {
+
+/**
+ Set team from database
+ */
+.controller("controller_lines_database_team", function ($scope, SelectedLines, gatewaySocket, Restangular) {
 
 	var users = null;
+
+	$scope.selected = {};
 
 	var timer;
 	var focus = false;
@@ -721,16 +769,24 @@ angular.module("dsm.lines", [
 		}
 	};
 
+	onDidSetLineData();
 	$scope.$on("didSetLineData", function() {
+		onDidSetLineData();
+	});
+	function onDidSetLineData() {
 		if (focus == false) {
 			update();
 		}
-	});
+	}
 
+	onDidChangeSelectedUser();
 	$scope.$on("didChangeSelectedUser", function () {
+		onDidChangeSelectedUser();
+	});
+	function onDidChangeSelectedUser() {
 		focus = false;
 		update();
-	});
+	}
 
 	function update() {
 		users = SelectedLines.getAllSelectedUsers();
@@ -754,11 +810,6 @@ angular.module("dsm.lines", [
 			$scope.selected.manschaft = null;
 		}
 	}
-
-
-	$scope.selected = {
-
-	};
 
 
 	$scope.$watch("selected.manschaft", function() {
@@ -819,37 +870,28 @@ angular.module("dsm.lines", [
 
 })
 
-.controller("LinesController", function ($scope, SelectedLines) {
-	$scope.linesSelectedCount = 0;
-	$scope.hasOnlineSelectedLine = false;
-
-	$scope.store = {
-		dashboardMode: "database",
-	};
-
-	$scope.$on("didChangeSelectedLines", function () {
-		$scope.linesSelectedCount = SelectedLines.getLinesSelectedCount();
-		$scope.hasOnlineSelectedLine = SelectedLines.hasOnlineSelectedLine();
-	});
-})
-
-
-
 /**
  Manage the selection of lines
  */
 .controller("controller_lines_selected", function ($scope, Lines, SelectedLines) {
 
 	$scope.lines = {};
+	onDidChangeLines();
 	$scope.$on("didChangeLines", function () {
-		$scope.lines = Lines.getLines();
+		onDidChangeLines();
 	});
+	function onDidChangeLines() {
+		$scope.lines = Lines.getLines();
+	}
 
 	$scope.selectedLines = {};
+	onDidChangeSelectedLines();
 	$scope.$on("didChangeSelectedLines", function () {
-		$scope.selectedLines = SelectedLines.getSelectedLines();
+		onDidChangeSelectedLines();
 	});
-
+	function onDidChangeSelectedLines() {
+		$scope.selectedLines = SelectedLines.getSelectedLines();
+	}
 
 
 	$scope.selectLine = function(id, value){

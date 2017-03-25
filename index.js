@@ -11,7 +11,13 @@ var app = express({ strict: true });
 app.use(function(req, res, next){
 	res.locals.req = req;
 	res.locals.config = {
-		dscGateway: config.dscGateway,
+		dscGateway: {
+			url: config.dscGateway.url,
+			key: config.dscGateway.key,
+		},
+		dsm: {
+			scaleFactor: config.dsm.scaleFactor,
+		},
 	};
 	next();
 });

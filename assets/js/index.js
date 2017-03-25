@@ -7,15 +7,13 @@ var app = angular.module('dsm', [
 	"dsm.services.typeahead.user",
 ]);
 
-var scaleFactor = 4;
-
 app.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.
 
 		// lines routes
 		when('/lines', {
 			templateUrl: '/lines',
-			controller: 'LinesController',
+			controller: 'controller_lines',
 		}).
 
 

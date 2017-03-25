@@ -126,7 +126,7 @@ block body
 
 
 				//- User
-				div(class="bs-callout bs-callout-primary" ng-controller="LineUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'database' || hasOnlineSelectedLine == false" ng-focus="focus = true;" ng-blur="focus = false; update();")
+				div(class="bs-callout bs-callout-primary" ng-controller="controller_lines_database_user" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'database' || hasOnlineSelectedLine == false" ng-focus="focus = true;" ng-blur="focus = false; update();")
 					h4 Schütze
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -156,7 +156,7 @@ block body
 
 				
 				//- Manschaft
-				div(class="bs-callout bs-callout-primary" ng-controller="LineTeamController" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'database' || hasOnlineSelectedLine == false")
+				div(class="bs-callout bs-callout-primary" ng-controller="controller_lines_database_team" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'database' || hasOnlineSelectedLine == false")
 					h4 Manschaft
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -175,7 +175,7 @@ block body
 
 
 				//- User
-				div(class="bs-callout bs-callout-primary" ng-controller="LineManualUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'manual' || hasOnlineSelectedLine == false")
+				div(class="bs-callout bs-callout-primary" ng-controller="controller_lines_manual_user" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'manual' || hasOnlineSelectedLine == false")
 					h4 Schütze
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -195,7 +195,7 @@ block body
 									|  Übertragen
 									
 				//- Manschaft
-				div(class="bs-callout bs-callout-primary" ng-controller="LineManualTeamController" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'manual' || hasOnlineSelectedLine == false")
+				div(class="bs-callout bs-callout-primary" ng-controller="controller_lines_manual_team" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'manual' || hasOnlineSelectedLine == false")
 					h4 Manschaft
 					div(class="form-horizontal")
 						div(class="form-group")

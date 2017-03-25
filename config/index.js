@@ -3,5 +3,6 @@ module.exports = {
 	lines : require("./lines.js"),
 	network	: require("./network.js"),
 	dscGateway: require("./dscGateway.js"),
+	dsm: require("./dsm.js"),
 	disziplinen: require("../disziplinen/"),
 };
