@@ -162,10 +162,14 @@ block body
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Manschaft:
 							div(class="col-md-10")
-								ui-select(ng-model="selected.manschaft" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="didSelectTeam()")
-									ui-select-match {{selected.manschaft.name}}
-									ui-select-choices(repeat="manschaft in manschaften | propsFilter: {name: $select.search}" )
-										div {{manschaft.name}}
+								.input-group
+									ui-select(ng-model="selected.manschaft" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="didSelectTeam()")
+										ui-select-match {{selected.manschaft.name}}
+										ui-select-choices(repeat="manschaft in manschaften | propsFilter: {name: $select.search}" )
+											div {{manschaft.name}}
+									span(class="input-group-btn")
+										button(type="button" class="btn btn-default btn noMargin" ng-click="resetTeam()")
+											span(class="glyphicon glyphicon-remove" aria-hidden="true")
 
 
 
