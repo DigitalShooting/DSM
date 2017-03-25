@@ -162,15 +162,10 @@ block body
 						div(class="form-group")
 							label(class="col-sm-2 control-label") Manschaft:
 							div(class="col-md-10")
-								.input-group
-									input(onClick="this.select();" type="text" ng-model="selected.manschaft" placeholder="" uib-typeahead="manschaft as getManschaftTitle(manschaft) for manschaft in getManschaften($viewValue)" typeahead-loading="loadingManschaften" typeahead-no-results="noResultsManschaften" class="form-control" ng-focus="focus(true)" ng-blur="focus(false)")
-									span(class="input-group-btn")
-										button(type="button" class="btn btn-default btn noMargin" ng-click="resetTeam()")
-											span(class="glyphicon glyphicon-remove" aria-hidden="true")
-								i(ng-show="loadingmanschaften" class="glyphicon glyphicon-refresh")
-								div(ng-show="noResultsmanschaften")
-									i(class="glyphicon glyphicon-remove")
-									| Keine Manschaft gefunden
+								ui-select(ng-model="selected.manschaft" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="didSelectTeam()")
+									ui-select-match {{selected.manschaft.name}}
+									ui-select-choices(repeat="manschaft in manschaften | propsFilter: {name: $select.search}" )
+										div {{manschaft.name}}
 
 
 

@@ -794,7 +794,6 @@ angular.module("dsm.lines", [
 		for (var i in users) {
 			if (manschaft == null) {
 				manschaft = {
-					_set: true,
 					name: users[i].manschaft,
 					anzahlSchuetzen: users[i].manschaftAnzahlSchuetzen,
 				};
@@ -812,15 +811,12 @@ angular.module("dsm.lines", [
 	}
 
 
-	$scope.$watch("selected.manschaft", function() {
+	// $scope .$watch("selected.manschaft", function() {
+	$scope.didSelectTeam = function() {
 		if ($scope.selected.manschaft != null && typeof $scope.selected.manschaft != "string") {
-			if ($scope.selected.manschaft._set == true) {
-				return;
-			}
-
 			setCurrentInfo();
 		}
-	});
+	};
 
 	function setCurrentInfo() {
 		var manschaft = $scope.selected.manschaft;
@@ -844,21 +840,25 @@ angular.module("dsm.lines", [
 
 
 
+	Restangular.all("/manschaft").getList({
+	}).then(function(manschaften) {
+		$scope.manschaften = manschaften;
+	});
 
-	$scope.getManschaften = function(serachString) {
-		return Restangular.one("/manschaft").get({
-			search: serachString,
-			limit: 1000,
-		}).then(function(manschaften) {
-			return manschaften;
-		});
-	};
-	$scope.getManschaftTitle = function(manschaft) {
-		if (manschaft != null) {
-			return manschaft.name;
-		}
-		return "";
-	};
+	// $scope.getManschaften = function(serachString) {
+	// 	return Restangular.one("/manschaft").get({
+	// 		search: serachString,
+	// 		limit: 1000,
+	// 	}).then(function(manschaften) {
+	// 		return manschaften;
+	// 	});
+	// };
+	// $scope.getManschaftTitle = function(manschaft) {
+	// 	if (manschaft != null) {
+	// 		return manschaft.name;
+	// 	}
+	// 	return "";
+	// };
 
 
 

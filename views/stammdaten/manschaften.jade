@@ -12,8 +12,8 @@ block main
 	table(class="table table-hover table-striped")
 		thead
 			tr
-				+tableHeader("Verein", "verein")
 				+tableHeader("Name", "name")
+				+tableHeader("Anzahl Schützen", "anzahlSchuetzen")
 				th(style="width:10%;")
 			tr
 				td(colspan="2")
@@ -24,8 +24,8 @@ block main
 						|  Neu
 		tbody
 			tr(ng-repeat="manschaft in manschaften track by $index")
-				td {{manschaft.verein}}
 				td {{manschaft.name}}
+				td {{manschaft.anzahlSchuetzen}}
 				td
 					button(type="button" class="btn btn-link btn-sm noMargin col-xs-12" ng-click="editEntry(manschaft)")
 						span(class="glyphicon glyphicon-pencil" aria-hidden="true")
@@ -35,11 +35,6 @@ block main
 	
 	//- saisonTypeahead template
 	script(type="text/ng-template" id="saisonTypeahead.html")
-		a {{match.model.name}}
-	
-	
-	//- vereinTypeahead template
-	script(type="text/ng-template" id="vereinTypeahead.html")
 		a {{match.model.name}}
 		
 		
@@ -56,13 +51,10 @@ block main
 				span(aria-hidden="true") &times
 			h4(class="modal-title" id="exampleModalLabel")
 				span(class="glyphicon glyphicon-th-large" aria-hidden="true")
-				|  {{verein.name}} {{manschaft.name}}
+				|  {{manschaft.name}}
 		div(class="modal-body")
 			form
 				div(class="row")
-					div(class="form-group col-md-6")
-						label(class="control-label") Verein:
-						verein-typeahead(verein="verein" manschaft="verein")
 					div(class="form-group col-md-6")
 						label(class="control-label") Manschafts Name/ Nummer:
 						input(type="text" class="form-control" ng-model="manschaft.name")
