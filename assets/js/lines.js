@@ -179,7 +179,23 @@ angular.module("dsm.lines", [
 				}
 			}
 			return users;
-		}
+		},
+
+		/**
+		 True if min one selected line is online
+		 */
+		hasOnlineSelectedLine: function() {
+			var lines = Lines.getLines();
+			for (var id in linesSelected){
+				if (linesSelected[id] == true){
+					var line = lines[id];
+					if (line != null && (line.online == true)){
+						return true;
+					}
+				}
+			}
+			return false;
+		},
 
 	};
 })
@@ -805,6 +821,7 @@ angular.module("dsm.lines", [
 
 .controller("LinesController", function ($scope, SelectedLines) {
 	$scope.linesSelectedCount = 0;
+	$scope.hasOnlineSelectedLine = false;
 
 	$scope.store = {
 		dashboardMode: "database",
@@ -812,6 +829,7 @@ angular.module("dsm.lines", [
 
 	$scope.$on("didChangeSelectedLines", function () {
 		$scope.linesSelectedCount = SelectedLines.getLinesSelectedCount();
+		$scope.hasOnlineSelectedLine = SelectedLines.hasOnlineSelectedLine();
 	});
 })
 

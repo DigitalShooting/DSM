@@ -9,7 +9,7 @@ angular.module("dsm.services.sockets", [
 		ioSocket: io.connect(dscGatewayUrl)
 	});
 
-	var auth = {key: "123"};
+	var auth = {key: dscAPIKey};
 
 	gatewaySocket.api = {
 		setNewTarget: function(line){

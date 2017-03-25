@@ -10,6 +10,9 @@ var app = express({ strict: true });
 
 app.use(function(req, res, next){
 	res.locals.req = req;
+	res.locals.config = {
+		dscGateway: config.dscGateway,
+	};
 	next();
 });
 

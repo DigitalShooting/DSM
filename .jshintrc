@@ -9,7 +9,8 @@
 		"document",
 		"moment",
 		"io",
-		"dscGatewayUrl"
+		"dscGatewayUrl",
+		"dscAPIKey"
 	],
 	 "-W041": false
 }

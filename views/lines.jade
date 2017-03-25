@@ -57,7 +57,7 @@ block body
 
 
 				//- Disziplinen selection
-				div(class="bs-callout bs-callout-primary" ng-controller="controller_lines_disziplinen" ng-hide="linesSelectedCount == 0")
+				div(class="bs-callout bs-callout-primary" ng-controller="controller_lines_disziplinen" ng-hide="linesSelectedCount == 0 || hasOnlineSelectedLine == false")
 					h4 Disziplin & Scheibe
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -87,7 +87,7 @@ block body
 
 
 				//- Message
-				div(class="bs-callout bs-callout-default" ng-hide="linesSelectedCount == 0" ng-controller="controller_lines_message")
+				div(class="bs-callout bs-callout-default" ng-hide="linesSelectedCount == 0 || hasOnlineSelectedLine == false" ng-controller="controller_lines_message")
 					h4 Nachricht
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -109,7 +109,7 @@ block body
 
 			.col-md-6
 				//- Druck & Log
-				div(class="bs-callout bs-callout-default" ng-hide="linesSelectedCount == 0" ng-controller="controller_lines_print")
+				div(class="bs-callout bs-callout-default" ng-hide="linesSelectedCount == 0 || hasOnlineSelectedLine == false" ng-controller="controller_lines_print")
 					h4 Druck & Log
 					div(class="btn-group fullWidth" role="group")
 						button(type="submit" class="btn btn-default col-md-12" ng-click="print()")
@@ -126,7 +126,7 @@ block body
 
 
 				//- User
-				div(class="bs-callout bs-callout-primary" ng-controller="LineUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'database'" ng-focus="focus = true;" ng-blur="focus = false; update();")
+				div(class="bs-callout bs-callout-primary" ng-controller="LineUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'database' || hasOnlineSelectedLine == false" ng-focus="focus = true;" ng-blur="focus = false; update();")
 					h4 Schütze
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -153,15 +153,10 @@ block body
 								div(ng-show="noResultsUser")
 									i(class="glyphicon glyphicon-remove")
 									| Kein Schütze gefunden
-						//- div(class="form-group")
-						//- 	label(class="col-sm-2 control-label") Ersatz:
-						//- 	div(class="col-md-10")
-						//- 		.input-group
-						//- 			input(type="checkbox" ng-model="seleeeect" class="form-control")
 
 				
 				//- Manschaft
-				div(class="bs-callout bs-callout-primary" ng-controller="LineTeamController" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'database'")
+				div(class="bs-callout bs-callout-primary" ng-controller="LineTeamController" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'database' || hasOnlineSelectedLine == false")
 					h4 Manschaft
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -180,7 +175,7 @@ block body
 
 
 				//- User
-				div(class="bs-callout bs-callout-primary" ng-controller="LineManualUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'manual'")
+				div(class="bs-callout bs-callout-primary" ng-controller="LineManualUserController" ng-hide="linesSelectedCount != 1 || store.dashboardMode != 'manual' || hasOnlineSelectedLine == false")
 					h4 Schütze
 					div(class="form-horizontal")
 						div(class="form-group")
@@ -200,7 +195,7 @@ block body
 									|  Übertragen
 									
 				//- Manschaft
-				div(class="bs-callout bs-callout-primary" ng-controller="LineManualTeamController" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'manual'")
+				div(class="bs-callout bs-callout-primary" ng-controller="LineManualTeamController" ng-hide="linesSelectedCount == 0 || store.dashboardMode != 'manual' || hasOnlineSelectedLine == false")
 					h4 Manschaft
 					div(class="form-horizontal")
 						div(class="form-group")

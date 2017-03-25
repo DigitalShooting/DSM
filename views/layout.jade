@@ -108,4 +108,5 @@ html(lang="de")
 		div(ng-view)
 		
 		script.
-			var dscGatewayUrl = "127.0.0.1:4000";
+			var dscGatewayUrl = "#{config.dscGateway.url}";
+			var dscAPIKey = "#{config.dscGateway.key}";
