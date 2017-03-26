@@ -212,13 +212,13 @@ angular.module("dsm.lines", [
 	}
 
 	// -- store lines recived from DSC-Gateway --
-	var lines = [];
+	var lines = {};
 
 	gatewaySocket.emit("getLines", {});
 
 	// listen to DSC-Gateway updates
-	gatewaySocket.on("disconnect", function(data){
-		lines = data.lines; // TODO???
+	gatewaySocket.on("disconnect", function(){
+		lines = {};
 		triggerUpdate();
 	});
 	gatewaySocket.on("onlineLines", function(data){
