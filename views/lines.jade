@@ -166,7 +166,7 @@ block body
 									ui-select(ng-model="selected.manschaft" theme="bootstrap" ng-disabled="disabled" reset-search-input="true" on-select="didSelectTeam()")
 										ui-select-match {{selected.manschaft.name}}
 										ui-select-choices(repeat="manschaft in manschaften | propsFilter: {name: $select.search}" )
-											div {{manschaft.name}}
+											div {{manschaft.name}} ({{manschaft.anzahlSchuetzen}} Schützen)
 									span(class="input-group-btn")
 										button(type="button" class="btn btn-default btn noMargin" ng-click="resetTeam()")
 											span(class="glyphicon glyphicon-remove" aria-hidden="true")
