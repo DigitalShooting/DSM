@@ -112,26 +112,28 @@ angular.module("dsm.lines", [
 			var partType = null;
 			var part = null;
 			var noPart = false;
-			for (var id in linesSelected){
-				if (linesSelected[id] == true){
-					var line = lines[id];
-					if (line != null && (line.online == true)){
-						var data = line.cache.setData;
-						if (disziplin == null || data.disziplin._id == disziplin._id) {
-							disziplin = data.disziplin;
-							if (noPart == false && (partType == null || partType == data.sessionParts[data.sessionIndex].type)) {
-								partType = data.sessionParts[data.sessionIndex].type;
-								part = data.disziplin.parts[partType];
+			if (lines != null) {
+				for (var id in linesSelected){
+					if (linesSelected[id] == true){
+						var line = lines[id];
+						if (line != null && (line.online == true)){
+							var data = line.cache.setData;
+							if (disziplin == null || data.disziplin._id == disziplin._id) {
+								disziplin = data.disziplin;
+								if (noPart == false && (partType == null || partType == data.sessionParts[data.sessionIndex].type)) {
+									partType = data.sessionParts[data.sessionIndex].type;
+									part = data.disziplin.parts[partType];
+								}
+								else {
+									noPart = true;
+									part = null;
+								}
 							}
 							else {
-								noPart = true;
+								disziplin = null;
 								part = null;
+								break;
 							}
-						}
-						else {
-							disziplin = null;
-							part = null;
-							break;
 						}
 					}
 				}
