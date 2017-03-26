@@ -34,10 +34,10 @@ angular.module("dsm.lines", [
 
 	// Update didChangeSelectedDisziplin on each change of selected lines and data
 	$rootScope.$on("didSetLineData", function () {
-		$rootScope.$broadcast('didChangeSelectedDisziplin');
+		didChangeSelectedLines();
 	});
 	$rootScope.$on("didChangeLines", function () {
-		$rootScope.$broadcast('didChangeSelectedDisziplin');
+		didChangeSelectedLines();
 	});
 
 
