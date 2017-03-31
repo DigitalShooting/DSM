@@ -32,10 +32,7 @@ angular.module("dsm.lines", [
 		}
 	}
 
-	// Update didChangeSelectedDisziplin on each change of selected lines and data
-	$rootScope.$on("didSetLineData", function () {
-		didChangeSelectedLines();
-	});
+	// Update didChangeSelectedDisziplin on each change of selected lines
 	$rootScope.$on("didChangeLines", function () {
 		didChangeSelectedLines();
 	});
@@ -360,6 +357,31 @@ angular.module("dsm.lines", [
 		part: null,
 	};
 
+	var timer;
+	var focus = false;
+	$scope.focus = function(value) {
+		if (value) {
+			clearTimeout(timer);
+			focus = true;
+		}
+		else {
+			timer = setTimeout(function(){
+				focus = false;
+				didChangeSelectedDisziplin();
+			}, 10000);
+		}
+	};
+
+	onDidSetLineData();
+	$scope.$on("didSetLineData", function() {
+		onDidSetLineData();
+	});
+	function onDidSetLineData() {
+		if (focus == false) {
+			didChangeSelectedDisziplin();
+		}
+	}
+
 	didChangeSelectedDisziplin();
 	$scope.$on("didChangeSelectedDisziplin", function () {
 		didChangeSelectedDisziplin();
@@ -588,7 +610,7 @@ angular.module("dsm.lines", [
 			timer = setTimeout(function(){
 				focus = false;
 				update();
-			}, 10000);
+			}, 30000);
 		}
 	};
 
