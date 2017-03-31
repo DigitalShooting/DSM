@@ -1,9 +1,7 @@
 # DigitalShootingManager (DSM)
-Verwaltungsoberfläche für DSCs, basierend auf der Socket.io API.
+Verwaltungsoberfläche für DSCs, benötigt einen DSC-Gateway.
 
 ![Demo](https://raw.githubusercontent.com/DigitalShooting/assets/master/dsm1.png)
-
-
 
 
 ## Funktionen
@@ -11,31 +9,19 @@ Verwaltungsoberfläche für DSCs, basierend auf der Socket.io API.
 ### Stände
 Verwaltung der Stände:
 - Ein/ Ausschalten
-- Disziplin
-- Part
-- Schütze
+- Disziplin/ Part
+- Verein/ Schütze
+- Manschaft
 - Drucken
 
 ### Stammdaten
-Verwaltung der Schützen
-
-### RWKs
-Durchführung von RWKs
+Verwaltung von **Schützen**, **Vereine** und **Mannschaften**.
+Ein Schütze kann einem Verein zugeordnet werden.
+Mannschaften sind *keinem* Verein zugeordnet, sondern dienen nur als Zuordnung zur Anzahl der Schützen in einer Mannschaft, welche zur Berechnung der Zwischenstände benötigt wird.
 
 ### Statistiken
-- Historie aller Daten.
-- Laden eine alten Session auf eine Linie
+Anzeige einer Historie aller Daten, welche vom DSC-Gateway gesammelt werden. Alte Sessions können auf eine aktive Linie geladen werden.
 
-
-
-
-## Resources
-- [restangular](https://github.com/mgonto/restangular)
-- [node-mysql](https://github.com/felixge/node-mysql)
-- [bootstrap](http://getbootstrap.com/)
-- [angular-ui](http://angular-ui.github.io/bootstrap/)
-
-- [angular-dragdrop](http://codef0rmer.github.io/angular-dragdrop/#/list)
 
 
 ## Licence
