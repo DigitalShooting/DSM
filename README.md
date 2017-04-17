@@ -14,7 +14,7 @@ Verwaltungsoberfläche für DSCs, benötigt einen DSC-Gateway.
 ````
 # clone and update submodules
 git clone --recursiv https://github.com/DigitalShooting/DSM.git
-cd DSC
+cd DSM
 
 # NPM rebuild
 npm rebuild
