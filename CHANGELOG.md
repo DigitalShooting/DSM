@@ -15,6 +15,9 @@
 - Show stats of last day/ week as overview
 - Add names/ teams to line buttons
 
+## v2.0.1
+- `ADD` add node_modules to repo
+
 ## v2.0.0
 - `ADD` Teams
 - `ADD` Statistic page
