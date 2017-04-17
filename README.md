@@ -4,6 +4,28 @@ Verwaltungsoberfläche für DSCs, benötigt einen DSC-Gateway.
 ![Demo](https://raw.githubusercontent.com/DigitalShooting/assets/master/dsm1.png)
 
 
+## Installation
+
+### Abhängigkeiten
+- nodejs (>4)
+- npm
+
+### Git
+````
+# clone and update submodules
+git clone --recursiv https://github.com/DigitalShooting/DSM.git
+cd DSC
+
+# NPM rebuild
+npm rebuild
+
+# configure (more under /docs/config.md)
+ls config/
+
+# start
+node index.js
+````
+
 ## Funktionen
 
 ### Stände
