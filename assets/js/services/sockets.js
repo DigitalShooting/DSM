@@ -102,10 +102,20 @@ angular.module("dsm.services.sockets", [
 			});
 		},
 		setPower: function(line, on){
-			gatewaySocket.emit("setPower", {
-				state: on,
-				line: line,
-			});
+			if (on == true) {
+				gatewaySocket.emit("startLine", {
+					line: line,
+				});
+			}
+			else {
+				gatewaySocket.emit("setLine", {
+					method: "shutdown",
+					line: line,
+					data: {
+						auth: auth,
+					}
+				});
+			}
 		},
 		getData: function(line){
 			gatewaySocket.emit("setLine", {
