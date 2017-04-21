@@ -9,11 +9,14 @@
 - Allow a selection of the current teams for export as CSV, PDF, allow email result
 - Add option to open calc Programm wir exported csv
 - Allow import of users/ Vereine
-- Select all lines at the beginning 
+- Select all lines at the beginning
 - Add some kind of auth before getting the dsc auth key
 - Extend statistics view with line selection, date range, Disziplin, name, team
 - Show stats of last day/ week as overview
 - Add names/ teams to line buttons
+
+## v2.1.0 TODO
+- `ADD` use new start/ stop APIs
 
 ## v2.0.1
 - `ADD` add node_modules to repo
