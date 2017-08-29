@@ -28,6 +28,7 @@ angular.module("dsm.services.sockets", [
 				data: {
 					auth: auth,
 					partId: partId,
+					force: true,
 				},
 			});
 		},
