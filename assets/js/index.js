@@ -3,7 +3,7 @@ var app = angular.module('dsm', [
 	"ngRoute", "angular-intro",
 	"dsm.lines",
 	"dsm.stammdaten.user", "dsm.stammdaten.verein", "dsm.stammdaten.manschaften",
-	"dsm.stats.group",
+	"dsm.stats.group", "dsm.stats.gpk",
 	"dsm.services.typeahead.user",
 ]);
 
@@ -42,6 +42,10 @@ app.config(['$routeProvider', function($routeProvider) {
 		when('/stats/group/', {
 			templateUrl: '/stats/group/',
 			controller: 'StatsGroupController',
+		}).
+		when('/stats/gpk/', {
+			templateUrl: '/stats/gpk/',
+			controller: 'StatsGPKGroupController',
 		}).
 
 

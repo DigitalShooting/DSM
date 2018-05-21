@@ -9,4 +9,8 @@ router.use("/group/", function(req, res){
 	res.render("stats/group");
 });
 
+router.use("/gpk/", function(req, res){
+	res.render("stats/gpk");
+});
+
 module.exports = router;
