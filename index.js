@@ -22,8 +22,8 @@ app.use(function(req, res, next){
 	next();
 });
 
-// set up jade
-app.set("view engine", "jade");
+// set up pug
+app.set("view engine", "pug");
 
 // route fonts
 app.use("/fonts/", express.static("./node_modules/bootstrap/fonts"));
