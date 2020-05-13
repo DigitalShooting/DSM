@@ -8,6 +8,7 @@ module.exports = {
 	// mongodb connection params
 	mongodb: {
 		url: "mongodb://localhost:27017",
-		collection: "gpk",
+		db: "dsc-gateway",
+		collection: "dsc-gateway_main",
 	},
 };
