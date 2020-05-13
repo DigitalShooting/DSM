@@ -22,7 +22,7 @@ router.get("/confirm", function(req, res){
 						auth: { key: config.dscGateway.key },
 					}
 				});
-			}
+			});
 			
 			setTimeout(function(){
 					child_process.exec(["sudo shutdown -h now"], function(){});
