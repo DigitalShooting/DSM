@@ -1,7 +1,7 @@
-var express = require("express");
-var router = express.Router();
-var config = require("../config/");
-var child_process = require("child_process");
+const express = require("express");
+const router = express.Router();
+const config = require("../config/");
+const child_process = require("child_process");
 const socketIOClient = require('socket.io-client');
 
 router.get("/", function(req, res){
@@ -14,8 +14,8 @@ router.get("/confirm", function(req, res){
 		var socket = socketIOClient(config.dscGateway.url);
 		socket.on('connect', () => {
 			
-			for (var i in config.lines){
-				gatewaySocket.emit("setLine", {
+			config.lines.forEach(line => {
+				socket.emit("setLine", {
 					method: "shutdown",
 					line: line._id,
 					data: {
