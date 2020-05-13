@@ -14,7 +14,15 @@ router.get("/confirm", function(req, res){
 		var socket = socketIOClient(config.dscGateway.url);
 		socket.on('connect', () => {
 			
-			config.lines.forEach(line => {
+			for (let i in config.lines) {
+				let line = config.lines[i];
+				console.log({
+					method: "shutdown",
+					line: line._id,
+					data: {
+						auth: { key: config.dscGateway.key },
+					}
+				});
 				socket.emit("setLine", {
 					method: "shutdown",
 					line: line._id,
@@ -22,10 +30,10 @@ router.get("/confirm", function(req, res){
 						auth: { key: config.dscGateway.key },
 					}
 				});
-			});
+			}
 			
 			setTimeout(function(){
-					child_process.exec(["sudo shutdown -h now"], function(){});
+					child_process.exec("sudo shutdown -h now", function(){});
 			}, 5000);
 			
 		});
