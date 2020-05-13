@@ -12,20 +12,12 @@ router.get("/confirm", function(req, res){
 		console.log("[INFO] Shutting Down");
 
 		var socket = socketIOClient(config.dscGateway.url);
-		socket.on('connect', () => {
-			
-			for (let i in config.lines) {
-				let line = config.lines[i];
-				console.log({
-					method: "shutdown",
-					line: line._id,
-					data: {
-						auth: { key: config.dscGateway.key },
-					}
-				});
+		
+		socket.on("onlineLines", (onlineLines) => {
+			for (let lineID in onlineLines.lines) {
 				socket.emit("setLine", {
 					method: "shutdown",
-					line: line._id,
+					line: lineID,
 					data: {
 						auth: { key: config.dscGateway.key },
 					}
@@ -33,10 +25,10 @@ router.get("/confirm", function(req, res){
 			}
 			
 			setTimeout(function(){
-					child_process.exec("sudo shutdown -h now", function(){});
+				child_process.exec("sudo shutdown -h now", function(){});
 			}, 5000);
-			
 		});
+
 		
 		res.redirect("/");
 });
