@@ -1,8 +1,8 @@
 module.exports = {
 	host     : "127.0.0.1",
-	user     : "firebug",
-	password : "lydVagCeHicMa",
-	database : "firebug_morbid_dev_1",
+	user     : "user",
+	password : "pass",
+	database : "db",
 	dateStrings: "date",  // Required to get correct date
 
 	// mongodb connection params
